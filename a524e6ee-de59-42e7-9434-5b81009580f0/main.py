@@ -10,7 +10,11 @@ class TradingStrategy(Strategy):
                               "EWJ", "EEM", "GSG", "GLD", "HYG",
                               "LQD", "TLT"]
         self.crash_protection_asset = "SHY"
-        self.interval = "1day"
+
+    @property
+    def interval(self):
+        return "1day"
+
 
     @property
     def assets(self):
