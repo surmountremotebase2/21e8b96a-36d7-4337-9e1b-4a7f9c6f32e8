@@ -4,10 +4,10 @@ import pandas as pd
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define the global asset classes and the crash protection asset
-        self.asset_classes = ["Asset1", "Asset2", "Asset3", "Asset4", "Asset5", 
-                              "Asset6", "Asset7", "Asset8", "Asset9", "Asset10",
-                              "Asset11", "Asset12"]
-        self.crash_protection_asset = "CPAsset"
+        self.asset_classes = ["SPY", "QQQ", "TECL", "IWM", "VGK", 
+                              "EWJ", "EEM", "GSG", "GLD", "HYG",
+                              "LQD", "TLT", "SHY"]
+        self.crash_protection_asset = "SHY"
         self.interval = "1month"
 
     @property
