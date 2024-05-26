@@ -30,7 +30,7 @@ class TradingStrategy(Strategy):
             if positive_momentum_assets <= 3:
                 # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
                 allocations[self.crash_protection_asset] = 1.0
-                for asset in self.asset_classes:
+                for asset in self.tickers:
                     allocations[asset] = 0.0
             else:
                 cp_allocation = (12 - positive_momentum_assets) / 4
@@ -38,7 +38,7 @@ class TradingStrategy(Strategy):
                 
                 # Determine allocations for assets with positive momentum
                 sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:3]
-                for asset in self.asset_classes:
+                for asset in self.tickers:
                     if asset in sorted_assets_by_momentum:
                         allocations[asset] = (1 - cp_allocation) / 3
                     else:
@@ -53,7 +53,7 @@ class TradingStrategy(Strategy):
         MOMt = [(closet / SMA(t..t-12)) – 1]
         """
         momentum_scores = {}
-        for asset in self.asset_classes:
+        for asset in self.tickers:
             close_data = data["ohlcv"][-1][asset]['close']
             sma = self.calculate_sma(asset, data["ohlcv"])
             if sma > 0:  # Avoid division by zero
