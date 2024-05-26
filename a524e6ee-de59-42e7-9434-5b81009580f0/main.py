@@ -66,7 +66,3 @@ class TradingStrategy(Strategy):
         if len(close prices) == 13:
             return sum(close_prices) / len(close_prices)
         return 0
-
-# Note: This code assumes the presence of an underlying function or mechanism within the Surmount AI framework
-# that fetches the necessary historical data (monthly close prices for the past 13 months for each asset class)
-# and calls
