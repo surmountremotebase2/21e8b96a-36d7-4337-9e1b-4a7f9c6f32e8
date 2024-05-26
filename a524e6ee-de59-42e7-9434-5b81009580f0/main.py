@@ -8,7 +8,7 @@ class TradingStrategy(Strategy):
                               "EWJ", "EEM", "GSG", "GLD", "HYG",
                               "LQD", "TLT"]
         self.crash_protection_asset = "SHY"
-        self.interval = "1month"
+        self.interval = "1day"
 
     @property
     def assets(self):
@@ -62,7 +62,7 @@ class TradingStrategy(Strategy):
         """
         Calculate Simple Moving Average (SMA) for an asset over the last 13 months.
         """
-        close_prices = [x[asset]['close'] for x in data[-13:]]
+        close_prices = [x[asset]['close'] for x in data[-252:]]
         if len(close_prices) == 13:
             return sum(close_prices) / len(close_prices)
         else:
