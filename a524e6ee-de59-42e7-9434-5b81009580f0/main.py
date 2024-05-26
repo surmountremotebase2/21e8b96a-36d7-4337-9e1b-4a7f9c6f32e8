@@ -6,7 +6,7 @@ class TradingStrategy(Strategy):
         # Define the global asset classes and the crash protection asset
         self.asset_classes = ["SPY", "QQQ", "TECL", "IWM", "VGK", 
                               "EWJ", "EEM", "GSG", "GLD", "HYG",
-                              "LQD", "TLT", "SHY"]
+                              "LQD", "TLT"]
         self.crash_protection_asset = "SHY"
         self.interval = "1month"
 
@@ -23,7 +23,7 @@ class TradingStrategy(Strategy):
         positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
 
         # Determine the allocation to crash protection asset
-        if positive_momentum_assets <= 6:
+        if positive_momentum_assets <= 4:
             # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
             allocations[self.crash_protection_asset] = 1.0
             for asset in self.asset_classes:
