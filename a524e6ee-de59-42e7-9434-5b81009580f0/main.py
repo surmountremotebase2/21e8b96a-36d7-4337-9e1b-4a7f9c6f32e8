@@ -74,4 +74,4 @@ class TradingStrategy(Strategy):
         close_prices = [x[asset]['close'] for x in data[-253:]]
         if len(close_prices) == 252:
             return sum(close_prices) / len(close_prices)
-        return None
+        return 0
