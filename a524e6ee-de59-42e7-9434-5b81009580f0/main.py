@@ -23,20 +23,20 @@ class TradingStrategy(Strategy):
         positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
 
         # Determine the allocation to crash protection asset
-        if positive_momentum_assets <= 4:
+        if positive_momentum_assets <= 3:
             # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
             allocations[self.crash_protection_asset] = 1.0
             for asset in self.asset_classes:
                 allocations[asset] = 0.0
         else:
-            cp_allocation = (12 - positive_momentum_assets) / 6
+            cp_allocation = (12 - positive_momentum_assets) / 4
             allocations[self.crash_protection_asset] = cp_allocation
             
             # Determine allocations for assets with positive momentum
-            sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:6]
+            sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:3]
             for asset in self.asset_classes:
                 if asset in sorted_assets_by_momentum:
-                    allocations[asset] = (1 - cp_allocation) / 6
+                    allocations[asset] = (1 - cp_allocation) / 3
                 else:
                     allocations[asset] = 0.0
 
