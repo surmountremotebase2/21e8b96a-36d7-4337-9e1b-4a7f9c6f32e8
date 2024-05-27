@@ -32,7 +32,7 @@ class TradingStrategy(Strategy):
 
 
         # Determine the allocation to crash protection asset
-        if positive_momentum_assets <= 3:
+        if positive_momentum_assets <= 2:
             # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
             allocations[self.crash_protection_asset] = 1.0
             for asset in self.tickers:
@@ -73,7 +73,7 @@ class TradingStrategy(Strategy):
         """
         Calculate Simple Moving Average (SMA) for an asset over the last 13 months.
         """
-        close_prices = [x[asset]['close'] for x in data[-253:]]
+        close_prices = [x[asset]['close'] for x in data[-252:]]
         if len(close_prices) == 252:
             return sum(close_prices) / len(close_prices)
         return 0
