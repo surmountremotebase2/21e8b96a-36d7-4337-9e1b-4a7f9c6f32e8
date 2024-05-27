@@ -2,7 +2,7 @@ from surmount.base_class import Strategy, TargetAllocation, backtest
 from surmount.logging import log
 import pandas as pd
 
-# https://allocatesmartly.com/protective-asset-allocation/
+
 
 class TradingStrategy(Strategy):
     def __init__(self):
