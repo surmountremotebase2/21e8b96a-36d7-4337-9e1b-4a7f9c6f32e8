@@ -10,7 +10,7 @@ class TradingStrategy(Strategy):
         self.tickers = ["SPY", "QQQ", "TECL", "IWM", "VGK", 
                               "EWJ", "EEM", "GSG", "GLD", "HYG",
                               "LQD", "TLT"]
-        self.crash_protection_asset = "SHY"
+        self.crash_protection_asset = "IEF"
 
     @property
     def interval(self):
