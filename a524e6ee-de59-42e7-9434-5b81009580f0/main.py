@@ -8,11 +8,13 @@ class TradingStrategy(Strategy):
     def __init__(self):
         # Define the global asset classes and the crash protection asset
         self.tickers = ["SPY", "QQQ", "TECL", "IWM", "VGK", 
-                              "EWJ", "EEM", "GSG", "GLD", "HYG",
-                              "LQD", "TLT"]
-        self.crash_protection_asset = "IEF"
-        self.RiskON = 3
-        self.RiskOFF = 2
+                              "EWJ", "EEM", "GSG", "XLK", "HYG", "XLU", "XLV",
+                              "LQD", "TLT", "SPLV", "MTUM", "DBC", "SOXX", ]
+        self.crash_protection_asset1 = "IEF"
+        self.crash_protection_asset2 = "GLD"
+        self.RiskON = 3  #Number of Risk ON Assets
+        self.RiskOFF = 2 #Number of Risk OFF Assets
+        self.LTMA = 100  #Long Term Moving Average
 
     @property
     def interval(self):
@@ -78,7 +80,7 @@ class TradingStrategy(Strategy):
         """
         Calculate Simple Moving Average (SMA) for an asset over the last 13 months.
         """
-        close_prices = [x[asset]['close'] for x in data[-252:]]
+        close_prices = [x[asset]['close'] for x in data[-self.LTMA:]]
         sma = pd.DataFrame(close_prices).mean()
         if sma[0] == 0:
             return 0
