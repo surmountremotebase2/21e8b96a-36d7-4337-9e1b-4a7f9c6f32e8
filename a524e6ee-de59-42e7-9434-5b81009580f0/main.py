@@ -11,7 +11,7 @@ class TradingStrategy(Strategy):
                               "EWJ", "EEM", "GSG", "XLK", "HYG", "XLU", "XLV",
                               "LQD", "TLT", "SPLV", "MTUM", "DBC", "SOXX"]
         self.crash_protection_asset1 = "IEF"
-        self.crash_protection_asset2 = "GLD"
+        self.crash_protection_asset2 = "BIL"
         self.cplist = [self.crash_protection_asset1, self.crash_protection_asset2]
         self.RiskON = 3  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
@@ -91,8 +91,8 @@ class TradingStrategy(Strategy):
         momentum_scores = {}
         for asset in self.tickers:
             close_data = data["ohlcv"][-1][asset]['close']
-            close_prices = data["ohlcv"]['close']
-            close_prices = pd.DataFrame(close_prices[asset])
+            close_prices = data["ohlcv"][asset]['close']
+            close_prices = pd.DataFrame(close_prices)
             sma = self.calculate_sma(asset, data["ohlcv"])
             if sma > 0:  # Avoid division by zero
                 #momentum_score = (close_data / sma) - 1
