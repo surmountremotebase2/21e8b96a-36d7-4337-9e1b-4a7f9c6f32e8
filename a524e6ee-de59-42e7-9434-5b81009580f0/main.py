@@ -74,7 +74,7 @@ class TradingStrategy(Strategy):
         Calculate Simple Moving Average (SMA) for an asset over the last 13 months.
         """
         close_prices = [x[asset]['close'] for x in data[-252:]]
-        sma = pd.DataFrame(close_prices).mean()
+        sma = pd.DataFrame(close_prices.values()).mean()
         if sma == 0:
             return 0
         else:
