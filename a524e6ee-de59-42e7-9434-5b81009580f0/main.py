@@ -10,7 +10,7 @@ class TradingStrategy(Strategy):
         self.tickers = ["SPY", "QQQ", "TECL", "IWM", "VGK", 
                               "EWJ", "EEM", "GSG", "XLK", "HYG", "XLU", "XLV",
                               "LQD", "TLT", "SPLV", "GLD", "MTUM", "DBC", "SOXX"]
-        self.crash_protection_asset1 = "IEF"
+        self.crash_protection_asset1 = "TIP"
         self.crash_protection_asset2 = "BIL"
         self.cplist = [self.crash_protection_asset1, self.crash_protection_asset2]
         self.RiskON = 3  #Number of Risk ON Assets
@@ -40,11 +40,11 @@ class TradingStrategy(Strategy):
         # Determine the allocation to crash protection asset
         if positive_momentum_assets < 2:
             # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
-            cpmomentum_scores = self.calculate_cpmomentum_scores(data)
-            sorted_cpassets_by_momentum = sorted(cpmomentum_scores, key=momentum_scores.get, reverse=True)
+            #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
+            #sorted_cpassets_by_momentum = sorted(cpmomentum_scores, key=momentum_scores.get, reverse=True)
             # Calculate number of assets with positive momentum
-            allocations[sorted_cpassets_by_momentum[1]] = 0.7
-            allocations[sorted_cpassets_by_momentum[0]] = 0.3
+            allocations[self.crash_protection_asset1] = 0.7
+            allocations[self.crash_protection_asset2] = 0.3
             for asset in self.tickers:
                 allocations[asset] = 0.0
         else:
