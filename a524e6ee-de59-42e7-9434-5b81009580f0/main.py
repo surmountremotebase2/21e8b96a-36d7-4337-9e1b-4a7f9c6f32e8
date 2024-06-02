@@ -9,7 +9,7 @@ class TradingStrategy(Strategy):
         # Define the global asset classes and the crash protection asset
         self.tickers = ["SPY", "QQQ", "TECL", "IWM", "VGK", 
                               "EWJ", "EEM", "GSG", "XLK", "HYG", "XLU", "XLV",
-                              "LQD", "TLT", "SPLV", "MTUM", "DBC", "SOXX"]
+                              "LQD", "TLT", "SPLV", "GLD", "MTUM", "DBC", "SOXX"]
         self.crash_protection_asset1 = "IEF"
         self.crash_protection_asset2 = "BIL"
         self.cplist = [self.crash_protection_asset1, self.crash_protection_asset2]
