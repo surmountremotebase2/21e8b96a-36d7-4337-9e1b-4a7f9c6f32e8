@@ -11,6 +11,8 @@ class TradingStrategy(Strategy):
                               "EWJ", "EEM", "GSG", "GLD", "HYG",
                               "LQD", "TLT"]
         self.crash_protection_asset = "IEF"
+        self.RiskON = 3
+        self.RiskOFF = 2
 
     @property
     def interval(self):
@@ -32,20 +34,22 @@ class TradingStrategy(Strategy):
         #positive_momentum_assets = 3
 
         # Determine the allocation to crash protection asset
-        if positive_momentum_assets <= 2:
+        if positive_momentum_assets <= 1:
             # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
             allocations[self.crash_protection_asset] = 1.0
             for asset in self.tickers:
                 allocations[asset] = 0.0
         else:
-            cp_allocation = (12 - positive_momentum_assets) / 4
-            allocations[self.crash_protection_asset] = cp_allocation
+            if positive_momentum_assets < self.RiskON:
+                cp_allocation = (self.RiskON - positive_momentum_assets) * (1/self.RiskON)
+                allocations[self.crash_protection_asset] = cp_allocation
             
+
             # Determine allocations for assets with positive momentum
-            sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:3]
+            sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:self.RiskON]
             for asset in self.tickers:
                 if asset in sorted_assets_by_momentum:
-                    allocations[asset] = (1 - cp_allocation) / 3
+                    allocations[asset] = (1 - cp_allocation) / self.RiskON
                 else:
                     allocations[asset] = 0.0
 
