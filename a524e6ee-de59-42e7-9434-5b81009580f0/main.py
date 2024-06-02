@@ -50,7 +50,7 @@ class TradingStrategy(Strategy):
         else:
             if positive_momentum_assets < self.RiskON:
                 cp_allocation = (self.RiskON - positive_momentum_assets) * (1/self.RiskON)
-                allocations[self.crash_protection_asset] = cp_allocation
+                allocations[self.crash_protection_asset1] = cp_allocation
             else:
                 cp_allocation = 0
 
