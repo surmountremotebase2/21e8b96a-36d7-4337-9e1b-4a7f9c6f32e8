@@ -75,7 +75,7 @@ class TradingStrategy(Strategy):
         """
         close_prices = [x[asset]['close'] for x in data[-252:]]
         sma = pd.DataFrame(close_prices).mean()
-        if sma == 0:
+        if sma[0] == 0:
             return 0
         else:
             return sma[0]
