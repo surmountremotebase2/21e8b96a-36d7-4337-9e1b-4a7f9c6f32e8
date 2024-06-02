@@ -16,6 +16,7 @@ class TradingStrategy(Strategy):
         self.RiskON = 3  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
         self.LTMA = 100  #Long Term Moving Average
+        self.STMA = 21   #Short Term Momentum
 
     @property
     def interval(self):
@@ -42,8 +43,8 @@ class TradingStrategy(Strategy):
             cpmomentum_scores = self.calculate_momentum_scores(data[self.cplist])
             sorted_cpassets_by_momentum = sorted(cpmomentum_scores, key=momentum_scores.get, reverse=True)
             # Calculate number of assets with positive momentum
-            allocations[sorted_cpassets_by_momentum[0]] = 0.7
-            allocations[sorted_cpassets_by_momentum[1]] = 0.3
+            allocations[sorted_cpassets_by_momentum[1]] = 0.7
+            allocations[sorted_cpassets_by_momentum[0]] = 0.3
             for asset in self.tickers:
                 allocations[asset] = 0.0
         else:
@@ -75,7 +76,7 @@ class TradingStrategy(Strategy):
             sma = self.calculate_sma(asset, data["ohlcv"])
             if sma > 0:  # Avoid division by zero
                 #momentum_score = (close_data / sma) - 1
-                momentum_score = (close_data / sma)
+                momentum_score = () (close_data / sma) + data["ohlcv"][-self.STMA:][asset]['close'].pct_change())
             else:
                 momentum_score = 0
             momentum_scores[asset] = momentum_score
