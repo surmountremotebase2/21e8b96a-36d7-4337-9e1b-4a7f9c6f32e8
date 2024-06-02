@@ -29,7 +29,7 @@ class TradingStrategy(Strategy):
         # Calculate number of assets with positive momentum
         positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
         print(positive_momentum_assets)
-        positive_momentum_assets = 2
+        positive_momentum_assets = 3
 
         # Determine the allocation to crash protection asset
         if positive_momentum_assets <= 2:
