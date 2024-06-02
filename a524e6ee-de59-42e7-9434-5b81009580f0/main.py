@@ -40,7 +40,7 @@ class TradingStrategy(Strategy):
         # Determine the allocation to crash protection asset
         if positive_momentum_assets <= 2:
             # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
-            cpmomentum_scores = self.calculate_momentum_scores(data[self.cplist])
+            cpmomentum_scores = self.calculate_cpmomentum_scores(data)
             sorted_cpassets_by_momentum = sorted(cpmomentum_scores, key=momentum_scores.get, reverse=True)
             # Calculate number of assets with positive momentum
             allocations[sorted_cpassets_by_momentum[1]] = 0.7
@@ -64,6 +64,24 @@ class TradingStrategy(Strategy):
 
         return TargetAllocation(allocations)
 
+    def calculate_cpmomentum_scores(self, data):
+        """
+        Calculate momentum scores for asset classes based on the formula:
+        MOMt = [(closet / SMA(t..t-12)) – 1]
+        """
+        momentum_scores = {}
+        for asset in self.cplist:
+            close_data = data["ohlcv"][-1][asset]['close']
+            close_prices = data["ohlcv"]['close']
+            close_prices = pd.DataFrame(close_prices[asset])
+            sma = self.calculate_sma(asset, data["ohlcv"])
+            if sma > 0:  # Avoid division by zero
+                #momentum_score = (close_data / sma) - 1
+                momentum_score = ( (close_data / sma) + close_prices.pct_change(self.STMA)[-1])
+            else:
+                momentum_score = 0
+            momentum_scores[asset] = momentum_score
+        return momentum_scores
 
     def calculate_momentum_scores(self, data):
         """
