@@ -12,7 +12,7 @@ class TradingStrategy(Strategy):
                               "LQD", "TLT", "SPLV", "MTUM", "DBC", "SOXX"]
         self.crash_protection_asset1 = "IEF"
         self.crash_protection_asset2 = "GLD"
-        self.cplist = [self.crash_protection_asset1 + self.crash_protection_asset2]
+        self.cplist = [self.crash_protection_asset1, self.crash_protection_asset2]
         self.RiskON = 3  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
         self.LTMA = 100  #Long Term Moving Average
