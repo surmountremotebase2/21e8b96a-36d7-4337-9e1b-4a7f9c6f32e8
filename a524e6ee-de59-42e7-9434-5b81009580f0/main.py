@@ -70,9 +70,10 @@ class TradingStrategy(Strategy):
         MOMt = [(closet / SMA(t..t-12)) – 1]
         """
         momentum_scores = {}
+        datatick = data["ohlcv"]
         for asset in self.cplist:
             close_data = data["ohlcv"][-1][asset]['close']
-            close_prices = data["ohlcv"][-self.LTMA:][asset]['close']
+            close_prices = [x[asset]['close'] for x in datatick[-self.LTMA:]]
             close_prices = pd.DataFrame(close_prices)
             sma = self.calculate_sma(asset, data["ohlcv"])
             if sma > 0:  # Avoid division by zero
