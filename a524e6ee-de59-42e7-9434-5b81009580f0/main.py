@@ -89,7 +89,7 @@ class TradingStrategy(Strategy):
         MOMt = [(closet / SMA(t..t-12)) – 1]
         """
         momentum_scores = {}
-        datatick = data["ohlcv"]["close"]
+        datatick = data["ohlcv"][self.tickers]["close"]
         for asset in self.tickers:
             close_data = data["ohlcv"][-1][asset]['close']
             close_prices = datatick[asset][-self.LTMA:]
