@@ -73,7 +73,8 @@ class TradingStrategy(Strategy):
         momentum_scores = {}
         for asset in self.tickers:
             close_data = data["ohlcv"][-1][asset]['close']
-            close_prices = pd.DataFrame(data["ohlcv"][asset]['close'])
+            close_prices = [x[asset]['close'] for x in data[-self.LTMA:]]
+            close_prices = pd.DataFrame(close_prices)
             sma = self.calculate_sma(asset, data["ohlcv"])
             if sma > 0:  # Avoid division by zero
                 #momentum_score = (close_data / sma) - 1
