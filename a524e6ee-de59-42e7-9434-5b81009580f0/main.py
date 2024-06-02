@@ -32,7 +32,7 @@ class TradingStrategy(Strategy):
         #positive_momentum_assets = 3
 
         # Determine the allocation to crash protection asset
-        if positive_momentum_assets <= 1:
+        if positive_momentum_assets <= 2:
             # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
             allocations[self.crash_protection_asset] = 1.0
             for asset in self.tickers:
