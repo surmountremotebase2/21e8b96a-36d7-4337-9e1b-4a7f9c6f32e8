@@ -77,7 +77,7 @@ class TradingStrategy(Strategy):
             sma = self.calculate_sma(asset, data["ohlcv"])
             if sma > 0:  # Avoid division by zero
                 #momentum_score = (close_data / sma) - 1
-                momentum_score = ( (close_data / sma) + close_prices.pct_change(self.STMA)[-1])
+                momentum_score = ( (close_data / sma) + close_prices.pct_change(self.STMA).iloc[-1])
             else:
                 momentum_score = 0
             momentum_scores[asset] = momentum_score
@@ -97,7 +97,7 @@ class TradingStrategy(Strategy):
             sma = self.calculate_sma(asset, data["ohlcv"])
             if sma > 0:  # Avoid division by zero
                 #momentum_score = (close_data / sma) - 1
-                momentum_score = ( (close_data / sma) + close_prices.pct_change(self.STMA)[-1])
+                momentum_score = ( (close_data / sma) + close_prices.pct_change(self.STMA).iloc[-1])
             else:
                 momentum_score = 0
             momentum_scores[asset] = momentum_score
