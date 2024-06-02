@@ -25,7 +25,7 @@ class TradingStrategy(Strategy):
     @property
     def assets(self):
         # Include the crash protection asset in the list
-        return self.tickers + [self.cplist]
+        return self.tickers + self.cplist
 
     def run(self, data):
         allocations = {}
