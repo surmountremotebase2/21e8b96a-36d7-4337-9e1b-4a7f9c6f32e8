@@ -92,8 +92,8 @@ class TradingStrategy(Strategy):
         datatick = data["ohlcv"]
         for asset in self.tickers:
             close_data = data["ohlcv"][-1][asset]['close']
-            close_prices = datatick[-self.LTMA:]
-            close_prices = pd.DataFrame(close_prices[asset])
+            close_prices = [x[asset]['close'] for x in datatick[-self.LTMA:]]
+            close_prices = pd.DataFrame(close_prices)
             sma = self.calculate_sma(asset, data["ohlcv"])
             if sma > 0:  # Avoid division by zero
                 #momentum_score = (close_data / sma) - 1
