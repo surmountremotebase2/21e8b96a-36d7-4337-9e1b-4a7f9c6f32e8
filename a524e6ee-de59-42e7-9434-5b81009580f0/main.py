@@ -92,7 +92,7 @@ class TradingStrategy(Strategy):
         datatick = data["ohlcv"]
         for asset in self.tickers:
             close_data = data["ohlcv"][-1][asset]['close']
-            close_prices = datatick[asset]
+            close_prices = datatick["close"]
             close_prices = pd.DataFrame(close_prices)
             sma = self.calculate_sma(asset, data["ohlcv"])
             if sma > 0:  # Avoid division by zero
