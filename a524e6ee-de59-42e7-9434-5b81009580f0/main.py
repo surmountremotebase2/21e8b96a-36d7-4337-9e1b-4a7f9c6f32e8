@@ -17,7 +17,7 @@ class TradingStrategy(Strategy):
         self.cplist = [self.crash_protection_asset1, self.crash_protection_asset2]
         self.RiskON = 3  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
-        self.LTMA = 50  #Long Term Moving Average
+        self.LTMA = 200  #Long Term Moving Average
         self.STMOM = 15   #Short Term Momentum
         self.LTMOM = 128   #Short Term Momentum
 
@@ -81,7 +81,7 @@ class TradingStrategy(Strategy):
             sma = self.calculate_sma(asset, datatick)
             if sma > 0:  # Avoid division by zero
                 #momentum_score = (close_data / sma) - 1
-                momentum_score = ( (close_data / sma) + ( (close_data / close_prices[-self.LTMOM]) *10) )
+                momentum_score = ( (close_data / sma) + ( (close_data / close_prices[-self.STMOM])) )
             else:
                 momentum_score = 0
             momentum_scores[asset] = momentum_score
@@ -100,7 +100,7 @@ class TradingStrategy(Strategy):
             #close_prices = pd.DataFrame(close_prices)
             sma = self.calculate_sma(asset, data["ohlcv"])
             if sma > 0:  # Avoid division by zero
-                momentum_score = ( (close_data / sma) + ( (close_data / close_prices[-self.LTMOM]) *10) )
+                momentum_score = ( (close_data / sma) + ( (close_data / close_prices[-self.STMOM])) )
             else:
                 momentum_score = 0
             momentum_scores[asset] = momentum_score
