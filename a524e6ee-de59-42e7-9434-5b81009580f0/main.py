@@ -21,7 +21,7 @@ class TradingStrategy(Strategy):
         self.LTMA = 100  #Long Term Moving Average
         self.STMOM = 20   #Short Term Momentum
         self.LTMOM = 128   #Short Term Momentum
-        self.STMA = 50
+        self.STMA = 10
         self.DAYOFWEEK = 3
         self.init = 0
         self.last_allocations = {}
@@ -139,7 +139,7 @@ class TradingStrategy(Strategy):
             else:
                 momentum_score = 0.0
             if ema > 0:
-                momentum_score = momentum_score - ( (close_data / ema) - 1 )
+                momentum_score = momentum_score + ( (close_data / ema) - 1 )
             momentum_scores[asset] = momentum_score
         return momentum_scores
 
