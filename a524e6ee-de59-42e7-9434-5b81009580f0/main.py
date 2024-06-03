@@ -39,7 +39,7 @@ class TradingStrategy(Strategy):
         is_last_day = False
         today = date.today() #GET Today's date
         datatick = data["ohlcv"]
-        today = datatick[-1]["SPY"]["date"]
+        today = datatick[-1]["QQQ"]["date"]
         # Convert the strings to datetime objects using to_datetime
         today = pd.to_datetime(today)
         dayweek = today.weekday()
