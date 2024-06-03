@@ -17,9 +17,10 @@ class TradingStrategy(Strategy):
         self.cplist = [self.crash_protection_asset1, self.crash_protection_asset2]
         self.RiskON = 3  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
-        self.LTMA = 100  #Long Term Moving Average
+        self.LTMA = 50  #Long Term Moving Average
         self.STMOM = 15   #Short Term Momentum
         self.LTMOM = 128   #Short Term Momentum
+        self.DAYOFWEEK = 6
         self.init = 0
         self.last_allocations = {}
 
@@ -43,7 +44,7 @@ class TradingStrategy(Strategy):
         #log(f"DATE: {today.strftime('%Y-%m-%d')}")
         # Check if tomorrow belongs to the same month as today
         #is_last_day = today.month != (today + timedelta(days=1)).month
-        is_last_day = today.weekday() == 6:
+        is_last_day = today.weekday() == self.DAYOFWEEK:
         if is_last_day or self.init == 0:
             self.init = 1
 
