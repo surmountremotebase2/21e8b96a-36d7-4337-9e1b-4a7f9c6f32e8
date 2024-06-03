@@ -7,16 +7,17 @@ import pandas as pd
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define the global asset classes and the crash protection asset
-        self.tickers = ["SPY", "QQQ", "TECL", "IWM", "VGK", 
-                              "EWJ", "EEM", "GSG", "XLK", "HYG", "XLU", "XLV",
+        #self.tickers = ["SPY", "QQQ", "TECL", "IWM", "VGK", 
+        self.tickers = ["SPY", "QQQ", "TECL", "IWM", "IJT", 
+                              "EWJ", "EEM", "XLK", "HYG", "XLU", "XLV",
                               "LQD", "TLT", "SPLV", "GLD", "MTUM", "DBC", "SOXX"]
         self.crash_protection_asset1 = "TIP"
         self.crash_protection_asset2 = "BIL"
         self.cplist = [self.crash_protection_asset1, self.crash_protection_asset2]
         self.RiskON = 3  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
-        self.LTMA = 100  #Long Term Moving Average
-        self.STMA = 21   #Short Term Momentum
+        self.LTMA = 50  #Long Term Moving Average
+        self.STMA = 15   #Short Term Momentum
 
     @property
     def interval(self):
