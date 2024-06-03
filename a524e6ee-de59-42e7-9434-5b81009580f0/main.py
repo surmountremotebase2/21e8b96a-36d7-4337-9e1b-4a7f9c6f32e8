@@ -63,7 +63,7 @@ class TradingStrategy(Strategy):
             #positive_momentum_assets = 3
 
             # Determine the allocation to crash protection asset
-            if positive_momentum_assets <= 2:
+            if positive_momentum_assets <= 1:
                 # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
                 #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
                 #sorted_cpassets_by_momentum = sorted(cpmomentum_scores, key=momentum_scores.get, reverse=True)
