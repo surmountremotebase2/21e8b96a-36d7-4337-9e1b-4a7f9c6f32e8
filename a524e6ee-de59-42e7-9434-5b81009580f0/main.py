@@ -17,7 +17,7 @@ class TradingStrategy(Strategy):
         self.cplist = [self.crash_protection_asset1, self.crash_protection_asset2]
         self.RiskON = 3  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
-        self.LTMA = 80  #Long Term Moving Average
+        self.LTMA = 100  #Long Term Moving Average
         self.STMOM = 21   #Short Term Momentum
         self.LTMOM = 128   #Short Term Momentum
         self.DAYOFWEEK = 3
@@ -75,7 +75,7 @@ class TradingStrategy(Strategy):
             else:
                 if positive_momentum_assets < self.RiskON:
                     cp_allocation = (self.RiskON - positive_momentum_assets) * (1/self.RiskON)
-                    allocations[self.crash_protection_asset1] = cp_allocation
+                    allocations[self.crash_protection_asset2] = cp_allocation
                 else:
                     cp_allocation = 0
 
