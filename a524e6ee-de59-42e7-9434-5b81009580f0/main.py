@@ -81,7 +81,7 @@ class TradingStrategy(Strategy):
             sma = self.calculate_sma(asset, datatick)
             if sma > 0:  # Avoid division by zero
                 #momentum_score = (close_data / sma) - 1
-                momentum_score = ( (close_data / sma) - (close_data / close_prices[-self.STMOM]) )
+                momentum_score = ( (close_data / sma) - (close_data / close_prices[-self.STMOM][0]) )
             else:
                 momentum_score = 0
             momentum_scores[asset] = momentum_score
@@ -100,7 +100,7 @@ class TradingStrategy(Strategy):
             #close_prices = pd.DataFrame(close_prices)
             sma = self.calculate_sma(asset, data["ohlcv"])
             if sma > 0:  # Avoid division by zero
-                momentum_score = ( (close_data / sma) - (close_data / close_prices[-self.STMOM]) )
+                momentum_score = ( (close_data / sma) - (close_data / close_prices[-self.STMOM][0]) )
             else:
                 momentum_score = 0
             momentum_scores[asset] = momentum_score
