@@ -76,19 +76,21 @@ class TradingStrategy(Strategy):
         else:
             log(f"Mom scores: {momentum_scores.values()}")
             if positive_momentum_assets < self.RiskON:
-                cp_allocation = (self.RiskON - positive_momentum_assets) * (1/self.RiskON)
+                #cp_allocation = (self.RiskON - positive_momentum_assets) * (1/self.RiskON)
+                cp_allocation = 0.33
                 allocations[self.crash_protection_asset2] = cp_allocation
             else:
                 cp_allocation = 0.0
                 allocations[self.crash_protection_asset2] = cp_allocation
-                positive_momentum_assets = self.RiskON
+
 
             # Determine allocations for assets with positive momentum
             sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:self.RiskON]
             log(f"Sorted MOM {today.strftime('%Y-%m-%d')}: {sorted_assets_by_momentum}")
             for asset in self.tickers:
                 if asset in sorted_assets_by_momentum:
-                    allocations[asset] = (1 - cp_allocation) / positive_momentum_assets
+                    #allocations[asset] = (1 - cp_allocation) / positive_momentum_assets
+                    allocations[asset] = 0.33
                 else:
                     allocations[asset] = 0.0
 
