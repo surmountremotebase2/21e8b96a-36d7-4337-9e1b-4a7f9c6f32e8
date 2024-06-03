@@ -20,6 +20,7 @@ class TradingStrategy(Strategy):
         self.LTMA = 100  #Long Term Moving Average
         self.STMOM = 21   #Short Term Momentum
         self.LTMOM = 128   #Short Term Momentum
+        self.STMA = 20
         self.DAYOFWEEK = 3
         self.init = 0
         self.last_allocations = {}
@@ -107,6 +108,7 @@ class TradingStrategy(Strategy):
         for asset in self.cplist:
             close_data = datatick[-1][asset]['close']
             close_prices = [x[asset]['close'] for x in datatick[-252:]]
+            ema = technical_indicators.MFI(asset, data, self.STMA)
             #close_prices = pd.DataFrame(close_prices)
             sma = self.calculate_sma(asset, datatick)
             if sma > 0:  # Avoid division by zero
@@ -129,11 +131,14 @@ class TradingStrategy(Strategy):
             close_prices = [x[asset]['close'] for x in datatick[-self.LTMOM:]]
             #close_prices = pd.DataFrame(close_prices)
             sma = self.calculate_sma(asset, data["ohlcv"])
+            ema = technical_indicators.MFI(asset, data, self.STMA)
             if sma > 0:  # Avoid division by zero
                 #momentum_score = ( ((close_data / sma) *2) - ((close_data / close_prices[-self.STMOM])) ) -1
                 momentum_score = ( (close_data / sma) - 1 )
             else:
                 momentum_score = 0.0
+            if ema > 0:
+                momentum_score = momentum_score + ( (close_data / ema) - 1 )
             momentum_scores[asset] = momentum_score
         return momentum_scores
 
@@ -142,6 +147,17 @@ class TradingStrategy(Strategy):
         Calculate Simple Moving Average (SMA) for an asset over the last 13 months.
         """
         close_prices = [x[asset]['close'] for x in data[-self.LTMA:]]
+        sma = pd.DataFrame(close_prices).mean()
+        if sma[0] == 0:
+            return 0.0
+        else:
+            return sma[0]
+
+    def calculate_shortsma(self, asset, data):
+        """
+        Calculate Simple Moving Average (SMA) for an asset over the last 13 months.
+        """
+        close_prices = [x[asset]['close'] for x in data[-self.STMA:]]
         sma = pd.DataFrame(close_prices).mean()
         if sma[0] == 0:
             return 0.0
