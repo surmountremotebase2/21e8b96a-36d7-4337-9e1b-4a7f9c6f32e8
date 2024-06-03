@@ -37,7 +37,7 @@ class TradingStrategy(Strategy):
         allocations = {}
         today = date.today() #GET Today's date
         datatick = data["ohlcv"]
-        today = d[-1]["SPY"]["date"]
+        today = datatick[-1]["SPY"]["date"]
         # Convert the strings to datetime objects using to_datetime
         today = pd.to_datetime(today)
         log(f"DATE: {today.strftime('%Y-%m-%d')}")
