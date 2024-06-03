@@ -45,9 +45,9 @@ class TradingStrategy(Strategy):
         dayweek = today.weekday()
         #log(f"WeekDay: {str(dayweek)}")
         # Check if tomorrow belongs to the same month as today
-        #is_last_day = today.month != (today + timedelta(days=1)).month
-        if dayweek == self.DAYOFWEEK:
-            is_last_day = True
+        is_last_day = today.month != (today + timedelta(days=1)).month
+        #if dayweek == self.DAYOFWEEK:
+            #is_last_day = True
 
         if is_last_day or self.init == 0:
             self.init = 1
@@ -87,11 +87,8 @@ class TradingStrategy(Strategy):
                         allocations[asset] = (1 - cp_allocation) / self.RiskON
                     else:
                         allocations[asset] = 0.0
-
-            self.last_allocations = allocations
             return TargetAllocation(allocations)
-        else:
-            return TargetAllocation(self.last_allocations)
+
 
     def calculate_cpmomentum_scores(self, data):
         """
