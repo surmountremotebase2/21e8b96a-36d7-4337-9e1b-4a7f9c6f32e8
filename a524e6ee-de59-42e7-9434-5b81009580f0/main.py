@@ -42,7 +42,8 @@ class TradingStrategy(Strategy):
         today = pd.to_datetime(today)
         #log(f"DATE: {today.strftime('%Y-%m-%d')}")
         # Check if tomorrow belongs to the same month as today
-        is_last_day = today.month != (today + timedelta(days=2)).month
+        #is_last_day = today.month != (today + timedelta(days=1)).month
+        is_last_day = today.weekday() == 6:
         if is_last_day or self.init == 0:
             self.init = 1
 
