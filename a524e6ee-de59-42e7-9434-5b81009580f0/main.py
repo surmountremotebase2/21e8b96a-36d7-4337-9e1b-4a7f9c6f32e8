@@ -77,7 +77,7 @@ class TradingStrategy(Strategy):
             for asset in self.tickers:
                 allocations[asset] = 0.0
         else:
-            log(f"Mom scores: {momentum_scores.values()}")
+            #log(f"Mom scores: {momentum_scores.values()}")
             if positive_momentum_assets < self.RiskON:
                 #cp_allocation = (self.RiskON - positive_momentum_assets) * (1/self.RiskON)
                 cp_allocation = 0.33
