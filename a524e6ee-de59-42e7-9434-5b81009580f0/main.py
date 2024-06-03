@@ -17,8 +17,8 @@ class TradingStrategy(Strategy):
         self.cplist = [self.crash_protection_asset1, self.crash_protection_asset2]
         self.RiskON = 4  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
-        self.LTMA = 200  #Long Term Moving Average
-        self.STMOM = 15   #Short Term Momentum
+        self.LTMA = 100  #Long Term Moving Average
+        self.STMOM = 30   #Short Term Momentum
         self.LTMOM = 128   #Short Term Momentum
 
     @property
