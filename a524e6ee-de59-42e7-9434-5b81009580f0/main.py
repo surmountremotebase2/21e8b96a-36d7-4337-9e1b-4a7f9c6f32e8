@@ -22,7 +22,7 @@ class TradingStrategy(Strategy):
         self.STMOM = 20   #Short Term Momentum
         self.LTMOM = 128   #Short Term Momentum
         self.STMA = 10
-        self.DAYOFWEEK = 3
+        self.DAYOFWEEK = 4
         self.init = 0
         self.last_allocations = {}
 
@@ -48,8 +48,8 @@ class TradingStrategy(Strategy):
         #log(f"WeekDay: {str(dayweek)}")
         # Check if tomorrow belongs to the same month as today
         is_last_day = today.month != (today + timedelta(days=2)).month
-        #if dayweek == self.DAYOFWEEK:
-            #is_last_day = True
+        if dayweek == self.DAYOFWEEK:
+            is_last_day = True
 
         if is_last_day or self.init == 0:
             self.init = 1
