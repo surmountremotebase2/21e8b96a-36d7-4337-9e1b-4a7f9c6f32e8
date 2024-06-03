@@ -64,13 +64,13 @@ class TradingStrategy(Strategy):
 
             # Determine the allocation to crash protection asset
             if positive_momentum_assets <= 1:
-                log("RISK OFF")
+                log(f"RISK OFF: BIL")
                 # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
                 #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
                 #sorted_cpassets_by_momentum = sorted(cpmomentum_scores, key=momentum_scores.get, reverse=True)
                 # Calculate number of assets with positive momentum
                 #allocations[self.crash_protection_asset1] = 0.3
-                allocations[self.crash_protection_asset2] = 1
+                allocations["BIL"] = 1.0
                 for asset in self.tickers:
                     allocations[asset] = 0.0
             else:
@@ -124,7 +124,7 @@ class TradingStrategy(Strategy):
         datatick = data["ohlcv"]
         for asset in self.tickers:
             close_data = data["ohlcv"][-1][asset]['close']
-            close_prices = [x[asset]['close'] for x in datatick[-252:]]
+            close_prices = [x[asset]['close'] for x in datatick[-self.LTMOM:]]
             #close_prices = pd.DataFrame(close_prices)
             sma = self.calculate_sma(asset, data["ohlcv"])
             if sma > 0:  # Avoid division by zero
