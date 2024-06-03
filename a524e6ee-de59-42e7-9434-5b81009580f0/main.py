@@ -60,10 +60,9 @@ class TradingStrategy(Strategy):
 
         # Calculate number of assets with positive momentum
         positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
-        print(positive_momentum_assets)
         # Log the allocation for the current run.
         
-        log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
+        #log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
         #positive_momentum_assets = 3
 
         # Determine the allocation to crash protection asset
@@ -90,7 +89,7 @@ class TradingStrategy(Strategy):
 
             # Determine allocations for assets with positive momentum
             sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:self.RiskON]
-            log(f"Sorted MOM {today.strftime('%Y-%m-%d')}: {sorted_assets_by_momentum}")
+            #log(f"Sorted MOM {today.strftime('%Y-%m-%d')}: {sorted_assets_by_momentum}")
             for asset in self.tickers:
                 if asset in sorted_assets_by_momentum:
                     #allocations[asset] = (1 - cp_allocation) / positive_momentum_assets
