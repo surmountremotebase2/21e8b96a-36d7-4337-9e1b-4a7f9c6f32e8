@@ -64,13 +64,13 @@ class TradingStrategy(Strategy):
 
             # Determine the allocation to crash protection asset
             if positive_momentum_assets <= 1:
-                log(f"RISK OFF: BIL")
+                log(f"RISK OFF: SHV")
                 # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
                 #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
                 #sorted_cpassets_by_momentum = sorted(cpmomentum_scores, key=momentum_scores.get, reverse=True)
                 # Calculate number of assets with positive momentum
                 #allocations[self.crash_protection_asset1] = 0.3
-                allocations["BIL"] = 1.0
+                allocations[self.crash_protection_asset2] = 1.0
                 for asset in self.tickers:
                     allocations[asset] = 0.0
             else:
