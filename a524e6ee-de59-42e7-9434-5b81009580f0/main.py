@@ -9,7 +9,7 @@ class TradingStrategy(Strategy):
     def __init__(self):
         # Define the global asset classes and the crash protection asset
         #self.tickers = ["SPY", "QQQ", "TECL", "IWM", "VGK", 
-        self.tickers = ["SPY", "QQQ", "TECL", "IJT", "SH",
+        self.tickers = ["SPY", "QQQ", "TECL", "IJT",
                               #"EWJ", "EEM", "XLK", "HYG", "XLU", "XLV", "LQD",
                               "XLK", "XLU", "XLV", "FEZ", "TLT", "EWJ",
                               "MTUM", "SOXX"]
@@ -139,7 +139,7 @@ class TradingStrategy(Strategy):
             else:
                 momentum_score = 0.0
             if ema > 0:
-                momentum_score = momentum_score + ( (close_data / ema) - 1 )
+                momentum_score = momentum_score - ( (close_data / ema) - 1 )
             momentum_scores[asset] = momentum_score
         return momentum_scores
 
