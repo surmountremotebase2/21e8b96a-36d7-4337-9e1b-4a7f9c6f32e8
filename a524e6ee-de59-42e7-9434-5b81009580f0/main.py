@@ -56,8 +56,8 @@ class TradingStrategy(Strategy):
 
         momentum_scores = self.calculate_momentum_scores(data)
         ema = EMA("QQQ", datatick, self.STMA)[-1]
-        macd_signal = MACD("SPY", datatick, fast=15, slow=25)
-        log(f"{macd_signal}")
+        macd_signal = MACD("SPY", datatick, fast=15, slow=25)[-1]
+        #log(f"{macd_signal}")
         mrktclose = datatick[-1]["QQQ"]["close"]
 
         # Calculate number of assets with positive momentum
