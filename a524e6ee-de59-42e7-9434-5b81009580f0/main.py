@@ -45,7 +45,7 @@ class TradingStrategy(Strategy):
         dayweek = today.weekday()
         #log(f"WeekDay: {str(dayweek)}")
         # Check if tomorrow belongs to the same month as today
-        is_last_day = today.month != (today + timedelta(days=1)).month
+        is_last_day = today.month != (today + timedelta(days=3)).month
         #if dayweek == self.DAYOFWEEK:
             #is_last_day = True
 
