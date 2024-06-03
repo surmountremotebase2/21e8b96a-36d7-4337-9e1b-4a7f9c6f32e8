@@ -21,6 +21,7 @@ class TradingStrategy(Strategy):
         self.STMOM = 15   #Short Term Momentum
         self.LTMOM = 128   #Short Term Momentum
         self.init = 0
+        self.last_allocations = {}
 
     @property
     def interval(self):
@@ -75,7 +76,10 @@ class TradingStrategy(Strategy):
                     else:
                         allocations[asset] = 0.0
 
+            self.last_allocations = allocations
             return TargetAllocation(allocations)
+        else:
+            return TargetAllocation(self.last_allocations)
 
     def calculate_cpmomentum_scores(self, data):
         """
