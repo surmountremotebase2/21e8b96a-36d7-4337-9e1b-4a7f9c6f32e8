@@ -33,9 +33,10 @@ class TradingStrategy(Strategy):
 
     def run(self, data):
         allocations = {}
-        today = datetime.now() #GET Today's date
-        tomorrow = today.replace(day=today.day % 28 + 1)  # Handles most month lengths properly.
-        if tomorrow.day < today.day:
+        today = date.today() #GET Today's date
+        # Check if tomorrow belongs to the same month as today
+        is_last_day = today.month != (today + timedelta(days=1)).month
+        if is_last_day:
 
             momentum_scores = self.calculate_momentum_scores(data)
 
