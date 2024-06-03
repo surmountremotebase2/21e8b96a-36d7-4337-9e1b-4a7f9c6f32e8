@@ -1,7 +1,7 @@
 from surmount.base_class import Strategy, TargetAllocation, backtest
 from surmount.logging import log
 import pandas as pd
-
+from datetime import date, time, datetime, timedelta
 
 
 class TradingStrategy(Strategy):
