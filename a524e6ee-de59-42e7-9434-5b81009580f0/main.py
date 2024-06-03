@@ -13,7 +13,7 @@ class TradingStrategy(Strategy):
                               "XLK", "XLU", "XLV", "FEZ", "TLT", "GLD", "EWJ",
                               "MTUM", "SOXX"]
         self.crash_protection_asset1 = "TIP"
-        self.crash_protection_asset2 = "BIL"
+        self.crash_protection_asset2 = "SHV"
         self.cplist = [self.crash_protection_asset2]
         self.RiskON = 3  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
