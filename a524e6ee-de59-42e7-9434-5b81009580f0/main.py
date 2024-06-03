@@ -89,10 +89,7 @@ class TradingStrategy(Strategy):
                         allocations[asset] = (1 - cp_allocation) / self.RiskON
                     else:
                         allocations[asset] = 0.0
-            self.last_allocations = allocations
             return TargetAllocation(allocations)
-        else:
-            return TargetAllocation(self.last_allocations)
 
 
     def calculate_cpmomentum_scores(self, data):
