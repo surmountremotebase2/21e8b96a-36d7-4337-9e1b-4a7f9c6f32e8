@@ -90,7 +90,7 @@ class TradingStrategy(Strategy):
             for asset in self.tickers:
                 if asset in sorted_assets_by_momentum:
                     #allocations[asset] = (1 - cp_allocation) / positive_momentum_assets
-                    allocations[asset] = 0.33
+                    allocations[asset] = float(1 / self.RiskON)
                 else:
                     allocations[asset] = 0.0
 
