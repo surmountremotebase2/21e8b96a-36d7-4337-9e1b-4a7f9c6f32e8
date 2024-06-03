@@ -19,7 +19,7 @@ class TradingStrategy(Strategy):
         self.RiskON = 3  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
         self.LTMA = 100  #Long Term Moving Average
-        self.STMOM = 21   #Short Term Momentum
+        self.STMOM = 50   #Short Term Momentum
         self.LTMOM = 128   #Short Term Momentum
         self.STMA = 20
         self.DAYOFWEEK = 3
