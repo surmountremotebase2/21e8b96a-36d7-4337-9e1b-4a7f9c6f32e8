@@ -9,15 +9,17 @@ class TradingStrategy(Strategy):
         # Define the global asset classes and the crash protection asset
         #self.tickers = ["SPY", "QQQ", "TECL", "IWM", "VGK", 
         self.tickers = ["SPY", "QQQ", "TECL", "IWM", "IJT", 
-                              "EWJ", "EEM", "XLK", "HYG", "XLU", "XLV",
-                              "LQD", "TLT", "SPLV", "GLD", "MTUM", "DBC", "SOXX"]
+                              #"EWJ", "EEM", "XLK", "HYG", "XLU", "XLV", "LQD",
+                              "EWJ", "EEM", "XLK", "XLU", "XLV", "SH", "UUP",
+                              "IEF", "TLT", "SPLV", "GLD", "MTUM", "DBC", "SOXX"]
         self.crash_protection_asset1 = "TIP"
         self.crash_protection_asset2 = "BIL"
         self.cplist = [self.crash_protection_asset1, self.crash_protection_asset2]
         self.RiskON = 3  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
         self.LTMA = 50  #Long Term Moving Average
-        self.STMA = 15   #Short Term Momentum
+        self.STMOM = 15   #Short Term Momentum
+        self.LTMOM = 128   #Short Term Momentum
 
     @property
     def interval(self):
@@ -44,8 +46,8 @@ class TradingStrategy(Strategy):
             #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
             #sorted_cpassets_by_momentum = sorted(cpmomentum_scores, key=momentum_scores.get, reverse=True)
             # Calculate number of assets with positive momentum
-            allocations[self.crash_protection_asset1] = 0.7
-            allocations[self.crash_protection_asset2] = 0.3
+            allocations[self.crash_protection_asset1] = 0.3
+            allocations[self.crash_protection_asset2] = 0.7
             for asset in self.tickers:
                 allocations[asset] = 0.0
         else:
@@ -74,12 +76,12 @@ class TradingStrategy(Strategy):
         datatick = data["ohlcv"]
         for asset in self.cplist:
             close_data = datatick[-1][asset]['close']
-            close_prices = [x[asset]['close'] for x in datatick[-self.LTMA:]]
+            close_prices = [x[asset]['close'] for x in datatick[-252:]]
             #close_prices = pd.DataFrame(close_prices)
             sma = self.calculate_sma(asset, datatick)
             if sma > 0:  # Avoid division by zero
                 #momentum_score = (close_data / sma) - 1
-                momentum_score = ( (close_data / sma) + ( (close_data / close_prices[-self.STMA][0]) *100) )
+                momentum_score = ( (close_data / sma) + ( (close_data / close_prices[-self.STMOM][0]) *10) +  ( (close_data / close_prices[-self.LTMOM][0]) *10))
             else:
                 momentum_score = 0
             momentum_scores[asset] = momentum_score
@@ -99,7 +101,7 @@ class TradingStrategy(Strategy):
             sma = self.calculate_sma(asset, data["ohlcv"])
             if sma > 0:  # Avoid division by zero
                 #momentum_score = (close_data / sma) - 1
-                momentum_score = ( (close_data / sma) + ( (close_data / close_prices[-self.STMA]) *100) )
+                momentum_score = ( (close_data / sma) + ( (close_data / close_prices[-self.STMOM][0]) *10) +  ( (close_data / close_prices[-self.LTMOM][0]) *10))
             else:
                 momentum_score = 0
             momentum_scores[asset] = momentum_score
