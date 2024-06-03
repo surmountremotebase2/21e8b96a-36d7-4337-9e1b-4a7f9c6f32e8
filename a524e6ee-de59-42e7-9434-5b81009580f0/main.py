@@ -36,6 +36,11 @@ class TradingStrategy(Strategy):
     def run(self, data):
         allocations = {}
         today = date.today() #GET Today's date
+        datatick = data["ohlcv"]
+        today = d[-1]["SPY"]["date"]
+        # Convert the strings to datetime objects using to_datetime
+        today = pd.to_datetime(today)
+        log(f"DATE: {today.strftime('%Y-%m-%d')}")
         # Check if tomorrow belongs to the same month as today
         is_last_day = today.month != (today + timedelta(days=2)).month
         if is_last_day or self.init == 0:
