@@ -52,7 +52,8 @@ class TradingStrategy(Strategy):
             positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
             print(positive_momentum_assets)
             # Log the allocation for the current run.
-            log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
+            log(f"Mom scores: {momentum_scores.values()}")
+            #log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
             #positive_momentum_assets = 3
 
             # Determine the allocation to crash protection asset
