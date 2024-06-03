@@ -42,10 +42,11 @@ class TradingStrategy(Strategy):
         today = datatick[-1]["SPY"]["date"]
         # Convert the strings to datetime objects using to_datetime
         today = pd.to_datetime(today)
-        #log(f"DATE: {today.strftime('%Y-%m-%d')}")
+        dayweek = today.weekday()
+        log(f"WeekDay: {str(dayweek)}")
         # Check if tomorrow belongs to the same month as today
         #is_last_day = today.month != (today + timedelta(days=1)).month
-        if today.weekday() == self.DAYOFWEEK:
+        if dayweek == self.DAYOFWEEK:
             is_last_day = True
 
         if is_last_day or self.init == 0:
