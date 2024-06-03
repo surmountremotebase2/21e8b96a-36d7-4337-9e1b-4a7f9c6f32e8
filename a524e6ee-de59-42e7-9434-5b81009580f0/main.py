@@ -19,9 +19,9 @@ class TradingStrategy(Strategy):
         self.RiskON = 3  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
         self.LTMA = 100  #Long Term Moving Average
-        self.STMOM = 50   #Short Term Momentum
+        self.STMOM = 20   #Short Term Momentum
         self.LTMOM = 128   #Short Term Momentum
-        self.STMA = 20
+        self.STMA = 50
         self.DAYOFWEEK = 3
         self.init = 0
         self.last_allocations = {}
