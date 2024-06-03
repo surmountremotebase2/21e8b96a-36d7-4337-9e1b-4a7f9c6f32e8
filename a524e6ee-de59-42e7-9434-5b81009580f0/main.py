@@ -16,7 +16,7 @@ class TradingStrategy(Strategy):
         self.crash_protection_asset1 = "TIP"
         self.crash_protection_asset2 = "SHV"
         self.cplist = [self.crash_protection_asset2]
-        self.RiskON = 3  #Number of Risk ON Assets
+        self.RiskON = 2  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
         self.LTMA = 100  #Long Term Moving Average
         self.STMOM = 20   #Short Term Momentum
@@ -55,6 +55,8 @@ class TradingStrategy(Strategy):
             self.init = 1
 
             momentum_scores = self.calculate_momentum_scores(data)
+            ema = EMA("TECL", datatick, self.STMA)[-1]
+            mrktclose = datatick[-1]["TECL"]["close"]
 
             # Calculate number of assets with positive momentum
             positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
@@ -65,7 +67,7 @@ class TradingStrategy(Strategy):
             #positive_momentum_assets = 3
 
             # Determine the allocation to crash protection asset
-            if positive_momentum_assets <= 2:
+            if (positive_momentum_assets <= 1) or (mrktclose < ema and positive_momentum_assets <= 2:
                 log(f"RISK OFF: SHV")
                 # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
                 #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
