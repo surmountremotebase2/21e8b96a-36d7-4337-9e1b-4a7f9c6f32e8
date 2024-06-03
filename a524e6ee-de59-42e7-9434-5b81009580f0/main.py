@@ -81,6 +81,7 @@ class TradingStrategy(Strategy):
             else:
                 cp_allocation = 0.0
                 allocations[self.crash_protection_asset2] = cp_allocation
+                positive_momentum_assets = self.RiskON
 
             # Determine allocations for assets with positive momentum
             sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:self.RiskON]
