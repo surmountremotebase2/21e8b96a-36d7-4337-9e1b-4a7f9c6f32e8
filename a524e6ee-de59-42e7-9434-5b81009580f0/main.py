@@ -20,7 +20,7 @@ class TradingStrategy(Strategy):
         self.LTMA = 50  #Long Term Moving Average
         self.STMOM = 15   #Short Term Momentum
         self.LTMOM = 128   #Short Term Momentum
-        self.DAYOFWEEK = 6
+        self.DAYOFWEEK = 3
         self.init = 0
         self.last_allocations = {}
 
@@ -43,7 +43,7 @@ class TradingStrategy(Strategy):
         # Convert the strings to datetime objects using to_datetime
         today = pd.to_datetime(today)
         dayweek = today.weekday()
-        log(f"WeekDay: {str(dayweek)}")
+        #log(f"WeekDay: {str(dayweek)}")
         # Check if tomorrow belongs to the same month as today
         #is_last_day = today.month != (today + timedelta(days=1)).month
         if dayweek == self.DAYOFWEEK:
