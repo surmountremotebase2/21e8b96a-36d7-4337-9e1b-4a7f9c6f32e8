@@ -11,11 +11,11 @@ class TradingStrategy(Strategy):
         #self.tickers = ["SPY", "QQQ", "TECL", "IWM", "VGK", 
         self.tickers = ["SPY", "QQQ", "TECL", "IJT",
                               #"EWJ", "EEM", "XLK", "HYG", "XLU", "XLV", "LQD",
-                              "XLK", "XLU", "XLV", "FEZ", "TLT", "IEF", "EWJ",
+                              "XLK", "XLV", "FEZ", "TLT", "IEF", "EWJ",
                               "MTUM", "SOXX"]
         self.crash_protection_asset1 = "TIP"
         self.crash_protection_asset2 = "SHV"
-        self.cplist = [self.crash_protection_asset2, "XLI"]
+        self.cplist = [self.crash_protection_asset2, "XLI", "XLU"]
         self.RiskON = 3  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
         self.LTMA = 100  #Long Term Moving Average
