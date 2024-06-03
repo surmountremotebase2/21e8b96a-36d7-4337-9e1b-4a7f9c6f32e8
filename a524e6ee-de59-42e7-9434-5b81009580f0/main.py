@@ -10,7 +10,7 @@ class TradingStrategy(Strategy):
         #self.tickers = ["SPY", "QQQ", "TECL", "IWM", "VGK", 
         self.tickers = ["SPY", "QQQ", "TECL", "IJT", 
                               #"EWJ", "EEM", "XLK", "HYG", "XLU", "XLV", "LQD",
-                              "XLK", "XLU", "XLV", "FEZ", "TLT", "EWJ",
+                              "XLK", "XLU", "XLV", "FEZ", "TLT", "EWJ", "GLD"
                               "MTUM", "SOXX"]
         self.crash_protection_asset1 = "TIP"
         self.crash_protection_asset2 = "SHV"
@@ -87,9 +87,10 @@ class TradingStrategy(Strategy):
                 log(f"Sorted MOM {today.strftime('%Y-%m-%d')}: {sorted_assets_by_momentum}")
                 for asset in self.tickers:
                     if asset in sorted_assets_by_momentum:
-                        allocations[asset] = (1 - cp_allocation) / self.RiskON
+                        allocations[asset] = (1 - cp_allocation) / positive_momentum_assets
                     else:
                         allocations[asset] = 0.0
+
             return TargetAllocation(allocations)
 
 
