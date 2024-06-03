@@ -10,8 +10,8 @@ class TradingStrategy(Strategy):
         #self.tickers = ["SPY", "QQQ", "TECL", "IWM", "VGK", 
         self.tickers = ["SPY", "QQQ", "TECL", "IJT", 
                               #"EWJ", "EEM", "XLK", "HYG", "XLU", "XLV", "LQD",
-                              "XLK", "XLU", "XLV", "IEF", "EWJ", "FEZ", "TLT", "GLD",
-                              "SPLV", "MTUM", "SOXX"]
+                              "XLK", "XLU", "XLV", "IEF", "SH", "FEZ", "TLT", "GLD",
+                              "MTUM", "SOXX"]
         self.crash_protection_asset1 = "TIP"
         self.crash_protection_asset2 = "BIL"
         self.cplist = [self.crash_protection_asset1, self.crash_protection_asset2]
