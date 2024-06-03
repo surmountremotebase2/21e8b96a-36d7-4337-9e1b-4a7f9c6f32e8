@@ -15,7 +15,7 @@ class TradingStrategy(Strategy):
         self.crash_protection_asset1 = "TIP"
         self.crash_protection_asset2 = "BIL"
         self.cplist = [self.crash_protection_asset1, self.crash_protection_asset2]
-        self.RiskON = 3  #Number of Risk ON Assets
+        self.RiskON = 4  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
         self.LTMA = 200  #Long Term Moving Average
         self.STMOM = 15   #Short Term Momentum
@@ -41,7 +41,7 @@ class TradingStrategy(Strategy):
         #positive_momentum_assets = 3
 
         # Determine the allocation to crash protection asset
-        if positive_momentum_assets < 1:
+        if positive_momentum_assets < 3:
             # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
             #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
             #sorted_cpassets_by_momentum = sorted(cpmomentum_scores, key=momentum_scores.get, reverse=True)
@@ -53,7 +53,7 @@ class TradingStrategy(Strategy):
         else:
             if positive_momentum_assets < self.RiskON:
                 cp_allocation = (self.RiskON - positive_momentum_assets) * (1/self.RiskON)
-                allocations[self.crash_protection_asset2] = cp_allocation
+                allocations[self.crash_protection_asset1] = cp_allocation
             else:
                 cp_allocation = 0
 
