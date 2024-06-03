@@ -33,39 +33,46 @@ class TradingStrategy(Strategy):
 
     def run(self, data):
         allocations = {}
-        momentum_scores = self.calculate_momentum_scores(data)
+        today = datetime.now() #GET Today's date
+        tomorrow = today.replace(day=today.day % 28 + 1)  # Handles most month lengths properly.
+        if tomorrow.day < today.day:
 
-        # Calculate number of assets with positive momentum
-        positive_momentum_assets = sum(m >= 0 for m in momentum_scores.values())
-        print(positive_momentum_assets)
-        #positive_momentum_assets = 3
+            momentum_scores = self.calculate_momentum_scores(data)
 
-        # Determine the allocation to crash protection asset
-        if positive_momentum_assets <= 2:
-            # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
-            #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
-            #sorted_cpassets_by_momentum = sorted(cpmomentum_scores, key=momentum_scores.get, reverse=True)
             # Calculate number of assets with positive momentum
-            allocations[self.crash_protection_asset1] = 0.3
-            allocations[self.crash_protection_asset2] = 0.7
-            for asset in self.tickers:
-                allocations[asset] = 0.0
-        else:
-            if positive_momentum_assets < self.RiskON:
-                cp_allocation = (self.RiskON - positive_momentum_assets) * (1/self.RiskON)
-                allocations[self.crash_protection_asset1] = cp_allocation
-            else:
-                cp_allocation = 0
+            positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
+            print(positive_momentum_assets)
+            # Log the allocation for the current run.
+            log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
+            #positive_momentum_assets = 3
 
-            # Determine allocations for assets with positive momentum
-            sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:self.RiskON]
-            for asset in self.tickers:
-                if asset in sorted_assets_by_momentum:
-                    allocations[asset] = (1 - cp_allocation) / self.RiskON
-                else:
+            # Determine the allocation to crash protection asset
+            if positive_momentum_assets <= 2:
+                # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
+                #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
+                #sorted_cpassets_by_momentum = sorted(cpmomentum_scores, key=momentum_scores.get, reverse=True)
+                # Calculate number of assets with positive momentum
+                allocations[self.crash_protection_asset1] = 0.3
+                allocations[self.crash_protection_asset2] = 0.7
+                for asset in self.tickers:
                     allocations[asset] = 0.0
+            else:
+                if positive_momentum_assets < self.RiskON:
+                    cp_allocation = (self.RiskON - positive_momentum_assets) * (1/self.RiskON)
+                    allocations[self.crash_protection_asset1] = cp_allocation
+                else:
+                    cp_allocation = 0
 
-        return TargetAllocation(allocations)
+                # Determine allocations for assets with positive momentum
+                sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:self.RiskON]
+                log(f"Sorted MOM {today.strftime('%Y-%m-%d')}: {sorted_assets_by_momentum}")
+                for asset in self.tickers:
+                    if asset in sorted_assets_by_momentum:
+                        allocations[asset] = (1 - cp_allocation) / self.RiskON
+                    else:
+                        allocations[asset] = 0.0
+
+            return TargetAllocation(allocations)
 
     def calculate_cpmomentum_scores(self, data):
         """
