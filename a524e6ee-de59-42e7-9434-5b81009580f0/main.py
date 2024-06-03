@@ -20,6 +20,7 @@ class TradingStrategy(Strategy):
         self.LTMA = 80  #Long Term Moving Average
         self.STMOM = 15   #Short Term Momentum
         self.LTMOM = 128   #Short Term Momentum
+        self.init = 0
 
     @property
     def interval(self):
@@ -35,8 +36,9 @@ class TradingStrategy(Strategy):
         allocations = {}
         today = date.today() #GET Today's date
         # Check if tomorrow belongs to the same month as today
-        is_last_day = today.month != (today + timedelta(days=1)).month
-        if is_last_day:
+        is_last_day = today.month != (today + timedelta(days=2)).month
+        if is_last_day or self.init == 0:
+            self.init = 1
 
             momentum_scores = self.calculate_momentum_scores(data)
 
