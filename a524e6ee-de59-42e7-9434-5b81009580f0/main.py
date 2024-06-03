@@ -69,8 +69,8 @@ class TradingStrategy(Strategy):
                 #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
                 #sorted_cpassets_by_momentum = sorted(cpmomentum_scores, key=momentum_scores.get, reverse=True)
                 # Calculate number of assets with positive momentum
-                allocations[self.crash_protection_asset1] = 0.3
-                allocations[self.crash_protection_asset2] = 0.7
+                #allocations[self.crash_protection_asset1] = 0.3
+                allocations[self.crash_protection_asset2] = 1.0
                 for asset in self.tickers:
                     allocations[asset] = 0.0
             else:
