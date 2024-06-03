@@ -14,7 +14,7 @@ class TradingStrategy(Strategy):
                               "MTUM", "SOXX"]
         self.crash_protection_asset1 = "TIP"
         self.crash_protection_asset2 = "BIL"
-        self.cplist = [self.crash_protection_asset1, self.crash_protection_asset2]
+        self.cplist = [self.crash_protection_asset2]
         self.RiskON = 3  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
         self.LTMA = 100  #Long Term Moving Average
@@ -70,7 +70,7 @@ class TradingStrategy(Strategy):
                 #sorted_cpassets_by_momentum = sorted(cpmomentum_scores, key=momentum_scores.get, reverse=True)
                 # Calculate number of assets with positive momentum
                 #allocations[self.crash_protection_asset1] = 0.3
-                allocations[self.crash_protection_asset2] = 1.0
+                allocations[self.crash_protection_asset2] = 1
                 for asset in self.tickers:
                     allocations[asset] = 0.0
             else:
