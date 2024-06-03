@@ -11,7 +11,7 @@ class TradingStrategy(Strategy):
         #self.tickers = ["SPY", "QQQ", "TECL", "IWM", "VGK", 
         self.tickers = ["SPY", "QQQ", "TECL", "IJT",
                               #"EWJ", "EEM", "XLK", "HYG", "XLU", "XLV", "LQD",
-                              "XLK", "XLU", "XLV", "FEZ", "TLT", "EWJ",
+                              "XLK", "XLU", "XLV", "FEZ", "TLT", "IEF", "EWJ",
                               "MTUM", "SOXX"]
         self.crash_protection_asset1 = "TIP"
         self.crash_protection_asset2 = "SHV"
@@ -55,8 +55,9 @@ class TradingStrategy(Strategy):
             self.init = 1
 
         momentum_scores = self.calculate_momentum_scores(data)
-        ema = EMA("TECL", datatick, self.STMA)[-1]
-        mrktclose = datatick[-1]["TECL"]["close"]
+        ema = EMA("QQQ", datatick, self.STMA)[-1]
+        macd_signal = MACD("SPY", ohlcv_data, fast=15, slow=25)["signal"]  # Traditional MACD
+        mrktclose = datatick[-1]["QQQ"]["close"]
 
         # Calculate number of assets with positive momentum
         positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
@@ -66,7 +67,7 @@ class TradingStrategy(Strategy):
         #positive_momentum_assets = 3
 
         # Determine the allocation to crash protection asset
-        if (positive_momentum_assets <= 1) or (mrktclose < ema and positive_momentum_assets <= 2):
+        if (positive_momentum_assets <= 1) or (macd_signal < 0 and positive_momentum_assets <= 3):
             log(f"RISK OFF: SHV")
             # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
             #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
