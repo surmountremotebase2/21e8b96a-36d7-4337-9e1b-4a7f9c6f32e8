@@ -71,6 +71,7 @@ class TradingStrategy(Strategy):
         # Determine allocations for assets with positive momentum
         sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:self.RiskON]
         TopMom = sorted_assets_by_momentum[0]
+        log(f"TopMom: {TopMom}")
 
         # Determine the allocation to crash protection asset
         if (positive_momentum_assets <= 1) or (xlu > xli and TopMom in self.SafeAssets):
