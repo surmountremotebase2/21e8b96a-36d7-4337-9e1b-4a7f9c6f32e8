@@ -57,12 +57,12 @@ class TradingStrategy(Strategy):
 
         momentum_scores = self.calculate_momentum_scores(data)
         ema = EMA("QQQ", datatick, self.STMA)[-1]
-        xlu = (datatick[-1]["XLU"]["close"] - datatick[-45]["XLU"]["close"]) / datatick[-45]["XLU"]["close"]
-        xli = (datatick[-1]["XLI"]["close"] - datatick[-45]["XLI"]["close"]) / datatick[-45]["XLI"]["close"]
+        xlu = (datatick[-1]["XLU"]["close"] - datatick[-50]["XLU"]["close"]) / datatick[-50]["XLU"]["close"]
+        xli = (datatick[-1]["XLI"]["close"] - datatick[-50]["XLI"]["close"]) / datatick[-50]["XLI"]["close"]
         #log(f"{macd_signal}")
         mrktclose = datatick[-1]["QQQ"]["close"]
         teclmrktclose = datatick[-1]["TECL"]["close"]
-        teclema = EMA("TECL", datatick, self.STMA)[-1]
+        teclrsi = RSI("TECL", datatick, 15)[-1]
 
         # Calculate number of assets with positive momentum
         positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
@@ -71,7 +71,7 @@ class TradingStrategy(Strategy):
         #log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
         #positive_momentum_assets = 3
         # Determine allocations for assets with positive momentum
-        if teclmrktclose < teclema and "TECL" in momentum_scores:
+        if teclrsi > 80 and "TECL" in momentum_scores:
             del momentum_scores["TECL"]
 
         sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:self.RiskON]
