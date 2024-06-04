@@ -71,8 +71,6 @@ class TradingStrategy(Strategy):
         #log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
         #positive_momentum_assets = 3
         # Determine allocations for assets with positive momentum
-        filtermom = []
-
         if teclmrktclose < teclema and "TECL" in momentum_scores:
             del momentum_scores["TECL"]
 
