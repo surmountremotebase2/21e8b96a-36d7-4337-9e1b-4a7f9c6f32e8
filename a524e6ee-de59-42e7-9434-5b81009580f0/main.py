@@ -74,10 +74,8 @@ class TradingStrategy(Strategy):
         filtermom = []
 
         if teclmrktclose < teclema and "TECL" in momentum_scores:
-            for asset in momentum_scores:
-                if asset != "TECL":
-                    filtermom.append(asset)
-            
+            del momentum_scores["TECL"]
+
         sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:self.RiskON]
         TopMom = sorted_assets_by_momentum[0]
         log(f"TopMom: {TopMom}")
