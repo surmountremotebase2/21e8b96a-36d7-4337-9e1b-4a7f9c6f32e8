@@ -22,7 +22,7 @@ class TradingStrategy(Strategy):
         self.LTMA = 100  #Long Term Moving Average
         self.STMOM = 20   #Short Term Momentum
         self.LTMOM = 128   #Short Term Momentum
-        self.STMA = 10
+        self.STMA = 20
         self.DAYOFWEEK = 4
         self.init = 0
         self.last_allocations = {}
