@@ -57,8 +57,8 @@ class TradingStrategy(Strategy):
 
         momentum_scores = self.calculate_momentum_scores(data)
         ema = EMA("QQQ", datatick, self.STMA)[-1]
-        xlu = (datatick[-1]["XLU"]["close"] - datatick[-50]["XLU"]["close"]) / datatick[-50]["XLU"]["close"]
-        xli = (datatick[-1]["XLI"]["close"] - datatick[-50]["XLI"]["close"]) / datatick[-50]["XLI"]["close"]
+        xlu = (datatick[-1]["XLU"]["close"] - datatick[-30]["XLU"]["close"]) / datatick[-30]["XLU"]["close"]
+        xli = (datatick[-1]["XLI"]["close"] - datatick[-30]["XLI"]["close"]) / datatick[-30]["XLI"]["close"]
         #log(f"{macd_signal}")
         mrktclose = datatick[-1]["QQQ"]["close"]
         teclmrktclose = datatick[-1]["TECL"]["close"]
@@ -76,19 +76,24 @@ class TradingStrategy(Strategy):
 
         sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:self.RiskON]
         TopMom = sorted_assets_by_momentum[0]
-        log(f"TopMom: {TopMom}")
+        #log(f"TopMom: {TopMom}")
 
         # Determine the allocation to crash protection asset
-        if (positive_momentum_assets <= 1) or (xlu > xli and TopMom in self.SafeAssets):
-            log(f"RISK OFF: SHV")
+        if (positive_momentum_assets <= 3) or (xlu > xli):
+            #log(f"RISK OFF: SHV")
             # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
             #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
             #sorted_cpassets_by_momentum = sorted(cpmomentum_scores, key=momentum_scores.get, reverse=True)
             # Calculate number of assets with positive momentum
             #allocations[self.crash_protection_asset1] = 0.3
-            allocations[self.crash_protection_asset2] = 1.0
             for asset in self.tickers:
-                allocations[asset] = 0.0
+                allocations[asset] = 0.0            
+            if xlu > xli and TopMom in self.SafeAssets:
+                allocations[TopMom] = 0.5
+                allocations[self.crash_protection_asset2] = 0.5
+            else:
+                allocations[self.crash_protection_asset2] = 1.0
+
         else:
             #log(f"Mom scores: {momentum_scores.values()}")
             if positive_momentum_assets < self.RiskON:
