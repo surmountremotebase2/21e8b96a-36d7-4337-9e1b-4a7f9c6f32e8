@@ -62,7 +62,8 @@ class TradingStrategy(Strategy):
         #log(f"{macd_signal}")
         mrktclose = datatick[-1]["QQQ"]["close"]
         teclmrktclose = datatick[-1]["TECL"]["close"]
-        teclrsi = RSI("TECL", datatick, 128)[-1]
+        teclrsi = RSI("TECL", datatick, 30)[-1]
+        teclema = EMA("TECL", datatick, 10)[-1]
 
         
         # Log the allocation for the current run.
@@ -70,7 +71,7 @@ class TradingStrategy(Strategy):
         #log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
         #positive_momentum_assets = 3
         # Determine allocations for assets with positive momentum
-        if xlu > xli and teclrsi > 85 and "TECL" in momentum_scores:
+        if teclmrktclose < teclema and teclrsi > 50 and "TECL" in momentum_scores:
             del momentum_scores["TECL"]
         
         # Calculate number of assets with positive momentum
