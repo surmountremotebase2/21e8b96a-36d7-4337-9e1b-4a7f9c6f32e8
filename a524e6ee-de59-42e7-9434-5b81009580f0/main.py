@@ -61,6 +61,8 @@ class TradingStrategy(Strategy):
         xli = (datatick[-1]["XLI"]["close"] - datatick[-45]["XLI"]["close"]) / datatick[-45]["XLI"]["close"]
         #log(f"{macd_signal}")
         mrktclose = datatick[-1]["QQQ"]["close"]
+        teclmrktclose = datatick[-1]["TECL"]["close"]
+        teclema = EMA("TECL", datatick, self.STMA)[-1]
 
         # Calculate number of assets with positive momentum
         positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
@@ -69,6 +71,13 @@ class TradingStrategy(Strategy):
         #log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
         #positive_momentum_assets = 3
         # Determine allocations for assets with positive momentum
+        filtermom = []
+
+        if teclmrktclose < teclema and "TECL" in momentum_scores:
+            for asset in momentum_scores:
+                if asset != "TECL":
+                    filtermom.append(asset)
+            
         sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:self.RiskON]
         TopMom = sorted_assets_by_momentum[0]
         log(f"TopMom: {TopMom}")
