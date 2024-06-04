@@ -79,7 +79,7 @@ class TradingStrategy(Strategy):
         #log(f"TopMom: {TopMom}")
 
         # Determine the allocation to crash protection asset
-        if (positive_momentum_assets <= 3) or (xlu > xli):
+        if (positive_momentum_assets <= 3) or (xlu > xli and TopMom in self.SafeAssets):
             #log(f"RISK OFF: SHV")
             # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
             #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
@@ -88,7 +88,7 @@ class TradingStrategy(Strategy):
             #allocations[self.crash_protection_asset1] = 0.3
             for asset in self.tickers:
                 allocations[asset] = 0.0            
-            if xlu > xli and TopMom in self.SafeAssets:
+            if TopMom in self.SafeAssets:
                 allocations[TopMom] = 0.5
                 allocations[self.crash_protection_asset2] = 0.5
             else:
