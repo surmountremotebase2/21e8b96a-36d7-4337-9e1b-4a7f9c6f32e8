@@ -64,15 +64,17 @@ class TradingStrategy(Strategy):
         teclmrktclose = datatick[-1]["TECL"]["close"]
         teclrsi = RSI("TECL", datatick, 15)[-1]
 
-        # Calculate number of assets with positive momentum
-        positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
+        
         # Log the allocation for the current run.
         
         #log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
         #positive_momentum_assets = 3
         # Determine allocations for assets with positive momentum
-        if teclrsi > 80 and "TECL" in momentum_scores:
+        if teclrsi > 85 and "TECL" in momentum_scores:
             del momentum_scores["TECL"]
+        
+        # Calculate number of assets with positive momentum
+        positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
 
         sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:self.RiskON]
         TopMom = sorted_assets_by_momentum[0]
