@@ -57,12 +57,12 @@ class TradingStrategy(Strategy):
 
         momentum_scores = self.calculate_momentum_scores(data)
         ema = EMA("QQQ", datatick, self.STMA)[-1]
-        xlu = (datatick[-1]["XLU"]["close"] - datatick[-30]["XLU"]["close"]) / datatick[-30]["XLU"]["close"]
-        xli = (datatick[-1]["XLI"]["close"] - datatick[-30]["XLI"]["close"]) / datatick[-30]["XLI"]["close"]
+        xlu = (datatick[-1]["XLU"]["close"] - datatick[-45]["XLU"]["close"]) / datatick[-45]["XLU"]["close"]
+        xli = (datatick[-1]["XLI"]["close"] - datatick[-45]["XLI"]["close"]) / datatick[-45]["XLI"]["close"]
         #log(f"{macd_signal}")
         mrktclose = datatick[-1]["QQQ"]["close"]
         teclmrktclose = datatick[-1]["TECL"]["close"]
-        teclrsi = RSI("TECL", datatick, 15)[-1]
+        teclrsi = RSI("TECL", datatick, 128)[-1]
 
         
         # Log the allocation for the current run.
