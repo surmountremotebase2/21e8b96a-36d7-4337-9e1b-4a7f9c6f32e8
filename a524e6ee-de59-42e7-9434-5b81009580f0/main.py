@@ -148,7 +148,7 @@ class TradingStrategy(Strategy):
             momentum_scores[asset] = momentum_score
         return momentum_scores
 
-    def calculate_annualized_realized_volatility(data, window=252):
+    def calculate_annualized_realized_volatility(self, data, window=252):
         # Ensure consistent indexing for calculations
         data = data.reset_index(drop=True)
         # Calculate daily log returns (avoiding potential division by zero)
