@@ -80,6 +80,7 @@ class TradingStrategy(Strategy):
         # Check for increasing volatility on a 5-day basis (assuming daily data)
         if len(qqq_prices) >= 5:
             past_5_days_volatility = annualized_volatility[-5:]
+            log(f"PAST VOLA {past_5_days_volatility}")
             is_increasing_volatility = last_day_vola > past_5_days_volatility
 
         
