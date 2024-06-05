@@ -2,6 +2,7 @@ from surmount.base_class import Strategy, TargetAllocation, backtest
 from surmount.technical_indicators import MACD, RSI, EMA
 from surmount.logging import log
 import pandas as pd
+import numpy as np
 from datetime import date, time, datetime, timedelta
 
 
@@ -67,6 +68,7 @@ class TradingStrategy(Strategy):
         mrktema = EMA("QQQ", datatick, 10)[-1]
 
         qqq_prices = [x["QQQ"]['close'] for x in datatick[-252:]]
+        qqq_prices = pd.DataFrame(qqq_prices)
         last_day_volatility = calculate_annualized_realized_volatility(qqq_prices[-1:])
 
         # Check for increasing volatility on a 5-day basis (assuming daily data)
