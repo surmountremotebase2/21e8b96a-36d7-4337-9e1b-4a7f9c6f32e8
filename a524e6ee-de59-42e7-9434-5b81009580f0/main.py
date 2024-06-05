@@ -158,6 +158,7 @@ class TradingStrategy(Strategy):
         realized_variance = log_returns.var()
         # Annualize realized volatility (assuming 252 trading days per year)
         annualized_volatility = np.sqrt(realized_variance * window)
+        
         return annualized_volatility
 
     def calculate_sma(self, asset, data):
