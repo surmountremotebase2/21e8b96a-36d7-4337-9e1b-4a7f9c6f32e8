@@ -73,13 +73,15 @@ class TradingStrategy(Strategy):
         log_returns = qqq_prices.pct_change()
         log_returns.dropna(inplace=True)
         realized_variance = log_returns.var()
+        realized_variance5 = log_returns[-5].var()
         annualized_volatility = np.sqrt(realized_variance * 252)
+        annualized_volatility5 = np.sqrt(realized_variance * 252)
         last_day_vola = annualized_volatility
         log(f"{last_day_vola}")
 
         # Check for increasing volatility on a 5-day basis (assuming daily data)
         if len(qqq_prices) >= 5:
-            past_5_days_volatility = annualized_volatility[-5:]
+            past_5_days_volatility = annualized_volatility5
             log(f"PAST VOLA {past_5_days_volatility}")
             is_increasing_volatility = last_day_vola > past_5_days_volatility
 
