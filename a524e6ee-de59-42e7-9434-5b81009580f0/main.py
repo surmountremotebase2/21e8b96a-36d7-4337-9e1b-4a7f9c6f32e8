@@ -67,24 +67,19 @@ class TradingStrategy(Strategy):
         mrktrsi = RSI("QQQ", datatick, 15)[-1]
         mrktema = EMA("QQQ", datatick, 10)[-1]
 
-        qqq_prices = [x["QQQ"]['close'] for x in datatick[-253:]]
-        qqq_prices = pd.DataFrame(qqq_prices)
-        qqq_prices = qqq_prices.reset_index(drop=True)
-        log_returns = qqq_prices.pct_change()
-        log_returns5 = qqq_prices[-5:].pct_change()
-        log_returns.dropna(inplace=True)
-        log_returns5.dropna(inplace=True)
-        realized_variance = log_returns.var()
-        realized_variance5 = log_returns5.var()
-        annualized_volatility = np.sqrt(realized_variance[-1] * 252)
-        annualized_volatility5 = np.sqrt(realized_variance5[-1] * 252)
-        last_day_vola = annualized_volatility
-        log(f"{last_day_vola}")
+        qqq_prices = pd.DataFrame([x["QQQ"]["close"] for x in datatick[-253:]])
+        log_returns = qqq_prices.pct_change().dropna()
 
-        # Check for increasing volatility on a 5-day basis (assuming daily data)
-        if len(qqq_prices) >= 5:
-            past_5_days_volatility = annualized_volatility5
-            log(f"PAST VOLA {past_5_days_volatility}")
+        # Calculate realized variance and annualized volatility
+        realized_variance = log_returns.var()
+        annualized_volatility = np.sqrt(realized_variance * 252)
+        last_day_vola = annualized_volatility
+        log(f"Last Day Volatility: {last_day_vola}")
+
+        # Check for increasing volatility on a 5-day basis
+        if len(log_returns) >= 5:
+            past_5_days_volatility = log_returns[-5:].var() * np.sqrt(252)  # Annualize 5-day volatility
+            log(f"Past 5-Day Volatility: {past_5_days_volatility}")
             is_increasing_volatility = last_day_vola > past_5_days_volatility
 
         
