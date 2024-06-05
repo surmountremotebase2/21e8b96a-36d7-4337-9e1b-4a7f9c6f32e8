@@ -13,10 +13,10 @@ class TradingStrategy(Strategy):
         #                      #"EWJ", "EEM", "XLK", "HYG", "XLU", "XLV", "LQD",
         #                      "XLK", "XLV", "XLE", "FEZ", "STIP", "TLT", "IEF", "EWJ", "GLD",
         #                      "MTUM", "SPLV", "SOXX"]
-        self.tickers = ["QQQ", "TECL", "DBC", "RSP", "TLT", "IEF", "GLD", "XLK", "SOXX"]
+        self.tickers = ["QQQ", "TECL", "RSP", "TLT", "IEF", "GLD", "XLK", "SOXX"]
         self.crash_protection_asset1 = "TIP"
         self.crash_protection_asset2 = "SHV"
-        self.SafeAssets = ["IEF", "TLT", "GLD", "DBC"]
+        self.SafeAssets = ["IEF", "TLT", "GLD"]
         self.cplist = [self.crash_protection_asset2, "XLI", "XLU"]
         self.RiskON = 2  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
