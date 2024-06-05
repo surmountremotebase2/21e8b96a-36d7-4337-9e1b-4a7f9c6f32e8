@@ -76,8 +76,8 @@ class TradingStrategy(Strategy):
         log_returns5.dropna(inplace=True)
         realized_variance = log_returns.var()
         realized_variance5 = log_returns5.var()
-        annualized_volatility = np.sqrt(realized_variance * 252)
-        annualized_volatility5 = np.sqrt(realized_variance5 * 252)
+        annualized_volatility = np.sqrt(realized_variance[-1] * 252)
+        annualized_volatility5 = np.sqrt(realized_variance5[-1] * 252)
         last_day_vola = annualized_volatility
         log(f"{last_day_vola}")
 
