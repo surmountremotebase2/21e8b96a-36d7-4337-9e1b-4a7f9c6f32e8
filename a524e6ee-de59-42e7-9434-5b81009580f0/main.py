@@ -98,13 +98,9 @@ class TradingStrategy(Strategy):
                 allocations[self.crash_protection_asset2] = 1.0
 
         else:
-            #log(f"Mom scores: {momentum_scores.values()}")
-            if positive_momentum_assets < self.RiskON:
-                cp_allocation = 0.33
-                allocations[self.crash_protection_asset2] = cp_allocation
-            else:
-                cp_allocation = 0.0
-                allocations[self.crash_protection_asset2] = cp_allocation
+            
+            cp_allocation = 0.0
+            allocations[self.crash_protection_asset2] = cp_allocation
 
             #log(f"Sorted MOM {today.strftime('%Y-%m-%d')}: {sorted_assets_by_momentum}")
             for asset in self.tickers:
