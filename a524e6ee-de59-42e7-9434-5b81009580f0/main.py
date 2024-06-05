@@ -67,7 +67,7 @@ class TradingStrategy(Strategy):
         mrktrsi = RSI("QQQ", datatick, 15)[-1]
         mrktema = EMA("QQQ", datatick, 10)[-1]
 
-        qqq_prices = [x["QQQ"]['close'] for x in datatick[-252:]]
+        qqq_prices = [x["QQQ"]['close'] for x in datatick[-253:]]
         qqq_prices = pd.DataFrame(qqq_prices)
         last_day_volatility = calculate_annualized_realized_volatility(qqq_prices[-1:])
 
