@@ -64,7 +64,15 @@ class TradingStrategy(Strategy):
         mrktclose = datatick[-1]["QQQ"]["close"]
         teclmrktclose = datatick[-1]["TECL"]["close"]
         mrktrsi = RSI("QQQ", datatick, 15)[-1]
-        mrktema = EMA("QQQ", datatick, 15)[-1]
+        mrktema = EMA("QQQ", datatick, 10)[-1]
+
+        qqq_prices = datatick["QQQ"]["close"]
+        last_day_volatility = calculate_annualized_realized_volatility(qqq_prices[-1:])
+
+        # Check for increasing volatility on a 5-day basis (assuming daily data)
+        if len(qqq_prices) >= 5:
+            past_5_days_volatility = calculate_annualized_realized_volatility(qqq_prices[-5:])
+            is_increasing_volatility = last_day_volatility > past_5_days_volatility
 
         
         # Log the allocation for the current run.
@@ -72,7 +80,7 @@ class TradingStrategy(Strategy):
         #log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
         #positive_momentum_assets = 3
         # Determine allocations for assets with positive momentum
-        if mrktclose < mrktema and (mrktrsi > 70 or mrktrsi < 40):
+        if mrktclose < mrktema and (is_increasing_volatility):
             del momentum_scores["TECL"]
             del momentum_scores["TQQQ"]
         
@@ -115,26 +123,31 @@ class TradingStrategy(Strategy):
         return TargetAllocation(allocations)
 
 
-    def calculate_cpmomentum_scores(self, data):
-        """
-        Calculate momentum scores for asset classes based on the formula:
-        MOMt = [(closet / SMA(t..t-12)) – 1]
-        """
-        momentum_scores = {}
-        datatick = data["ohlcv"]
-        for asset in self.cplist:
-            close_data = datatick[-1][asset]['close']
-            close_prices = [x[asset]['close'] for x in datatick[-252:]]
-            ema = technical_indicators.MFI(asset, data, self.STMA)
-            #close_prices = pd.DataFrame(close_prices)
-            sma = self.calculate_sma(asset, datatick)
-            if sma > 0:  # Avoid division by zero
-                momentum_score = (close_data / sma) - 1
-                #momentum_score = ( ((close_data / sma) *2) - (close_data / close_prices[-self.STMOM]) ) -1
-            else:
-                momentum_score = 0
-            momentum_scores[asset] = momentum_score
-        return momentum_scores
+    def calculate_annualized_realized_volatility(data, window=252):
+    """Calculates the annualized realized volatility of an asset's closing prices.
+
+    Args:
+        data (pd.Series): A pandas Series containing the asset's closing prices.
+        window (int, optional): The window size (number of days) for calculating volatility. Defaults to 252 (one year).
+
+    Returns:
+        float: The annualized realized volatility.
+    """
+
+        # Ensure consistent indexing for calculations
+        data = data.reset_index(drop=True)
+
+        # Calculate daily log returns (avoiding potential division by zero)
+        log_returns = np.log(data) - np.log(data.shift(1))
+        log_returns.dropna(inplace=True)
+
+        # Calculate realized variance
+        realized_variance = log_returns.var()
+
+        # Annualize realized volatility (assuming 252 trading days per year)
+        annualized_volatility = np.sqrt(realized_variance * window)
+
+        return annualized_volatility
 
     def calculate_momentum_scores(self, data):
         """
