@@ -74,6 +74,7 @@ class TradingStrategy(Strategy):
         # Determine allocations for assets with positive momentum
         if mrktclose < mrktema and mrktrsi < 80 and mrktrsi > 40:
             del momentum_scores["TECL"]
+            del momentum_scores["TQQQ"]
         
         # Calculate number of assets with positive momentum
         positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
