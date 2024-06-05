@@ -5,7 +5,7 @@ class TradingStrategy(Strategy):
 
     def __init__(self):
         self.ticker = "QQQ"
-        self.amount = 100  # Dollar amount to invest at each interval
+        self.amount = 1000  # Dollar amount to invest at each interval
         self.investment_interval = 30  # Number of days between investments
         self.count = 0
         self.target_allocation = 0
