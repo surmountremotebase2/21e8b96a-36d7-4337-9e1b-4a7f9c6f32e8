@@ -69,7 +69,13 @@ class TradingStrategy(Strategy):
 
         qqq_prices = [x["QQQ"]['close'] for x in datatick[-253:]]
         qqq_prices = pd.DataFrame(qqq_prices)
-        last_day_volatility = calculate_annualized_realized_volatility(qqq_prices[-1:])
+        qqq_prices = qqq_prices.reset_index(drop=True)
+        log_returns = np.log(qqq_prices) - np.log(qqq_prices.shift(1))
+        log_returns.dropna(inplace=True)
+        realized_variance = log_returns.var()
+        annualized_volatility = np.sqrt(realized_variance * 252)
+        last_day_vola = annualized_volatility[-1]
+        log(f"{last_day_vola}")
 
         # Check for increasing volatility on a 5-day basis (assuming daily data)
         if len(qqq_prices) >= 5:
@@ -123,17 +129,6 @@ class TradingStrategy(Strategy):
                     allocations[asset] = 0.0
 
         return TargetAllocation(allocations)
-
-
-    def calculate_annualized_realized_volatility(self, close_prices, window=252):
-
-        data = data.reset_index(drop=True)
-        log_returns = np.log(data) - np.log(data.shift(1))
-        log_returns.dropna(inplace=True)
-        realized_variance = log_returns.var()
-        annualized_volatility = np.sqrt(realized_variance * window)
-        
-        return annualized_volatility
 
     def calculate_momentum_scores(self, data):
         """
