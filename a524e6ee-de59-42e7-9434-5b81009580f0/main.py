@@ -79,8 +79,8 @@ class TradingStrategy(Strategy):
 
         # Check for increasing volatility on a 5-day basis (assuming daily data)
         if len(qqq_prices) >= 5:
-            past_5_days_volatility = calculate_annualized_realized_volatility(qqq_prices[-5:])
-            is_increasing_volatility = last_day_volatility > past_5_days_volatility
+            past_5_days_volatility = annualized_volatility[-5:]
+            is_increasing_volatility = last_day_vola > past_5_days_volatility
 
         
         # Log the allocation for the current run.
