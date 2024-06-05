@@ -125,18 +125,6 @@ class TradingStrategy(Strategy):
         return TargetAllocation(allocations)
 
 
-    def calculate_annualized_realized_volatility(data, window=252):
-        # Ensure consistent indexing for calculations
-        data = data.reset_index(drop=True)
-        # Calculate daily log returns (avoiding potential division by zero)
-        log_returns = np.log(data) - np.log(data.shift(1))
-        log_returns.dropna(inplace=True)
-        # Calculate realized variance
-        realized_variance = log_returns.var()
-        # Annualize realized volatility (assuming 252 trading days per year)
-        annualized_volatility = np.sqrt(realized_variance * window)
-        return annualized_volatility
-
     def calculate_momentum_scores(self, data):
         """
         Calculate momentum scores for asset classes based on the formula:
@@ -159,6 +147,18 @@ class TradingStrategy(Strategy):
                 momentum_score = momentum_score + ( (close_data / ema) - 1 )
             momentum_scores[asset] = momentum_score
         return momentum_scores
+
+    def calculate_annualized_realized_volatility(data, window=252):
+        # Ensure consistent indexing for calculations
+        data = data.reset_index(drop=True)
+        # Calculate daily log returns (avoiding potential division by zero)
+        log_returns = np.log(data) - np.log(data.shift(1))
+        log_returns.dropna(inplace=True)
+        # Calculate realized variance
+        realized_variance = log_returns.var()
+        # Annualize realized volatility (assuming 252 trading days per year)
+        annualized_volatility = np.sqrt(realized_variance * window)
+        return annualized_volatility
 
     def calculate_sma(self, asset, data):
         """
