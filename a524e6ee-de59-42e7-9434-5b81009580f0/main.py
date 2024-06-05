@@ -9,15 +9,16 @@ class TradingStrategy(Strategy):
     def __init__(self):
         # Define the global asset classes and the crash protection asset
         #self.tickers = ["SPY", "QQQ", "TECL", "IWM", "VGK", 
-        self.tickers = ["SPY", "QQQ", "TECL", "DBC",
-                              #"EWJ", "EEM", "XLK", "HYG", "XLU", "XLV", "LQD",
-                              "XLK", "XLV", "XLE", "FEZ", "STIP", "TLT", "IEF", "EWJ", "GLD",
-                              "MTUM", "SPLV", "SOXX"]
+        #self.tickers = ["SPY", "QQQ", "TECL", "DBC",
+        #                      #"EWJ", "EEM", "XLK", "HYG", "XLU", "XLV", "LQD",
+        #                      "XLK", "XLV", "XLE", "FEZ", "STIP", "TLT", "IEF", "EWJ", "GLD",
+        #                      "MTUM", "SPLV", "SOXX"]
+        self.tickers = ["QQQ", "TECL", "DBC", "XLV", "XLE", "TLT", "IEF", "TIP", "GLD", "XLK", "SOXX"]
         self.crash_protection_asset1 = "TIP"
         self.crash_protection_asset2 = "SHV"
-        self.SafeAssets = ["IEF", "TLT", "GLD", "STIP", "DBC"]
+        self.SafeAssets = ["IEF", "TLT", "GLD", "TIP", "DBC"]
         self.cplist = [self.crash_protection_asset2, "XLI", "XLU"]
-        self.RiskON = 3  #Number of Risk ON Assets
+        self.RiskON = 2  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
         self.LTMA = 100  #Long Term Moving Average
         self.STMOM = 20   #Short Term Momentum
