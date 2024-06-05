@@ -124,29 +124,15 @@ class TradingStrategy(Strategy):
 
 
     def calculate_annualized_realized_volatility(data, window=252):
-    """Calculates the annualized realized volatility of an asset's closing prices.
-
-    Args:
-        data (pd.Series): A pandas Series containing the asset's closing prices.
-        window (int, optional): The window size (number of days) for calculating volatility. Defaults to 252 (one year).
-
-    Returns:
-        float: The annualized realized volatility.
-    """
-
         # Ensure consistent indexing for calculations
         data = data.reset_index(drop=True)
-
         # Calculate daily log returns (avoiding potential division by zero)
         log_returns = np.log(data) - np.log(data.shift(1))
         log_returns.dropna(inplace=True)
-
         # Calculate realized variance
         realized_variance = log_returns.var()
-
         # Annualize realized volatility (assuming 252 trading days per year)
         annualized_volatility = np.sqrt(realized_variance * window)
-
         return annualized_volatility
 
     def calculate_momentum_scores(self, data):
