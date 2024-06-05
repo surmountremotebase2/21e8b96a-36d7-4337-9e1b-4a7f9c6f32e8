@@ -68,19 +68,16 @@ class TradingStrategy(Strategy):
         mrktema = EMA("QQQ", datatick, 10)[-1]
 
         qqq_prices = pd.DataFrame([x["QQQ"]["close"] for x in datatick[-253:]])
-        log_returns = qqq_prices.pct_change().dropna()
+        log_returns = qqq_prices.pct_change().dropna()[-252:]
 
         # Calculate realized variance and annualized volatility
         realized_variance = log_returns.var()
         annualized_volatility = np.sqrt(realized_variance * 252)
         last_day_vola = annualized_volatility
         log(f"Last Day Volatility: {last_day_vola}")
+        is_increasing_volatility = False
+        is_increasing_volatility = last_day_vola > .25
 
-        # Check for increasing volatility on a 5-day basis
-        if len(log_returns) >= 5:
-            past_5_days_volatility = log_returns[-5:].var() * np.sqrt(252)  # Annualize 5-day volatility
-            log(f"Past 5-Day Volatility: {past_5_days_volatility}")
-            is_increasing_volatility = last_day_vola > past_5_days_volatility
 
         
         # Log the allocation for the current run.
