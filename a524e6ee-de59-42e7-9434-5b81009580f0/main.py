@@ -74,7 +74,7 @@ class TradingStrategy(Strategy):
         log_returns.dropna(inplace=True)
         realized_variance = log_returns.var()
         annualized_volatility = np.sqrt(realized_variance * 252)
-        last_day_vola = annualized_volatility[-1]
+        last_day_vola = annualized_volatility
         log(f"{last_day_vola}")
 
         # Check for increasing volatility on a 5-day basis (assuming daily data)
