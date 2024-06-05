@@ -76,7 +76,7 @@ class TradingStrategy(Strategy):
         last_day_vola = annualized_volatility
         log(f"Last Day Volatility: {last_day_vola}")
         is_increasing_volatility = False
-        is_increasing_volatility = last_day_vola > .25
+        is_increasing_volatility = last_day_vola[-1] > .25
 
 
         
