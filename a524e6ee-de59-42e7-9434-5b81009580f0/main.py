@@ -71,9 +71,11 @@ class TradingStrategy(Strategy):
         qqq_prices = pd.DataFrame(qqq_prices)
         qqq_prices = qqq_prices.reset_index(drop=True)
         log_returns = qqq_prices.pct_change()
+        log_returns5 = qqq_prices[-5:].pct_change()
         log_returns.dropna(inplace=True)
+        log_returns5.dropna(inplace=True)
         realized_variance = log_returns.var()
-        realized_variance5 = log_returns[-5].var()
+        realized_variance5 = log_returns5.var()
         annualized_volatility = np.sqrt(realized_variance * 252)
         annualized_volatility5 = np.sqrt(realized_variance * 252)
         last_day_vola = annualized_volatility
