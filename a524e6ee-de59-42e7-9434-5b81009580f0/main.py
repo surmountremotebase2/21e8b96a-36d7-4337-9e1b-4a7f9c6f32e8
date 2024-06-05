@@ -11,8 +11,8 @@ class TradingStrategy(Strategy):
         #self.tickers = ["SPY", "QQQ", "TECL", "IWM", "VGK", 
         self.tickers = ["SPY", "QQQ", "TECL", "DBC",
                               #"EWJ", "EEM", "XLK", "HYG", "XLU", "XLV", "LQD",
-                              "XLK", "XLV", "XLU", "FEZ", "STIP", "TLT", "IEF", "EWJ", "GLD",
-                              "MTUM", "SOXX"]
+                              "XLK", "XLV", "XLE", "FEZ", "STIP", "TLT", "IEF", "EWJ", "GLD",
+                              "MTUM", "SPLV", "SOXX"]
         self.crash_protection_asset1 = "TIP"
         self.crash_protection_asset2 = "SHV"
         self.SafeAssets = ["IEF", "TLT", "GLD", "STIP", "DBC"]
