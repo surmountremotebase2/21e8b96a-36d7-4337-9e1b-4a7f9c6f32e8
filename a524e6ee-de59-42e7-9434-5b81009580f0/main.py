@@ -71,7 +71,7 @@ class TradingStrategy(Strategy):
         #log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
         #positive_momentum_assets = 3
         # Determine allocations for assets with positive momentum
-        if mrktclose < mrktema and teclrsi < 70 and teclrsi > 30:
+        if mrktclose < mrktema and mrktrsi < 70 and mrktrsi > 30:
             del momentum_scores["TECL"]
         
         # Calculate number of assets with positive momentum
