@@ -70,7 +70,7 @@ class TradingStrategy(Strategy):
         qqq_prices = [x["QQQ"]['close'] for x in datatick[-253:]]
         qqq_prices = pd.DataFrame(qqq_prices)
         qqq_prices = qqq_prices.reset_index(drop=True)
-        log_returns = np.log(qqq_prices) - np.log(qqq_prices.shift(1))
+        log_returns = qqq_prices.pct_change()
         log_returns.dropna(inplace=True)
         realized_variance = log_returns.var()
         annualized_volatility = np.sqrt(realized_variance * 252)
