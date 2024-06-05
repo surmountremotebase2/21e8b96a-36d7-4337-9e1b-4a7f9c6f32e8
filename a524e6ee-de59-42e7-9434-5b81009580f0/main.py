@@ -64,7 +64,7 @@ class TradingStrategy(Strategy):
         mrktclose = datatick[-1]["QQQ"]["close"]
         teclmrktclose = datatick[-1]["TECL"]["close"]
         mrktrsi = RSI("QQQ", datatick, 15)[-1]
-        mrktema = EMA("QQQ", datatick, 50)[-1]
+        mrktema = EMA("QQQ", datatick, 15)[-1]
 
         
         # Log the allocation for the current run.
