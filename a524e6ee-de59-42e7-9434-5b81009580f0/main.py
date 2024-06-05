@@ -66,7 +66,7 @@ class TradingStrategy(Strategy):
         mrktrsi = RSI("QQQ", datatick, 15)[-1]
         mrktema = EMA("QQQ", datatick, 10)[-1]
 
-        qqq_prices = datatick[-252:]["QQQ"]["close"]
+        qqq_prices = datatick["QQQ"]["close"]
         last_day_volatility = calculate_annualized_realized_volatility(qqq_prices[-1:])
 
         # Check for increasing volatility on a 5-day basis (assuming daily data)
