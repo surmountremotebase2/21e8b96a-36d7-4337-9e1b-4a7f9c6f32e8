@@ -72,7 +72,7 @@ class TradingStrategy(Strategy):
         daily_change = qqq_prices[-50:].diff()
         # Calculate the 50-day ROC using the first price as the reference
         qqqroc = (daily_change[-1] / qqq_prices.iloc[0]) * 100  # Multiply by 100 to express as percentage
-
+        log(f"ROC {qqqroc})
         # Log the allocation for the current run.
         
         #log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
