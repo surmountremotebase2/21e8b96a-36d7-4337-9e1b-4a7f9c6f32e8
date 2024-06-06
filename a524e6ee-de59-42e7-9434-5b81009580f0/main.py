@@ -67,7 +67,7 @@ class TradingStrategy(Strategy):
         mrktrsi = RSI("QQQ", datatick, 15)[-1]
         mrktema = EMA("SPY", datatick, 10)[-1]
 
-        qqq_prices = pd.DataFrame([x["QQQ"]["close"] for x in datatick[-45:]])
+        qqq_prices = pd.DataFrame([x["QQQ"]["close"] for x in datatick[-60:]])
         # Calculate the daily price change
         daily_change = qqq_prices.diff()
         # Calculate the 50-day ROC using the first price as the reference
@@ -90,7 +90,7 @@ class TradingStrategy(Strategy):
         #log(f"TopMom: {TopMom}")
 
         # Determine the allocation to crash protection asset
-        if (positive_momentum_assets <= 1 and TopMom in self.SafeAssets) or (xlu > xli and TopMom in self.SafeAssets):
+        if (positive_momentum_assets <= 4 and TopMom in self.SafeAssets) or (xlu > xli and TopMom in self.SafeAssets):
             #log(f"RISK OFF: SHV")
             # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
             #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
