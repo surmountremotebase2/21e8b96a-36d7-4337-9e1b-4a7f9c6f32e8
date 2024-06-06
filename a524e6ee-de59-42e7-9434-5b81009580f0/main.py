@@ -19,7 +19,7 @@ class TradingStrategy(Strategy):
         self.crash_protection_asset2 = "SHV"
         self.SafeAssets = ["IEF", "TLT", "GLD", "DBC", "UUP"]
         self.cplist = [self.crash_protection_asset2, "XLI", "XLU"]
-        self.RiskON = 3  #Number of Risk ON Assets
+        self.RiskON = 2  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
         self.LTMA = 100  #Long Term Moving Average
         self.STMOM = 20   #Short Term Momentum
@@ -85,7 +85,8 @@ class TradingStrategy(Strategy):
         # Calculate number of assets with positive momentum
         positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
 
-        sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:self.RiskON]
+        #sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:self.RiskON]
+        sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:6]
         TopMom = sorted_assets_by_momentum[0]
         #log(f"TopMom: {TopMom}")
 
