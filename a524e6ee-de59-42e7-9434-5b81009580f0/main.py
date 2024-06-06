@@ -19,7 +19,7 @@ class TradingStrategy(Strategy):
         self.crash_protection_asset2 = "SHV"
         self.SafeAssets = ["IEF", "TLT", "GLD", "DBC", "UUP"]
         self.cplist = [self.crash_protection_asset2, "XLI", "XLU"]
-        self.RiskON = 3  #Number of Risk ON Assets
+        self.RiskON = 2  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
         self.LTMA = 100  #Long Term Moving Average
         self.STMOM = 20   #Short Term Momentum
@@ -128,7 +128,7 @@ class TradingStrategy(Strategy):
             for asset in self.SafeAssets:
                 if asset in sorted_assets_by_momentum:
                     # Allocate 1/4 to the first Safe Asset found
-                    safe_asset_allocation = 0.33
+                    safe_asset_allocation = 0.5
                     remaining_allocation -= safe_asset_allocation
                     allocations[asset] = safe_asset_allocation
                     break  # Exit the loop after finding the first Safe Asset
