@@ -18,6 +18,7 @@ class TradingStrategy(Strategy):
         self.crash_protection_asset1 = "TIP"
         self.crash_protection_asset2 = "SHV"
         self.SafeAssets = ["IEF", "TLT", "GLD", "DBC", "UUP"]
+        self.CPAssets = ["IEF", "TLT"]
         self.cplist = [self.crash_protection_asset2, "XLI", "XLU"]
         self.RiskON = 2  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
@@ -125,7 +126,8 @@ class TradingStrategy(Strategy):
             remaining_allocation = 1.0
 
             # Check for Safe Assets in sorted_momentum
-            for asset in self.SafeAssets:
+            #for asset in self.SafeAssets:
+            for asset in self.CPAssets
                 if asset in sorted_assets_by_momentum:
                     # Allocate 1/4 to the first Safe Asset found
                     safe_asset_allocation = 0.5
@@ -138,7 +140,8 @@ class TradingStrategy(Strategy):
             for asset in sorted_assets_by_momentum:
                 if num_allocations >= self.RiskON:
                     break  # Reached maximum allocation count
-                if asset not in self.SafeAssets:
+                #if asset not in self.SafeAssets:
+                for asset not in self.CPAssets:
                     allocations[asset] = remaining_allocation / (self.RiskON - num_allocations)
                     num_allocations += 1
                     remaining_allocation -= allocations[asset]
