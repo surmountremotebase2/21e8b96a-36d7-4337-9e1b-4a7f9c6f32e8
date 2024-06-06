@@ -100,7 +100,7 @@ class TradingStrategy(Strategy):
             #allocations[self.crash_protection_asset1] = 0.3
             for asset in self.tickers:
                 allocations[asset] = 0.0            
-            if TopMom in self.SafeAssets:
+            if TopMom in self.SafeAssets and positive_momentum_assets > 0:
                 allocations[TopMom] = 0.5
                 allocations[self.crash_protection_asset2] = 0.5
             else:
