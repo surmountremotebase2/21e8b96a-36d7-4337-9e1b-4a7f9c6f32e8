@@ -111,12 +111,35 @@ class TradingStrategy(Strategy):
             allocations[self.crash_protection_asset2] = cp_allocation
 
             #log(f"Sorted MOM {today.strftime('%Y-%m-%d')}: {sorted_assets_by_momentum}")
-            for asset in self.tickers:
+            '''for asset in self.tickers:
                 if asset in sorted_assets_by_momentum:
                     #allocations[asset] = (1 - cp_allocation) / positive_momentum_assets
+                    counter += 1
                     allocations[asset] = float(1 / self.RiskON)
                 else:
-                    allocations[asset] = 0.0
+                    allocations[asset] = 0.0 '''
+
+            safe_asset_allocation = 0.0
+            remaining_allocation = 1.0
+
+            # Check for Safe Assets in sorted_momentum
+            for asset in self.SafeAssets:
+                if asset in sorted_assets_by_momentum:
+                    # Allocate 1/4 to the first Safe Asset found
+                    safe_asset_allocation = 0.33
+                    remaining_allocation -= safe_asset_allocation
+                    allocations[asset] = safe_asset_allocation
+                    break  # Exit the loop after finding the first Safe Asset
+
+            # Allocate remaining to Risk-ON assets (max 3)
+            num_allocations = 0
+            for asset in sorted_assets_by_momentum:
+                if num_allocations >= self.RiskON:
+                    break  # Reached maximum allocation count
+                if asset not in self.SafeAssets:
+                    allocations[asset] = remaining_allocation / (self.RiskON - num_allocations)
+                    num_allocations += 1
+                    remaining_allocation -= allocations[asset]
 
         return TargetAllocation(allocations)
 
