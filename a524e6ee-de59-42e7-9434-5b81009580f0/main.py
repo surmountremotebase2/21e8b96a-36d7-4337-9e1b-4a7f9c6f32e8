@@ -127,7 +127,7 @@ class TradingStrategy(Strategy):
 
             # Check for Safe Assets in sorted_momentum
             #for asset in self.SafeAssets:
-            for asset in self.CPAssets
+            for asset in self.CPAssets:
                 if asset in sorted_assets_by_momentum:
                     # Allocate 1/4 to the first Safe Asset found
                     safe_asset_allocation = 0.5
