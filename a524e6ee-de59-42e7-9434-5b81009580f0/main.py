@@ -87,7 +87,7 @@ class TradingStrategy(Strategy):
         positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
 
         #sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:self.RiskON]
-        sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:6]
+        sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:5]
         TopMom = sorted_assets_by_momentum[0]
         #log(f"TopMom: {TopMom}")
 
