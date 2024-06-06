@@ -141,7 +141,7 @@ class TradingStrategy(Strategy):
                 if num_allocations >= self.RiskON:
                     break  # Reached maximum allocation count
                 #if asset not in self.SafeAssets:
-                for asset not in self.CPAssets:
+                if asset not in self.CPAssets:
                     allocations[asset] = remaining_allocation / (self.RiskON - num_allocations)
                     num_allocations += 1
                     remaining_allocation -= allocations[asset]
