@@ -67,7 +67,7 @@ class TradingStrategy(Strategy):
         mrktrsi = RSI("QQQ", datatick, 15)[-1]
         mrktema = EMA("SPY", datatick, 10)[-1]
 
-        qqq_prices = pd.DataFrame([x["QQQ"]["close"] for x in datatick[-60:]])
+        qqq_prices = pd.DataFrame([x["QQQ"]["close"] for x in datatick[-45:]])
         # Calculate the daily price change
         daily_change = qqq_prices.diff()
         # Calculate the 50-day ROC using the first price as the reference
@@ -78,7 +78,7 @@ class TradingStrategy(Strategy):
         #log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
         #positive_momentum_assets = 3
         # Determine allocations for assets with positive momentum
-        if (mrktclose < mrktema and (qqqroc.iloc[-1] < 0)) or (xlu < xli and qqqroc.iloc[-1] < 0):
+        if (mrktclose < mrktema and (qqqroc.iloc[-1] < 0)):
             del momentum_scores["TECL"]
             del momentum_scores["TQQQ"]
         
