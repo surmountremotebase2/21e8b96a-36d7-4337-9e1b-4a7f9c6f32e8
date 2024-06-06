@@ -65,9 +65,9 @@ class TradingStrategy(Strategy):
         mrktclose = datatick[-1]["QQQ"]["close"]
         teclmrktclose = datatick[-1]["TECL"]["close"]
         mrktrsi = RSI("QQQ", datatick, 15)[-1]
-        mrktema = EMA("QQQ", datatick, 20)[-1]
+        mrktema = EMA("QQQ", datatick, 10)[-1]
 
-        qqq_prices = pd.DataFrame([x["QQQ"]["close"] for x in datatick[-50:]])
+        qqq_prices = pd.DataFrame([x["QQQ"]["close"] for x in datatick[-60:]])
         # Calculate the daily price change
         daily_change = qqq_prices.diff()
         # Calculate the 50-day ROC using the first price as the reference
