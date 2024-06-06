@@ -67,11 +67,11 @@ class TradingStrategy(Strategy):
         mrktrsi = RSI("QQQ", datatick, 15)[-1]
         mrktema = EMA("QQQ", datatick, 20)[-1]
 
-        qqq_prices = pd.DataFrame([x["QQQ"]["close"] for x in datatick[-252:]])
+        qqq_prices = pd.DataFrame([x["QQQ"]["close"] for x in datatick[-50:]])
         # Calculate the daily price change
-        daily_change = qqq_prices[-50:].diff()
+        daily_change = qqq_prices.diff()
         # Calculate the 50-day ROC using the first price as the reference
-        qqqroc = (daily_change[-1] / qqq_prices.iloc[0]) * 100  # Multiply by 100 to express as percentage
+        qqqroc = (daily_change.iloc[-1] / qqq_prices.iloc[0]) * 100  # Multiply by 100 to express as percentage
         log(f"ROC {qqqroc}")
         # Log the allocation for the current run.
         
