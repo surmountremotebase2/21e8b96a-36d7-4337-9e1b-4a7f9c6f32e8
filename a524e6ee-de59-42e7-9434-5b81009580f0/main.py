@@ -65,27 +65,20 @@ class TradingStrategy(Strategy):
         mrktclose = datatick[-1]["QQQ"]["close"]
         teclmrktclose = datatick[-1]["TECL"]["close"]
         mrktrsi = RSI("QQQ", datatick, 15)[-1]
-        mrktema = EMA("QQQ", datatick, 10)[-1]
+        mrktema = EMA("QQQ", datatick, 20)[-1]
 
-        qqq_prices = pd.DataFrame([x["QQQ"]["close"] for x in datatick[-253:]])
-        log_returns = qqq_prices.pct_change().dropna()[-252:]
+        qqq_prices = pd.DataFrame([x["QQQ"]["close"] for x in datatick[-252:]])
+        # Calculate the daily price change
+        daily_change = qqq_prices[-50:].diff()
+        # Calculate the 50-day ROC using the first price as the reference
+        qqqroc = (daily_change[-1] / qqq_prices.iloc[0]) * 100  # Multiply by 100 to express as percentage
 
-        # Calculate realized variance and annualized volatility
-        realized_variance = log_returns.var()
-        annualized_volatility = np.sqrt(realized_variance * 252)
-        last_day_vola = annualized_volatility
-        log(f"Last Day Volatility: {last_day_vola}")
-        is_increasing_volatility = False
-        is_increasing_volatility = last_day_vola[-1] > .25
-
-
-        
         # Log the allocation for the current run.
         
         #log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
         #positive_momentum_assets = 3
         # Determine allocations for assets with positive momentum
-        if mrktclose < mrktema and (is_increasing_volatility):
+        if mrktclose < mrktema and (qqqroc < 0):
             del momentum_scores["TECL"]
             del momentum_scores["TQQQ"]
         
