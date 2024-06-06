@@ -19,7 +19,7 @@ class TradingStrategy(Strategy):
         self.crash_protection_asset2 = "SHV"
         self.SafeAssets = ["IEF", "TLT", "GLD", "DBC", "UUP"]
         self.cplist = [self.crash_protection_asset2, "XLI", "XLU"]
-        self.RiskON = 2  #Number of Risk ON Assets
+        self.RiskON = 3  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
         self.LTMA = 100  #Long Term Moving Average
         self.STMOM = 20   #Short Term Momentum
