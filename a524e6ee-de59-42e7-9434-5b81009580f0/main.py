@@ -157,11 +157,11 @@ class TradingStrategy(Strategy):
             close_prices = [x[asset]['close'] for x in datatick[-self.LTMOM:]]
             #close_prices = pd.DataFrame(close_prices)
             sma = self.calculate_sma(asset, data["ohlcv"])
-            #ema = EMA(asset, datatick, self.STMA)[-1]
-            ema = 0
+            ema = EMA(asset, datatick, self.STMA)[-1]
+            #ema = 0
             if sma > 0:  # Avoid division by zero
-                momentum_score = ( (((close_data / sma)) -1) *2 + ((close_data - close_prices[-self.STMOM]) / close_prices[-self.STMOM]) )
-                #momentum_score = ( (close_data / sma) - 1 )
+                #momentum_score = ( (((close_data / sma)) -1) *2 + ((close_data - close_prices[-self.STMOM]) / close_prices[-self.STMOM]) )
+                momentum_score = ( (close_data / sma) - 1 )
             else:
                 momentum_score = 0.0
             if ema > 0:
