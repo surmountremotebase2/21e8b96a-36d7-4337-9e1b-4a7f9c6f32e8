@@ -15,7 +15,7 @@ class TradingStrategy(Strategy):
         #                      "XLK", "XLV", "XLE", "FEZ", "STIP", "TLT", "IEF", "EWJ", "GLD",
         #                      "MTUM", "SPLV", "SOXX"]
         #self.tickers = ["QQQ", "MTUM", "XLV", "DBC", "UUP", "SPY", "TLT", "IEF", "GLD", "XLK", "SOXX", "IJT"]
-        self.tickers = ["QQQ", "MTUM", "XLV", "SPLV", "RSP", "EEM", "DBC", "UUP", "SPY", "TLT", "IEF", "GLD", "XLK", "SOXX", "IJT"]
+        self.tickers = ["QQQ", "DBC", "UUP", "SPY", "TLT", "IEF", "GLD", "XLK", "SOXX", "IJT"]
         self.crash_protection_asset1 = "TIP"
         self.crash_protection_asset2 = "BIL"
         #self.SafeAssets = ["IEF", "TLT", "GLD", "DBC", "UUP"]
@@ -93,7 +93,7 @@ class TradingStrategy(Strategy):
 
         # Determine the allocation to crash protection asset
         #if (positive_momentum_assets <= 4 and TopMom in self.SafeAssets) and (xlu > xli and TopMom in self.SafeAssets):
-        if ( (positive_momentum_assets <= 7 and TopMom in self.CPAssets)  or xlu > xli):
+        if ( (positive_momentum_assets <= 5 and TopMom in self.CPAssets)  or xlu > xli):
             #log(f"RISK OFF: SHV")
             # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
             #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
