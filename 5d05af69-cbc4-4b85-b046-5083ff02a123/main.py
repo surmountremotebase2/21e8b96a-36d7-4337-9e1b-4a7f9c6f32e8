@@ -92,7 +92,7 @@ class TradingStrategy(Strategy):
 
         # Determine the allocation to crash protection asset
         #if (positive_momentum_assets <= 4 and TopMom in self.SafeAssets) and (xlu > xli and TopMom in self.SafeAssets):
-        if ( (positive_momentum_assets <= 5 and TopMom in self.CPAssets)  or xlu > xli):
+        if ( (positive_momentum_assets <= 6 and TopMom in self.CPAssets)  or xlu > xli):
             #log(f"RISK OFF: SHV")
             # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
             #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
@@ -162,7 +162,7 @@ class TradingStrategy(Strategy):
             ema = EMA(asset, datatick, 15)[-1]
             #ema = 0
             if sma > 0:  # Avoid division by zero
-                momentum_score = ( (((close_data / sma)) -1) + ((close_data - close_prices[-self.STMOM]) / close_prices[-self.STMOM]) )
+                momentum_score = ( (((close_data / sma)) -1) + ((close_data - close_prices[-self.STMOM]) / close_prices[-self.STMOM]) *2 )
                 #momentum_score = ( (close_data / sma) - 1 )
             else:
                 momentum_score = 0.0
