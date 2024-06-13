@@ -18,7 +18,7 @@ class TradingStrategy(Strategy):
         self.crash_protection_asset1 = "TIP"
         self.crash_protection_asset2 = "SHV"
         self.SafeAssets = ["IEF", "TLT", "GLD", "DBC", "UUP"]
-        self.CPAssets = ["IEF", "TLT", "SH"]
+        self.CPAssets = ["IEF", "TLT", "SH", "UUP", "GLD"]
         self.cplist = [self.crash_protection_asset2, "XLI", "XLU"]
         self.RiskON = 2  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
