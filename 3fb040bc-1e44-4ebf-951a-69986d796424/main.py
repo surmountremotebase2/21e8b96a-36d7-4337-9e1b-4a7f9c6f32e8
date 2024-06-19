@@ -47,7 +47,7 @@ class TradingStrategy(Strategy):
             allocation = 0
             # Condition to enter a trade
             if current_price > upper_band:  # Breakout above upper band
-                allocation = 1.0  # Allocating 100% to buy signal, assuming bullish sentiment
+                allocation = 0.5  # Allocating 100% to buy signal, assuming bullish sentiment
             # Exit trade if price touches the middle band or based on Kalman filter estimation
             elif current_price < middle_band or current_price < kf_estimated_last_price:  # Simplified condition
                 allocation = 0  # No position
