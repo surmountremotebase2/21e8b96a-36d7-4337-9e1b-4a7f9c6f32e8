@@ -24,7 +24,7 @@ class TradingStrategy(Strategy):
         # Extract closing prices
         closes = [day[self.ticker]["close"] for day in ohlcv_data]
         # Calculate the 25-day high
-        high_25_day = max(closes[-26:-1])
+        high_25_day = max(closes[-27:-2])
         
         # Current close price
         current_close = closes[-1]
