@@ -1,10 +1,11 @@
+
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.technical_indicators import SMA
 from surmount.logging import log
 
 class TradingStrategy(Strategy):
     def __init__(self):
-        self.ticker = "QQQ"
+        self.ticker = "TECL"
     
     @property
     def assets(self):
@@ -34,7 +35,7 @@ class TradingStrategy(Strategy):
         if current_close >= high_25_day:
             #log("Current close is above the 25-day high. Buying QQQ.")
             allocation_dict[self.ticker] = 1  # Buy (allocate 100% to QQQ)
-        elif current_close <= low_25_day:
+        elif current_close < high_25_day:
             #log("Current close is below the 25-day high. Selling QQQ.")
             allocation_dict[self.ticker] = 0  # Sell (close position)
 
