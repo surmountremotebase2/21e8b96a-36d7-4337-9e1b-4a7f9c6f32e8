@@ -18,7 +18,7 @@ class TradingStrategy(Strategy):
     def run(self, data):
         allocation_dict = {self.TEC: 0}  # Default to no allocation
         ohlcv_data = data["ohlcv"]
-        if len(ohlcv_data) < 26:
+        if len(ohlcv_data) < 101:
             log("Not enough data to evaluate 25-day high.")
             return TargetAllocation(allocation_dict)
         
