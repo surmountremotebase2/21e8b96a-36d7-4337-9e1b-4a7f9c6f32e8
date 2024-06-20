@@ -24,17 +24,18 @@ class TradingStrategy(Strategy):
         # Extract closing prices
         closes = [day[self.ticker]["close"] for day in ohlcv_data]
         # Calculate the 25-day high
-        high_25_day = max(closes[-26:-1])
+        high_25_day = max(closes[-26:-2])
+        low_25_day = min(closes[-26:-2])
         
         # Current close price
         current_close = closes[-1]
 
         # Check if current close is above 25-day high
         if current_close >= high_25_day:
-            log("Current close is above the 25-day high. Buying QQQ.")
+            #log("Current close is above the 25-day high. Buying QQQ.")
             allocation_dict[self.ticker] = 1  # Buy (allocate 100% to QQQ)
-        elif current_close < high_25_day:
-            log("Current close is below the 25-day high. Selling QQQ.")
+        elif current_close <= low_25_day:
+            #log("Current close is below the 25-day high. Selling QQQ.")
             allocation_dict[self.ticker] = 0  # Sell (close position)
 
         return TargetAllocation(allocation_dict)
