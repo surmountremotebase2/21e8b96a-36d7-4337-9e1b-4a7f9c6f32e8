@@ -42,9 +42,12 @@ class TradingStrategy(Strategy):
         # Initialize TQQQ allocation to 0
         allocation = {"TQQQ": 0}
 
+        StockData = data["ohlcv"]
+        #d[-1]["QQQ"]
         # Retrieve OHLCV data for SPY
-        ohlcv_spy = data["ohlcv"]["SPY"]
-        ohlcv_tqqq = data["ohlcv"]["TQQQ"]  # Placeholder in case needed for advanced strategy iterations
+        ohlcv_spy = StockData[:-252]["ohlcv"]["SPY"]
+
+        ohlcv_tqqq = StockData[:-252]["ohlcv"]["TQQQ"]  # Placeholder in case needed for advanced strategy iterations
         
         # Ensure we have at least two days of data for SPY to compare
         if len(ohlcv_spy) >= 2:
