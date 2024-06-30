@@ -54,7 +54,8 @@ class TradingStrategy(Strategy):
             # Define "yesterday" and "today" based on the latest two data points
             yesterday = ohlcv_spy.iloc[-2]
             today = ohlcv_spy.iloc[-1]
-            log(f'TODAY: {today}')
+            todaydate = today['date']
+            log(f'TODAY: {todaydate}')
 
             # Check if today is a Monday and if the conditions are fulfilled
             today_date = pd.to_datetime(today['date'])
