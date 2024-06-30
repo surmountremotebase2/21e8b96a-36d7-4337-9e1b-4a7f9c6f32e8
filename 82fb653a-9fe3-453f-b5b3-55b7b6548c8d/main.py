@@ -67,7 +67,7 @@ class TradingStrategy(Strategy):
             todaydate = today['date']
             #log(f'TODAY: {todaydate}')
             # convert the string to a datetime object
-            todaydate_obj = datetime.strptime(todaydate, '%Y-%m-%d %H:%M:%S')
+            todaydate_obj = pd.to_datetime(todaydate)
             vols = [i["QQQ"]["volume"] for i in StockData]
             smavolL = self.SMAVol("QQQ", StockData, 30)
             smavolS = self.SMAVol("QQQ", StockData, 3)
