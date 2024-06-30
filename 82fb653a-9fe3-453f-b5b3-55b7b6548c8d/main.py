@@ -52,8 +52,8 @@ class TradingStrategy(Strategy):
         # Ensure we have at least two days of data for SPY to compare
         if len(ohlcv_spy) >= 2:
             # Define "yesterday" and "today" based on the latest two data points
-            yesterday = ohlcv_spy[-2]
-            today = ohlcv_spy[-1]
+            yesterday = ohlcv_spy.iloc[-2]
+            today = ohlcv_spy.iloc[-1]
 
             # Check if today is a Monday and if the conditions are fulfilled
             today_date = pd.to_datetime(today['date'])
