@@ -56,14 +56,22 @@ class TradingStrategy(Strategy):
             today = ohlcv_spy.iloc[-1]
             todaydate = today['date']
             log(f'TODAY: {todaydate}')
+            # convert the string to a datetime object
+            todaydate_obj = datetime.strptime(todaydate, '%Y-%m-%d %H:%M:%S')
 
-            # Check if today is a Monday and if the conditions are fulfilled
-            today_date = pd.to_datetime(today['date'])
-            if today_date.weekday() == 0:  # 0 represents Monday
-                ibs_today = self.IBS(today['close'], today['high'], today['low'])
-                if today['close'] < yesterday['close'] and ibs_today < 0.5:
-                    # Mark buy signal as True if conditions are met
-                    self.buy_signal = True
+            # check if the date is between December 20th and January 1st
+            if todaydate_obj.month == 12 and todaydate_obj.day >= 20 or todaydate_obj.month == 1 and todaydate_obj.day <= 1:
+                print('The date is between December 20th and January 1st.')
+            else:
+                
+
+                # Check if today is a Monday and if the conditions are fulfilled
+                today_date = pd.to_datetime(today['date'])
+                if today_date.weekday() == 0:  # 0 represents Monday
+                    ibs_today = self.IBS(today['close'], today['high'], today['low'])
+                    if today['close'] < yesterday['close'] and ibs_today < 0.5:
+                        # Mark buy signal as True if conditions are met
+                        self.buy_signal = True
             
             # Sell conditions based on SPY performance or holding duration
             if self.buy_signal:
