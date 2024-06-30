@@ -1,6 +1,7 @@
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.data import Asset
 from surmount.logging import log
+import pandas_ta as ta
 import pandas as pd
 from datetime import datetime
 
@@ -26,6 +27,14 @@ class TradingStrategy(Strategy):
         # No additional data sources required beyond default OHLCV data
         return []
 
+    def SMAVol(self, ticker, data, length):
+        close = [i[ticker]["volume"] for i in data]
+        d = ta.sma(pd.Series(close), length=length)
+        if d is None:
+            return None
+        return d.tolist()
+
+
     def IBS(self, close, high, low):
         """Internal Bar Strength (IBS) calculation.
         
@@ -38,13 +47,6 @@ class TradingStrategy(Strategy):
         - IBS value as a float
         """
         return (close - low) / (high - low) if (high - low) > 0 else 0
-
-    def SMAVol(self, ticker, data, length):
-        close = [i[ticker]["volume"] for i in data]
-        d = ta.sma(pd.Series(close), length=length)
-        if d is None:
-            return None
-        return d.tolist()
 
     def run(self, data):
         # Initialize TQQQ allocation to 0
