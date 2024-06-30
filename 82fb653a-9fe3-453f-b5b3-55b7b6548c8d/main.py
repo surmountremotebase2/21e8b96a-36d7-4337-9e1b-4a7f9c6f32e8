@@ -46,7 +46,7 @@ class TradingStrategy(Strategy):
         #d[-1]["QQQ"]
         # Retrieve OHLCV data for SPY
         StockDF = pd.DataFrame(StockData)
-
+        ohlcv_spy = StockDF["SPY"]
         ohlcv_tqqq = StockDF["TQQQ"]
         
         # Ensure we have at least two days of data for SPY to compare
