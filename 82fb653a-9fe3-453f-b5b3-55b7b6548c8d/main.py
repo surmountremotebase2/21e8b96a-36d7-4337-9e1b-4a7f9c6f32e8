@@ -65,7 +65,7 @@ class TradingStrategy(Strategy):
             
             # Sell conditions based on SPY performance or holding duration
             if self.buy_signal:
-                if self.hold_days >= 5 or today['close'] > yesterday['high']:
+                if self.hold_days >= 4 or today['close'] > yesterday['high']:
                     # Sell TQQQ (set allocation to 0) if holding period is 4 days or SPY closes higher than yesterday's high
                     self.buy_signal = False  # Reset buy signal
                     self.hold_days = 0  # Reset holding counter
