@@ -90,7 +90,7 @@ class TradingStrategy(Strategy):
                     if len(vols) < 30:
                         self.VolTrigger = True
                     else:
-                        if smavolS[-1]/smavolL[-1]-1>0:
+                        if smavolS[-1] > smavolL[-1]:
                                 self.VolTrigger = True
                         else: self.VolTrigger = False
 
