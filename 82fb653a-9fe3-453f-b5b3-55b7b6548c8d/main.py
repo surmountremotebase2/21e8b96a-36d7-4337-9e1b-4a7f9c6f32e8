@@ -98,13 +98,14 @@ class TradingStrategy(Strategy):
                 today_date = pd.to_datetime(today['date'])
                 if today_date.weekday() == 0:  # 0 represents Monday
                     ibs_today = self.IBS(today['close'], today['high'], today['low'])
-                    if today['close'] < yesterday['close'] and ibs_today < 0.5 and self.VolTrigger:
+                    #if today['close'] < yesterday['close'] and ibs_today < 0.5 and self.VolTrigger:
+                    if today['close'] < yesterday['close'] and ibs_today < 0.7 and self.VolTrigger:
                         # Mark buy signal as True if conditions are met
                         self.buy_signal = True
             
             # Sell conditions based on SPY performance or holding duration
             if self.buy_signal:
-                ibs_today = self.IBS(today['close'], today['high'], today['low'])
+                #ibs_today = self.IBS(today['close'], today['high'], today['low'])
                 if self.hold_days >= 7 or today['close'] > yesterday['high']:
                 #if self.hold_days >= 5 or today['close'] > yesterday['high']:
                     # Sell TQQQ (set allocation to 0) if holding period is 4 days or SPY closes higher than yesterday's high
