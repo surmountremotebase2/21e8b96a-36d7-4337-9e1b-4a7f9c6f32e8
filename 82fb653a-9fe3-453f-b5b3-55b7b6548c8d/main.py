@@ -68,9 +68,24 @@ class TradingStrategy(Strategy):
             #log(f'TODAY: {todaydate}')
             # convert the string to a datetime object
             todaydate_obj = datetime.strptime(todaydate, '%Y-%m-%d %H:%M:%S')
+            vols = [i["QQQ"]["volume"] for i in StockData]
+            smavolL = self.SMAVol("QQQ", StockData, 30)
+            smavolS = self.SMAVol("QQQ", StockData, 3)
+            #log(f'SMA Vol: {smavolL}')
+
+            if len(vols)==0:
+                    #return TargetAllocation({})
+                self.VolTrigger = False
+            else:
+                if len(vols) < 30:
+                    self.VolTrigger = True
+                else:
+                    if smavolS[-1] > smavolL[-1]:
+                            self.VolTrigger = True
+                    else: self.VolTrigger = False
 
             # check if the date is between December 20th and January 1st
-            if todaydate_obj.month == 12 and todaydate_obj.day >= 20 or todaydate_obj.month == 1 and todaydate_obj.day <= 3:
+            if (todaydate_obj.month == 12 and todaydate_obj.day >= 10 or todaydate_obj.month == 1 and todaydate_obj.day <= 5) and self.VolTrigger is False:
                 print('The date is between December 20th and January 1st.')
                 if self.buy_signal:
                     self.buy_signal = False
@@ -78,21 +93,7 @@ class TradingStrategy(Strategy):
                     
 
             else:
-                vols = [i["QQQ"]["volume"] for i in StockData]
-                smavolL = self.SMAVol("QQQ", StockData, 30)
-                smavolS = self.SMAVol("QQQ", StockData, 3)
-                log(f'SMA Vol: {smavolL}')
-
-                if len(vols)==0:
-                        #return TargetAllocation({})
-                    self.VolTrigger = False
-                else:
-                    if len(vols) < 30:
-                        self.VolTrigger = True
-                    else:
-                        if smavolS[-1] > smavolL[-1]:
-                                self.VolTrigger = True
-                        else: self.VolTrigger = False
+                
 
 
                 # Check if today is a Monday and if the conditions are fulfilled
