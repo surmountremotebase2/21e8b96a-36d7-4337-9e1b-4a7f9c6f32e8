@@ -2,6 +2,7 @@ from surmount.base_class import Strategy, TargetAllocation
 from surmount.data import Asset
 from surmount.logging import log
 import pandas as pd
+from datetime import datetime
 
 class TradingStrategy(Strategy):
     def __init__(self):
