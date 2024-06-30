@@ -86,7 +86,7 @@ class TradingStrategy(Strategy):
 
             # check if the date is between December 20th and January 1st
             if (todaydate_obj.month == 12 and todaydate_obj.day >= 10 or todaydate_obj.month == 1 and todaydate_obj.day <= 5):
-                print('The date is between December 20th and January 1st.')
+                log(f'The date is between December 20th and January 1st.')
                 if self.buy_signal:
                     self.buy_signal = False
                     self.hold_days = 0
