@@ -61,9 +61,9 @@ class TradingStrategy(Strategy):
             todaydate_obj = datetime.strptime(todaydate, '%Y-%m-%d %H:%M:%S')
 
             # check if the date is between December 20th and January 1st
-            if todaydate_obj.month == 12 and todaydate_obj.day >= 20 or todaydate_obj.month == 1 and todaydate_obj.day <= 1:
+            if todaydate_obj.month == 12 and todaydate_obj.day >= 20 or todaydate_obj.month == 1 and todaydate_obj.day <= 3:
                 print('The date is between December 20th and January 1st.')
-                if self.buy_signal and self.hold_days > 3:
+                if self.buy_signal:
                     self.buy_signal = False
                     self.hold_days = 0
                     
