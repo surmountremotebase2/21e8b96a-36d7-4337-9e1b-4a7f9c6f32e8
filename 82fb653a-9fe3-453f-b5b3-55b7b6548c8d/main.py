@@ -6,7 +6,7 @@ import pandas as pd
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define the asset for the strategy and initial target allocation
-        self.tickers = ["SPY", "RSP", "TQQQ"]
+        self.tickers = ["SPY", "QQQ", "TQQQ"]
         self.hold_days = 0 # Counter to keep track of holding duration
         self.buy_signal = False # Flag to indicate a buy signal from the strategy
 
@@ -46,7 +46,7 @@ class TradingStrategy(Strategy):
         #d[-1]["QQQ"]
         # Retrieve OHLCV data for SPY
         StockDF = pd.DataFrame(StockData)
-        ohlcv_spy = StockDF["RSP"]
+        ohlcv_spy = StockDF["QQQ"]
         ohlcv_tqqq = StockDF["TQQQ"]
         
         # Ensure we have at least two days of data for SPY to compare
