@@ -48,12 +48,13 @@ class TradingStrategy(Strategy):
         StockDF = pd.DataFrame(StockData)
         ohlcv_spy = StockDF["QQQ"]
         ohlcv_tqqq = StockDF["TQQQ"]
-        
+
         # Ensure we have at least two days of data for SPY to compare
         if len(ohlcv_spy) >= 2:
             # Define "yesterday" and "today" based on the latest two data points
             yesterday = ohlcv_spy.iloc[-2]
             today = ohlcv_spy.iloc[-1]
+            log(f'TODAY: {today}')
 
             # Check if today is a Monday and if the conditions are fulfilled
             today_date = pd.to_datetime(today['date'])
