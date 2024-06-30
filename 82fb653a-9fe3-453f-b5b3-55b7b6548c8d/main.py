@@ -77,7 +77,7 @@ class TradingStrategy(Strategy):
                     
 
             else:
-                vols = [i["VIRT"]["volume"] for i in data["ohlcv"]]
+                vols = [i["QQQ"]["volume"] for i in StockData]
                 smavolL = SMAVol("QQQ", StockData, 45)
                 smavolS = SMAVol("QQQ", StockData, 5)
 
