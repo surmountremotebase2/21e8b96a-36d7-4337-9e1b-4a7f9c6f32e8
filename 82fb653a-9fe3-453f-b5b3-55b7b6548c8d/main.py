@@ -53,7 +53,6 @@ class TradingStrategy(Strategy):
         if len(ohlcv_spy) >= 2:
             # Define "yesterday" and "today" based on the latest two data points
             yesterday = ohlcv_spy.iloc[-2]
-            yesterday = ohlcv_spy.iloc[-3]
             today = ohlcv_spy.iloc[-1]
 
             # Check if today is a Monday and if the conditions are fulfilled
@@ -66,7 +65,7 @@ class TradingStrategy(Strategy):
             
             # Sell conditions based on SPY performance or holding duration
             if self.buy_signal:
-                if self.hold_days >= 3 or today['close'] > yesterday['high']:
+                if self.hold_days >= 5 or today['close'] > yesterday['high']:
                 #if self.hold_days >= 10 or today['close'] < yesterday['low']:
                     # Sell TQQQ (set allocation to 0) if holding period is 4 days or SPY closes higher than yesterday's high
                     self.buy_signal = False  # Reset buy signal
