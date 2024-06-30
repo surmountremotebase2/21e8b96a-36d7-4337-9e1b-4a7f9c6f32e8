@@ -76,7 +76,17 @@ class TradingStrategy(Strategy):
                     
 
             else:
-                
+                vols = [i["VIRT"]["volume"] for i in data["ohlcv"]]
+                smavols = SMAVol("VIRT", data["ohlcv"], 40)
+                smavols2 = SMAVol("VIRT", data["ohlcv"], 10)
+
+                if len(vols)==0:
+                        #return TargetAllocation({})
+
+                if smavols2[-1]/smavols[-1]-1>0:
+                        out = smavols2[-1]/smavols[-1]-1
+                else: out = 0
+
 
                 # Check if today is a Monday and if the conditions are fulfilled
                 today_date = pd.to_datetime(today['date'])
