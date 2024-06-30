@@ -39,7 +39,7 @@ class TradingStrategy(Strategy):
         """
         return (close - low) / (high - low) if (high - low) > 0 else 0
 
-    def SMAVol(ticker, data, length):
+    def SMAVol(self, ticker, data, length):
         close = [i[ticker]["volume"] for i in data]
         d = ta.sma(pd.Series(close), length=length)
         if d is None:
