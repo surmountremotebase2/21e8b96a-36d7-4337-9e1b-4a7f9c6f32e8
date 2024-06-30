@@ -8,7 +8,7 @@ from datetime import datetime
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define the asset for the strategy and initial target allocation
-        self.tickers = ["SPY", "QQQ", "TQQQ"]
+        self.tickers = ["SPY", "QQQ", "TQQQ", "BIL"]
         self.hold_days = 0 # Counter to keep track of holding duration
         self.buy_signal = False # Flag to indicate a buy signal from the strategy
 
@@ -49,7 +49,7 @@ class TradingStrategy(Strategy):
 
     def run(self, data):
         # Initialize TQQQ allocation to 0
-        allocation = {"TQQQ": 0}
+        allocation = {"TQQQ": 0, "BIL": 1}
         self.VolTrigger = False
 
         StockData = data["ohlcv"]
@@ -68,7 +68,7 @@ class TradingStrategy(Strategy):
             #log(f'TODAY: {todaydate}')
             # convert the string to a datetime object
             todaydate_obj = pd.to_datetime(todaydate)
-            vols = [i["QQQ"]["volume"] for i in StockData]
+            '''vols = [i["QQQ"]["volume"] for i in StockData]
             smavolL = self.SMAVol("QQQ", StockData, 30)
             smavolS = self.SMAVol("QQQ", StockData, 3)
             #log(f'SMA Vol: {smavolL}')
@@ -82,10 +82,10 @@ class TradingStrategy(Strategy):
                 else:
                     if smavolS[-1] > smavolL[-1]:
                             self.VolTrigger = True
-                    else: self.VolTrigger = False
+                    else: self.VolTrigger = False'''
 
             # check if the date is between December 20th and January 1st
-            if (todaydate_obj.month == 12 and todaydate_obj.day >= 10 or todaydate_obj.month == 1 and todaydate_obj.day <= 10) and self.VolTrigger is True:
+            if (todaydate_obj.month == 12 and todaydate_obj.day >= 20 or todaydate_obj.month == 1 and todaydate_obj.day <= 6):
                 #log(f'The date is between December 20th and January 1st.')
                 if self.buy_signal:
                     log(f'The date is between December 20th and January 1st.')
@@ -117,11 +117,13 @@ class TradingStrategy(Strategy):
                 else:
                     # Keep holding TQQQ
                     allocation["TQQQ"] = 1
+                    allocation["BIL"] = 0
                     self.hold_days += 1
         
         if self.buy_signal and self.hold_days == 0:
             # If a buy signal was triggered and we are in the initial day of action
             allocation["TQQQ"] = 1
+            allocation["BIL"] = 0
             self.hold_days = 1  # Increment the hold day counter since we decided to buy
 
         # Log the action for diagnostic purposes
