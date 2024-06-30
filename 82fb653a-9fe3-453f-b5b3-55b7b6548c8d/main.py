@@ -53,6 +53,7 @@ class TradingStrategy(Strategy):
         if len(ohlcv_spy) >= 2:
             # Define "yesterday" and "today" based on the latest two data points
             yesterday = ohlcv_spy.iloc[-2]
+            yesterday = ohlcv_spy.iloc[-3]
             today = ohlcv_spy.iloc[-1]
 
             # Check if today is a Monday and if the conditions are fulfilled
