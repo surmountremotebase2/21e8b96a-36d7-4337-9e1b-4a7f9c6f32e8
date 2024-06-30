@@ -79,8 +79,8 @@ class TradingStrategy(Strategy):
 
             else:
                 vols = [i["QQQ"]["volume"] for i in StockData]
-                smavolL = SMAVol("QQQ", StockData, 45)
-                smavolS = SMAVol("QQQ", StockData, 5)
+                smavolL = self.SMAVol("QQQ", StockData, 45)
+                smavolS = self.SMAVol("QQQ", StockData, 5)
 
                 if len(vols)==0:
                         #return TargetAllocation({})
