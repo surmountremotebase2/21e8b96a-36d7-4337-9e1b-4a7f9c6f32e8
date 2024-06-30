@@ -50,7 +50,6 @@ class TradingStrategy(Strategy):
     def run(self, data):
         # Initialize TQQQ allocation to 0
         allocation = {"TQQQ": 0, "BIL": 1}
-        self.VolTrigger = False
 
         StockData = data["ohlcv"]
         #d[-1]["QQQ"]
@@ -92,11 +91,7 @@ class TradingStrategy(Strategy):
                     self.buy_signal = False
                     self.hold_days = 0
                     
-
             else:
-                
-
-
                 # Check if today is a Monday and if the conditions are fulfilled
                 today_date = pd.to_datetime(today['date'])
                 if today_date.weekday() == 0:  # 0 represents Monday
