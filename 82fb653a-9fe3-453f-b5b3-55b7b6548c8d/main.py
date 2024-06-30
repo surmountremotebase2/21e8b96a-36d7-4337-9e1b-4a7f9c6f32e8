@@ -49,6 +49,7 @@ class TradingStrategy(Strategy):
     def run(self, data):
         # Initialize TQQQ allocation to 0
         allocation = {"TQQQ": 0}
+        self.VolTrigger = False
 
         StockData = data["ohlcv"]
         #d[-1]["QQQ"]
@@ -77,15 +78,16 @@ class TradingStrategy(Strategy):
 
             else:
                 vols = [i["VIRT"]["volume"] for i in data["ohlcv"]]
-                smavols = SMAVol("VIRT", data["ohlcv"], 40)
-                smavols2 = SMAVol("VIRT", data["ohlcv"], 10)
+                smavolL = SMAVol("QQQ", StockData, 40)
+                smavolS = SMAVol("QQQ", StockData, 5)
 
                 if len(vols)==0:
                         #return TargetAllocation({})
-
-                if smavols2[-1]/smavols[-1]-1>0:
-                        out = smavols2[-1]/smavols[-1]-1
-                else: out = 0
+                    self.VolTrigger = False
+                else:
+                    if smavolS[-1]/smavolL[-1]-1>0:
+                            self.VolTrigger = True
+                    else: self.VolTrigger = False
 
 
                 # Check if today is a Monday and if the conditions are fulfilled
