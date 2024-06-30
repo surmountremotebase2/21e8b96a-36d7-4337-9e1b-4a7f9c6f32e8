@@ -85,7 +85,7 @@ class TradingStrategy(Strategy):
                     else: self.VolTrigger = False
 
             # check if the date is between December 20th and January 1st
-            if (todaydate_obj.month == 12 and todaydate_obj.day >= 10 or todaydate_obj.month == 1 and todaydate_obj.day <= 5):
+            if (todaydate_obj.month == 12 and todaydate_obj.day >= 10 or todaydate_obj.month == 1 and todaydate_obj.day <= 10) and self.VolTrigger is False:
                 #log(f'The date is between December 20th and January 1st.')
                 if self.buy_signal:
                     log(f'The date is between December 20th and January 1st.')
