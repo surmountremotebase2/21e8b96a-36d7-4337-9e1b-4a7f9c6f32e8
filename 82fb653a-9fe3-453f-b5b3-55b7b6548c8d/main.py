@@ -103,7 +103,7 @@ class TradingStrategy(Strategy):
             
             # Sell conditions based on SPY performance or holding duration
             if self.buy_signal:
-                ht = yesterday['high'])
+                ht = yesterday['high']
                 #ibs_today = self.IBS(today['close'], today['high'], today['low'])
                 #if ( self.hold_days >= 7 or today['close'] > yesterday['high'] ):
                 if ( self.hold_days >= 7 or today['close'] > ht ):
