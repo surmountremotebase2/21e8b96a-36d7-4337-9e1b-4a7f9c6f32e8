@@ -79,7 +79,7 @@ class TradingStrategy(Strategy):
 
             else:
                 vols = [i["QQQ"]["volume"] for i in StockData]
-                smavolL = self.SMAVol("QQQ", StockData, 30)
+                smavolL = self.SMAVol("QQQ", StockData, 60)
                 smavolS = self.SMAVol("QQQ", StockData, 3)
 
                 if len(vols)==0:
@@ -99,14 +99,14 @@ class TradingStrategy(Strategy):
                 if today_date.weekday() == 0:  # 0 represents Monday
                     ibs_today = self.IBS(today['close'], today['high'], today['low'])
                     #if today['close'] < yesterday['close'] and ibs_today < 0.5 and self.VolTrigger:
-                    if today['close'] < yesterday['close'] and ibs_today < 0.7 and self.VolTrigger:
+                    if today['close'] < yesterday['close'] and ibs_today < 0.5:
                         # Mark buy signal as True if conditions are met
                         self.buy_signal = True
             
             # Sell conditions based on SPY performance or holding duration
             if self.buy_signal:
                 #ibs_today = self.IBS(today['close'], today['high'], today['low'])
-                if self.hold_days >= 7 or today['close'] > yesterday['high']:
+                if ( self.hold_days >= 7 or today['close'] > yesterday['high'] ) and self.VolTrigger is False:
                 #if self.hold_days >= 5 or today['close'] > yesterday['high']:
                     # Sell TQQQ (set allocation to 0) if holding period is 4 days or SPY closes higher than yesterday's high
                     self.buy_signal = False  # Reset buy signal
