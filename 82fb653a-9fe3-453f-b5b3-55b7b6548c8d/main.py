@@ -45,7 +45,7 @@ class TradingStrategy(Strategy):
         StockData = data["ohlcv"]
         #d[-1]["QQQ"]
         # Retrieve OHLCV data for SPY
-        ohlcv_spy = StockData["SPY"]
+        ohlcv_spy = StockData[:-252]
 
         ohlcv_tqqq = StockData["ohlcv"]["TQQQ"][:-252]
         
