@@ -55,7 +55,7 @@ class TradingStrategy(Strategy):
             yesterday = ohlcv_spy.iloc[-2]
             today = ohlcv_spy.iloc[-1]
             todaydate = today['date']
-            log(f'TODAY: {todaydate}')
+            #log(f'TODAY: {todaydate}')
             # convert the string to a datetime object
             todaydate_obj = datetime.strptime(todaydate, '%Y-%m-%d %H:%M:%S')
 
