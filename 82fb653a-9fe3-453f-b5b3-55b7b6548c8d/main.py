@@ -27,7 +27,7 @@ class TradingStrategy(Strategy):
         # No additional data sources required beyond default OHLCV data
         return []
 
-    def SMAVol(ticker, data, lenght):
+    def SMAVol(self, ticker, data, lenght):
         close = [i[ticker]["volume"] for i in data]
         d = ta.sma(pd.Series(close), length=length)
         if d is None:
