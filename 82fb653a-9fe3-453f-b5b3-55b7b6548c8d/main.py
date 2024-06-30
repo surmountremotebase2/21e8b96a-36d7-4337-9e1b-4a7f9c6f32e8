@@ -45,9 +45,9 @@ class TradingStrategy(Strategy):
         StockData = data["ohlcv"]
         #d[-1]["QQQ"]
         # Retrieve OHLCV data for SPY
-        ohlcv_spy = StockData[:-252]["ohlcv"]["SPY"]
+        ohlcv_spy = StockData["ohlcv"][-252:]["SPY"]
 
-        ohlcv_tqqq = StockData[:-252]["ohlcv"]["TQQQ"]  # Placeholder in case needed for advanced strategy iterations
+        ohlcv_tqqq = StockData["ohlcv"]["TQQQ"][:-252]
         
         # Ensure we have at least two days of data for SPY to compare
         if len(ohlcv_spy) >= 2:
