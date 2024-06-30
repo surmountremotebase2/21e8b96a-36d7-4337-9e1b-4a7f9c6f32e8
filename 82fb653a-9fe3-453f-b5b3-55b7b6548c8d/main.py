@@ -78,23 +78,26 @@ class TradingStrategy(Strategy):
 
             else:
                 vols = [i["VIRT"]["volume"] for i in data["ohlcv"]]
-                smavolL = SMAVol("QQQ", StockData, 40)
+                smavolL = SMAVol("QQQ", StockData, 45)
                 smavolS = SMAVol("QQQ", StockData, 5)
 
                 if len(vols)==0:
                         #return TargetAllocation({})
                     self.VolTrigger = False
                 else:
-                    if smavolS[-1]/smavolL[-1]-1>0:
-                            self.VolTrigger = True
-                    else: self.VolTrigger = False
+                    if len(vols) < 45:
+                        self.VolTrigger = True
+                    else:
+                        if smavolS[-1]/smavolL[-1]-1>0:
+                                self.VolTrigger = True
+                        else: self.VolTrigger = False
 
 
                 # Check if today is a Monday and if the conditions are fulfilled
                 today_date = pd.to_datetime(today['date'])
                 if today_date.weekday() == 0:  # 0 represents Monday
                     ibs_today = self.IBS(today['close'], today['high'], today['low'])
-                    if today['close'] < yesterday['close'] and ibs_today < 0.5:
+                    if today['close'] < yesterday['close'] and ibs_today < 0.5 and self.VolTrigger:
                         # Mark buy signal as True if conditions are met
                         self.buy_signal = True
             
