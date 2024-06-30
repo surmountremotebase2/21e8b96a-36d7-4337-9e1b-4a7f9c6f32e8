@@ -81,7 +81,7 @@ class TradingStrategy(Strategy):
                 vols = [i["QQQ"]["volume"] for i in StockData]
                 smavolL = self.SMAVol("QQQ", StockData, 30)
                 smavolS = self.SMAVol("QQQ", StockData, 3)
-                log(smavolL)
+                log(f'SMA Vol: {smavolL}')
 
                 if len(vols)==0:
                         #return TargetAllocation({})
