@@ -40,7 +40,7 @@ class TradingStrategy(Strategy):
         sma200 = SMA("USO", data, 200)
         sma30 = SMA("USO", data, 30)
         sma15 = SMA("USO", data, 10)
-        smaS15 = SMA("SCO", data, 20)
+        smaS15 = SMA("SCO", data, 30)
         
         if not bb or not rsi or not sma30 or not sma15:
             return TargetAllocation(allocation_dict)  # Return no allocation if any calculation failed
