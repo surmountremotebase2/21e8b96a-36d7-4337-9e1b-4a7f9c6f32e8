@@ -33,12 +33,12 @@ class TradingStrategy(Strategy):
         allocation_dict = {"USO": 0}  # Default to no allocation
 
         # Calculate the 200-day Bollinger Bands with 1.2 standard deviations
-        bb = BB("USO", data["ohlcv"], 200, 1.2)
+        bb = BB("USO", data, 200, 1.2)
         # Calculate the 50-day RSI
-        rsi = RSI("USO", data["ohlcv"], 50)
+        rsi = RSI("USO", data, 50)
         # Calculate the 30-day and 15-day SMA
-        sma30 = SMA("USO", data["ohlcv"], 30)
-        sma15 = SMA("USO", data["ohlcv"], 15)
+        sma30 = SMA("USO", data, 30)
+        sma15 = SMA("USO", data, 15)
         
         if not bb or not rsi or not sma30 or not sma15:
             return TargetAllocation(allocation_dict)  # Return no allocation if any calculation failed
