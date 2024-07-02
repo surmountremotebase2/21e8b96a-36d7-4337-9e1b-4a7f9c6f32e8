@@ -32,10 +32,10 @@ class TradingStrategy(Strategy):
         #log(f'Macd Cols: {MACDDFCols}')   #Macd Cols: Index(['MACD_5_15_9', 'MACDh_5_15_9', 'MACDs_5_15_9'], dtype='object')
         #log(f'Macd Indi: {macd_indicator}')
         current_price = data[-1]["USO"]["close"]
-        previous_macd = macd_indicator["MACD_5_15_9"][-2]
-        current_macd = macd_indicator["MACD_5_15_9"][-1]
-        MH = macd_indicator["MACDh_5_15_9"][-1]
-        macd_signal = macd_indicator["MACDs_5_15_9"][-1]
+        previous_macd = macd_indicator["MACD_15_25_9"][-2]
+        current_macd = macd_indicator["MACD_15_25_9"][-1]
+        MH = macd_indicator["MACDh_15_25_9"][-1]
+        macd_signal = macd_indicator["MACDs_15_25_9"][-1]
         #log(f' MACD: {current_macd} - MH: {MH} - Signal: {macd_signal}')
 
         # MACD turning positive condition
