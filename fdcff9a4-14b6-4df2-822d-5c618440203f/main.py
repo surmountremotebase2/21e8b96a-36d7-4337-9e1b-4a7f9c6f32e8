@@ -40,7 +40,7 @@ class TradingStrategy(Strategy):
         #log(f' MACD: {current_macd} - MH: {MH} - Signal: {macd_signal}')
 
         # MACD turning positive condition
-        if macd_signal > 0 and current_price > sma_20[-1] and sma_20 > sma_100:
+        if macd_signal > 0 and current_price > sma_20[-1] and sma_20[-1] > sma_100[-1]:
             #log("MACD turning positive, buying USO")
             uso_allocation = 1
         # Close position if "USO" close price crossed below the 20 days SMA or MACD turns negative
