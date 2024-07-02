@@ -27,8 +27,8 @@ class TradingStrategy(Strategy):
         
         log(f'Macd Indi: {macd_indicator}')
         current_price = data[-1]["USO"]["close"]
-        previous_macd = macd_indicator["MACD"][-2]
-        current_macd = macd_indicator["MACD"][-1]
+        previous_macd = macd_indicator["MACD_5_15_9"][-2]
+        current_macd = macd_indicator["MACD_5_15_9"][-1]
         macd_signal = macd_indicator["signal"][-1]
 
         # MACD turning positive condition
