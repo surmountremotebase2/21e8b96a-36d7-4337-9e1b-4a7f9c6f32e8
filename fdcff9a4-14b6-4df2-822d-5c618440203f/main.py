@@ -26,7 +26,7 @@ class TradingStrategy(Strategy):
         sma_10 = SMA("USO", data, 10)
         sma_200 = SMA("USO", data, 200)
         
-        if macd_indicator is None or sma_20 is None:
+        if macd_indicator is None or sma_30 is None:
             return TargetAllocation({})
         
         MACDDF = pd.DataFrame(macd_indicator)
