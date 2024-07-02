@@ -36,7 +36,7 @@ class TradingStrategy(Strategy):
         current_macd = macd_indicator["MACD_5_15_9"][-1]
         MH = macd_indicator["MACDh_5_15_9"][-1]
         macd_signal = macd_indicator["MACDs_5_15_9"][-1]
-        log(f' MACD: {current_macd} - MH: {MH} - Signal: {macd_signal}')
+        #log(f' MACD: {current_macd} - MH: {MH} - Signal: {macd_signal}')
 
         # MACD turning positive condition
         if current_macd > macd_signal and previous_macd <= macd_signal:
