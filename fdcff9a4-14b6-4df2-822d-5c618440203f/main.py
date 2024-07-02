@@ -1,6 +1,8 @@
+
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.technical_indicators import MACD, SMA
 from surmount.logging import log
+import pandas as pd
 
 class TradingStrategy(Strategy):
 
@@ -25,6 +27,9 @@ class TradingStrategy(Strategy):
         if macd_indicator is None or sma_20 is None:
             return TargetAllocation({})
         
+        MACDDF = pd.DataFrame(macd_indicator)
+        MACDDFCols = MACDDF.columns
+        log(f'Macd Cols: {MACDDFCols}')
         #log(f'Macd Indi: {macd_indicator}')
         current_price = data[-1]["USO"]["close"]
         previous_macd = macd_indicator["MACD_5_15_9"][-2]
