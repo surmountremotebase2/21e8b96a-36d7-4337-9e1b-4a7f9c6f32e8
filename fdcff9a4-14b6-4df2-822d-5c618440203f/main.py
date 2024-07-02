@@ -23,7 +23,7 @@ class TradingStrategy(Strategy):
         # Calculate 20 day SMA for "USO"
         #sma_20 = SMA("USO", data, 18)
         sma_20 = EMA("USO", data, 18)
-        sma_100 = EMA("USO", data, 100)
+        sma_100 = SMA("USO", data, 100)
         
         if macd_indicator is None or sma_20 is None:
             return TargetAllocation({})
