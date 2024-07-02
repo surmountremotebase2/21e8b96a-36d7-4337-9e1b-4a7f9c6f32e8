@@ -40,6 +40,7 @@ class TradingStrategy(Strategy):
         sma200 = SMA("USO", data, 200)
         sma30 = SMA("USO", data, 30)
         sma15 = SMA("USO", data, 10)
+        smaS15 = SMA("SCO", data, 15)
         
         if not bb or not rsi or not sma30 or not sma15:
             return TargetAllocation(allocation_dict)  # Return no allocation if any calculation failed
@@ -50,7 +51,7 @@ class TradingStrategy(Strategy):
         if ( ((current_price > sma30[-1] and current_price > sma200[-1])) and rsi[-1] > 53 ):
             allocation_dict["USO"] = 1  # Full allocation to USO
             allocation_dict["SCO"] = 0
-        elif current_price < bb['lower'][-1] and rsi[-1] < 40 and current_price < sma15[-1]:
+        elif current_price < bb['lower'][-1] and rsi[-1] < 40 and current_price > smaS15[-1]:
             allocation_dict["USO"] = 0  # Close position
             allocation_dict["SCO"] = 0.5
         # Check if the position should be closed - close is below the 15-day SMA or RSI < 50
