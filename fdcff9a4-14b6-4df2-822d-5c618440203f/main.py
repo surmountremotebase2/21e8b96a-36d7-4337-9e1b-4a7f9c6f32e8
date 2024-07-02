@@ -19,13 +19,7 @@ class TradingStrategy(Strategy):
         
         # Calculate MACD with fast=5 and slow=15
         macd_indicator = MACD("USO", data, 15, 40)
-        
-        # Calculate 20 day SMA for "USO"
-        #sma_20 = SMA("USO", data, 18)
-        
-        if macd_indicator is None or sma_30 is None:
-            return TargetAllocation({})
-        
+
         MACDDF = pd.DataFrame(macd_indicator)
         MACDDFCols = MACDDF.columns
         #log(f'Macd Cols: {MACDDFCols}')   #Macd Cols: Index(['MACD_5_15_9', 'MACDh_5_15_9', 'MACDs_5_15_9'], dtype='object')
