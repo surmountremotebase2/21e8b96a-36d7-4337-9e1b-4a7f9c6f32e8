@@ -39,7 +39,7 @@ class TradingStrategy(Strategy):
         MH = macd_indicator["MACDh_15_40_9"][-1]
         macd_signal = macd_indicator["MACDs_15_40_9"][-1]
         #log(f' MACD: {current_macd} - MH: {MH} - Signal: {macd_signal}')
-        datadf = pd.DataFrame(data["USO"]["close"])
+        datadf = pd.DataFrame(data[:-252]["USO"]["close"])
         momentum = datadf.pct_change(10).iloc[-1]
 
         # MACD turning positive condition
