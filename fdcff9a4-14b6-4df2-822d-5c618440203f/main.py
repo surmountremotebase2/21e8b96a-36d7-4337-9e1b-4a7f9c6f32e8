@@ -25,6 +25,7 @@ class TradingStrategy(Strategy):
         if macd_indicator is None or sma_20 is None:
             return TargetAllocation({})
         
+        log(f'Macd Indi: {macd_indicator}')
         current_price = data[-1]["USO"]["close"]
         previous_macd = macd_indicator["MACD"][-2]
         current_macd = macd_indicator["MACD"][-1]
