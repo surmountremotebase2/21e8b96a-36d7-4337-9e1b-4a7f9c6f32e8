@@ -1,6 +1,6 @@
 
 from surmount.base_class import Strategy, TargetAllocation
-from surmount.technical_indicators import MACD, SMA
+from surmount.technical_indicators import MACD, SMA, EMA
 from surmount.logging import log
 import pandas as pd
 
@@ -22,7 +22,8 @@ class TradingStrategy(Strategy):
         macd_indicator = MACD("USO", data, 5, 15)
         
         # Calculate 20 day SMA for "USO"
-        sma_20 = SMA("USO", data, 20)
+        #sma_20 = SMA("USO", data, 18)
+        sma_20 = EMA("USO", data, 18)
         
         if macd_indicator is None or sma_20 is None:
             return TargetAllocation({})
@@ -39,7 +40,7 @@ class TradingStrategy(Strategy):
         #log(f' MACD: {current_macd} - MH: {MH} - Signal: {macd_signal}')
 
         # MACD turning positive condition
-        if macd_signal > 0:
+        if macd_signal > 0 and current_price > sma_20[-1]:
             #log("MACD turning positive, buying USO")
             uso_allocation = 1
         # Close position if "USO" close price crossed below the 20 days SMA or MACD turns negative
