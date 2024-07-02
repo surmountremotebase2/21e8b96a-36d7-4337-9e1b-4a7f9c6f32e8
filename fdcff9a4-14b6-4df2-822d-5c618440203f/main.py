@@ -33,7 +33,7 @@ class TradingStrategy(Strategy):
         allocation_dict = {"USO": 0}  # Default to no allocation
 
         # Calculate the 200-day Bollinger Bands with 1.2 standard deviations
-        bb = BB("USO", data, 250, 1.1)
+        bb = BB("USO", data, 200, 1.2)
         # Calculate the 50-day RSI
         rsi = RSI("USO", data, 50)
         # Calculate the 30-day and 15-day SMA
