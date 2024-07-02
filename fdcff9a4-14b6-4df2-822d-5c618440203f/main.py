@@ -47,7 +47,7 @@ class TradingStrategy(Strategy):
         if current_price > bb['upper'][-1] and rsi[-1] > 50 and current_price > sma30[-1]:
             allocation_dict["USO"] = 1  # Full allocation to USO
             allocation_dict["SCO"] = 0  # Close position
-        elif current_price < bb['lower'][-1] and rsi[-1] < 42 and current_price < sma30[-1]:
+        elif current_price < bb['lower'][-1] and rsi[-1] < 42 and current_price < sma15[-1]:
             allocation_dict["USO"] = 0  # Close position
             allocation_dict["SCO"] = 1  # Close position
         # Check if the position should be closed - close is below the 15-day SMA or RSI < 50
