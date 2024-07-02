@@ -7,7 +7,7 @@ class TradingStrategy(Strategy):
 
     @property
     def assets(self):
-        return ["USO", "SCO"]
+        return ["USO"]
 
     @property
     def interval(self):
@@ -33,7 +33,7 @@ class TradingStrategy(Strategy):
         allocation_dict = {"USO": 0}  # Default to no allocation
 
         # Calculate the 200-day Bollinger Bands with 1.2 standard deviations
-        bb = BB("USO", data, 200, 1.1)
+        bb = BB("USO", data, 250, 1.1)
         # Calculate the 50-day RSI
         rsi = RSI("USO", data, 50)
         # Calculate the 30-day and 15-day SMA
@@ -46,14 +46,12 @@ class TradingStrategy(Strategy):
         # Check if current close price is above the upper Bollinger band, RSI > 50, and close > 30-day SMA
         if current_price > bb['upper'][-1] and rsi[-1] > 48 and current_price > sma15[-1]:
             allocation_dict["USO"] = 1  # Full allocation to USO
-            allocation_dict["SCO"] = 0  # Close position
         elif current_price < bb['lower'][-1] and rsi[-1] < 43 and current_price < sma15[-1]:
             allocation_dict["USO"] = 0  # Close position
-            allocation_dict["SCO"] = 1  # Close position
         # Check if the position should be closed - close is below the 15-day SMA or RSI < 50
         #elif current_price < bb['upper'][-1] or rsi[-1] < 52 or current_price > sma15[-1]:
         else:
             allocation_dict["USO"] = 0  # Close position
-            allocation_dict["SCO"] = 0  # Close position
+
         
         return TargetAllocation(allocation_dict)
