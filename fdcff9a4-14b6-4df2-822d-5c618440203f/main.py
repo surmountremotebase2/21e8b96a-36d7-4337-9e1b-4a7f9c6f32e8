@@ -1,4 +1,3 @@
-
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.technical_indicators import MACD, SMA, EMA
 from surmount.logging import log
@@ -19,7 +18,7 @@ class TradingStrategy(Strategy):
         data = data["ohlcv"]
         
         # Calculate MACD with fast=5 and slow=15
-        macd_indicator = MACD("USO", data, 5, 15)
+        macd_indicator = MACD("USO", data, 15, 25)
         
         # Calculate 20 day SMA for "USO"
         #sma_20 = SMA("USO", data, 18)
