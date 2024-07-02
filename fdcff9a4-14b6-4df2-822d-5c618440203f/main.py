@@ -39,8 +39,8 @@ class TradingStrategy(Strategy):
         MH = macd_indicator["MACDh_15_40_9"][-1]
         macd_signal = macd_indicator["MACDs_15_40_9"][-1]
         #log(f' MACD: {current_macd} - MH: {MH} - Signal: {macd_signal}')
-        datadf = pd.DataFrame(data[:-252]["USO"]["close"])
-        momentum = datadf.pct_change(10).iloc[-1]
+        datadf = pd.DataFrame(data)
+        momentum = datadf["USO"]["close"].pct_change(10).iloc[-1]
 
         # MACD turning positive condition
         if current_macd > 0 and current_price > sma_30[-1] and (sma_10[-1] > sma_200[-1] and sma_30[-1] > sma_200[-1]):
