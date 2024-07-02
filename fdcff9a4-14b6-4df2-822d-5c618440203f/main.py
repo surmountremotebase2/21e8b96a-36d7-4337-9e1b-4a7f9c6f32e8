@@ -1,4 +1,3 @@
-
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.technical_indicators import MACD, SMA
 from surmount.logging import log
@@ -26,11 +25,12 @@ class TradingStrategy(Strategy):
         if macd_indicator is None or sma_20 is None:
             return TargetAllocation({})
         
+        log(f'MACD Col: {macd_indicator.columns}')
         #log(f'Macd Indi: {macd_indicator}')
         current_price = data[-1]["USO"]["close"]
         previous_macd = macd_indicator["MACD_5_15_9"][-2]
         current_macd = macd_indicator["MACD_5_15_9"][-1]
-        macd_signal = macd_indicator["signal"][-1]
+        macd_signal = macd_indicator["signal_5_15_9"][-1]
 
         # MACD turning positive condition
         if current_macd > macd_signal and previous_macd <= macd_signal:
