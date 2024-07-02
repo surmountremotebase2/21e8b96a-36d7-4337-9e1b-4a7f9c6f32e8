@@ -22,9 +22,6 @@ class TradingStrategy(Strategy):
         
         # Calculate 20 day SMA for "USO"
         #sma_20 = SMA("USO", data, 18)
-        sma_30 = EMA("USO", data, 30)
-        sma_10 = SMA("USO", data, 10)
-        sma_200 = SMA("USO", data, 200)
         
         if macd_indicator is None or sma_30 is None:
             return TargetAllocation({})
@@ -39,15 +36,24 @@ class TradingStrategy(Strategy):
         MH = macd_indicator["MACDh_15_40_9"][-1]
         macd_signal = macd_indicator["MACDs_15_40_9"][-1]
         #log(f' MACD: {current_macd} - MH: {MH} - Signal: {macd_signal}')
-        momentum = data[-1]["USO"]["close"] - data[-11]["USO"]["close"]
+        allocation_dict = {"USO": 0}  # Default to no allocation
 
-        # MACD turning positive condition
-        if current_macd > 0 and current_price > sma_30[-1] and (sma_10[-1] > sma_200[-1] and sma_30[-1] > sma_200[-1]):
-            #log("MACD turning positive, buying USO")
-            uso_allocation = 1
-        # Close position if "USO" close price crossed below the 20 days SMA or MACD turns negative
-        elif current_price < sma_30[-1] and momentum < 0 and macd_signal < 0:
-            #log("Closing USO position")
-            uso_allocation = 0
+        # Calculate the 200-day Bollinger Bands with 1.2 standard deviations
+        bb = BB("USO", data["ohlcv"], 200, 1.2)
+        # Calculate the 50-day RSI
+        rsi = RSI("USO", data["ohlcv"], 50)
+        # Calculate the 30-day and 15-day SMA
+        sma30 = SMA("USO", data["ohlcv"], 30)
+        sma15 = SMA("USO", data["ohlcv"], 15)
+        
+        if not bb or not rsi or not sma30 or not sma15:
+            return TargetAllocation(allocation_dict)  # Return no allocation if any calculation failed
 
-        return TargetAllocation({"USO": uso_allocation})
+        # Check if current close price is above the upper Bollinger band, RSI > 50, and close > 30-day SMA
+        if current_price > bb['upper'][-1] and rsi[-1] > 50 and current_price > sma30[-1]:
+            allocation_dict["USO"] = 1  # Full allocation to USO
+        # Check if the position should be closed - close is below the 15-day SMA or RSI < 50
+        elif current_price < sma15[-1] or rsi[-1] < 50:
+            allocation_dict["USO"] = 0  # Close position
+        
+        return TargetAllocation(allocation_dict)
