@@ -1,4 +1,3 @@
-
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.technical_indicators import MACD, SMA
 from surmount.logging import log
@@ -34,7 +33,8 @@ class TradingStrategy(Strategy):
         current_price = data[-1]["USO"]["close"]
         previous_macd = macd_indicator["MACD_5_15_9"][-2]
         current_macd = macd_indicator["MACD_5_15_9"][-1]
-        macd_signal = macd_indicator["signal_5_15_9"][-1]
+        macd_signal = macd_indicator["MACDs_5_15_9"][-1]
+        log(f' Current: {current_macd} - Signal: {macd_signal}')
 
         # MACD turning positive condition
         if current_macd > macd_signal and previous_macd <= macd_signal:
