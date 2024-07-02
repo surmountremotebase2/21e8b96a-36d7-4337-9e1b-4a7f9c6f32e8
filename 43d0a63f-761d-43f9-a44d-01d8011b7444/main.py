@@ -24,9 +24,9 @@ class TradingStrategy(Strategy):
         uso_allocation = 0
         
         # Define the lookback periods for the technical indicators
-        short_term_lookback = 20  # Short-term EMA
-        long_term_lookback = 50  # Long-term EMA
-        rsi_period = 14  # Relative Strength Index period
+        short_term_lookback = 10  # Short-term EMA
+        long_term_lookback = 100  # Long-term EMA
+        rsi_period = 30  # Relative Strength Index period
         
         # Calculate EMAs and RSI for USO
         short_term_ema = EMA(self.ticker, data["ohlcv"], short_term_lookback)
