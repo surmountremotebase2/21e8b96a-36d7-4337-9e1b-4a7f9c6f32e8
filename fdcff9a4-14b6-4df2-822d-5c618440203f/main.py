@@ -38,7 +38,7 @@ class TradingStrategy(Strategy):
         rsi = RSI("USO", data, 50)
         # Calculate the 30-day and 15-day SMA
         sma30 = SMA("USO", data, 30)
-        sma15 = SMA("USO", data, 15)
+        sma15 = SMA("USO", data, 10)
         
         if not bb or not rsi or not sma30 or not sma15:
             return TargetAllocation(allocation_dict)  # Return no allocation if any calculation failed
@@ -46,7 +46,7 @@ class TradingStrategy(Strategy):
         # Check if current close price is above the upper Bollinger band, RSI > 50, and close > 30-day SMA
         #if current_price > bb['upper'][-1] and rsi[-1] > 48 and current_price > sma15[-1]:
         #if ( (current_price > bb['upper'][-1] or (current_price > sma15[-1] and current_price > sma30[-1])) and rsi[-1] > 53 ):
-        if ( ((current_price > sma15[-1] and current_price > sma30[-1])) and rsi[-1] > 53 ):
+        if ( ((current_price > sma15[-1] and current_price > sma30[-1])) and rsi[-1] > 55 ):
             allocation_dict["USO"] = 1  # Full allocation to USO
         elif current_price < bb['lower'][-1] and rsi[-1] < 43 and current_price < sma15[-1]:
             allocation_dict["USO"] = 0  # Close position
