@@ -1,5 +1,5 @@
 from surmount.base_class import Strategy, TargetAllocation
-from surmount.technical_indicators import MACD, SMA, EMA
+from surmount.technical_indicators import MACD, SMA, EMA, BB
 from surmount.logging import log
 import pandas as pd
 
