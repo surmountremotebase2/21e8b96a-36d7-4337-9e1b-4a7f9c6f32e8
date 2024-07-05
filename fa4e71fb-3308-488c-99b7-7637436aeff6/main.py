@@ -60,9 +60,9 @@ class TradingStrategy(Strategy):
         #dataDF.set_index('date', inplace=True)
         log(f'{dataDFQQQ.iloc[-1]}')
 
-        dataDF['QQQ_Returns'] = dataDFQQQ['close'].pct_change()
+        dataDFQQQ['QQQ_Returns'] = dataDFQQQ['close'].pct_change()
         # Calculate the standard deviation of daily returns (daily volatility)
-        daily_volatility = dataDF['QQQ_Returns'].std()
+        daily_volatility = dataDFQQQ['QQQ_Returns'].std()
         QQQVola = daily_volatility * np.sqrt(252)
         WAITDays = int(QQQVola * self.LOOKD_CONST)
         RETLookback = int((1.0 - QQQVola) * self.LOOKD_CONST)
