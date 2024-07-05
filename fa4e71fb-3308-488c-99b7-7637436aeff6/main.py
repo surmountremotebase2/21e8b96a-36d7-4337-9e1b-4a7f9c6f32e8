@@ -53,7 +53,7 @@ class TradingStrategy(Strategy):
         today = pd.to_datetime(today)
         dayweek = today.weekday()
 
-        dataDF = pd.DataFrame(datatick["close"])
+        dataDF = pd.DataFrame(datatick.loc["close"])
 
         dataDF['QQQ_Returns'] = dataDF['QQQ'].pct_change()
         # Calculate the standard deviation of daily returns (daily volatility)
