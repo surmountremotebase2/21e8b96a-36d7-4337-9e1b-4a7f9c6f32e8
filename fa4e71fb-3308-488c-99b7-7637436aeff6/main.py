@@ -66,12 +66,12 @@ class TradingStrategy(Strategy):
         WAITDays = int(QQQVola * self.LOOKD_CONST)
         RETLookback = int((1.0 - QQQVola) * self.LOOKD_CONST)
 
-        xluret = dataDF["XLU"].pct_change(RETLookback).iloc[-1]
-        xliret = dataDF["XLI"].pct_change(RETLookback).iloc[-1]
-        gldret = dataDF["GLD"].pct_change(RETLookback).iloc[-1]
-        slvret = dataDF["SLV"].pct_change(RETLookback).iloc[-1]
-        uupret = dataDF["UUP"].pct_change(RETLookback).iloc[-1]
-        dbbret = dataDF["DBB"].pct_change(RETLookback).iloc[-1]
+        xluret = dataDF["XLU"].loc['close'].pct_change(RETLookback).iloc[-1]
+        xliret = dataDF["XLI"].loc['close'].pct_change(RETLookback).iloc[-1]
+        gldret = dataDF["GLD"].loc['close'].pct_change(RETLookback).iloc[-1]
+        slvret = dataDF["SLV"].loc['close'].pct_change(RETLookback).iloc[-1]
+        uupret = dataDF["UUP"].loc['close'].pct_change(RETLookback).iloc[-1]
+        dbbret = dataDF["DBB"].loc['close'].pct_change(RETLookback).iloc[-1]
 
         self.RiskFlag = ( (gldret > slvret) and (xluret > xliret) and (uupret > dbbret) )
 
