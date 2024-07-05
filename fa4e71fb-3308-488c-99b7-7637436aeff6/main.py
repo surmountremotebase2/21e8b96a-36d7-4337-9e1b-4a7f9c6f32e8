@@ -13,6 +13,11 @@ class TradingStrategy(Strategy):
         self.SafeAssets = ["IEF", "TLT", "GLD", "BIL"]
         self.Canary = ["GLD", "SLV", "XLI", "XLU", "XLI", "UUP", "DBB"]
 
+        self.INIT_WAITD = 15
+        self.VOLA_LOOKBACK = 126
+        self.LOOKD_CONST = 85
+        self.RiskFlag = False
+
         self.RiskON = 3  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
         self.LTMA = 100  #Long Term Moving Average
@@ -53,25 +58,36 @@ class TradingStrategy(Strategy):
 
         momentum_scores = self.calculate_momentum_scores(data)
         ema = EMA("QQQ", datatick, self.STMA)[-1]
-        xlu = (datatick[-1]["XLU"]["close"] - datatick[-45]["XLU"]["close"]) / datatick[-45]["XLU"]["close"]
-        xli = (datatick[-1]["XLI"]["close"] - datatick[-45]["XLI"]["close"]) / datatick[-45]["XLI"]["close"]
+
+        dataDF = pd.DataFrame(datatick)
+
+        dataDF['QQQ_Returns'] = dataDF['QQQ'].pct_change()
+        # Calculate the standard deviation of daily returns (daily volatility)
+        daily_volatility = dataDF['QQQ_Returns'].std()
+        trading_days_per_year = 252
+        QQQVola = daily_volatility * np.sqrt(trading_days_per_year)
+        WAITDays = int(QQQVola * self.LOOKD_CONST)
+        RETLookback = int((1.0 - QQQVola) * self.LOOKD_CONST)
+
+        xluret = dataDF["XLU"].pct_change(RETLookback).iloc[-1]
+        xliret = dataDF["XLI"].pct_change(RETLookback).iloc[-1]
+        gldret = dataDF["GLD"].pct_change(RETLookback).iloc[-1]
+        slvret = dataDF["SLV"].pct_change(RETLookback).iloc[-1]
+        uupret = dataDF["UUP"].pct_change(RETLookback).iloc[-1]
+        dbbret = dataDF["DBB"].pct_change(RETLookback).iloc[-1]
+
+        self.RiskFlag = ( (gldret > slvret) and (xluret > xliret) and (uupret > dbbret) )
+
         #log(f"{macd_signal}")
         mrktclose = datatick[-1]["QQQ"]["close"]
         
-        mrktrsi = RSI("QQQ", datatick, 15)[-1]
-        mrktema = EMA("SPY", datatick, 10)[-1]
+
 
         qqq_prices = pd.DataFrame([x["QQQ"]["close"] for x in datatick[-60:]])
         # Calculate the daily price change
         daily_change = qqq_prices.diff()
         # Calculate the 50-day ROC using the first price as the reference
         qqqroc = ( (qqq_prices.iloc[-1] - qqq_prices.iloc[0]) / qqq_prices.iloc[0]) * 100  # Multiply by 100 to express as percentage
-        #log(f"ROC {qqqroc}")
-        # Log the allocation for the current run.
-        
-        #log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
-        #positive_momentum_assets = 3
-        # Determine allocations for assets with positive momentum
        
         # Calculate number of assets with positive momentum
         positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
@@ -103,14 +119,6 @@ class TradingStrategy(Strategy):
             cp_allocation = 0.0
             allocations[self.crash_protection_asset2] = cp_allocation
 
-            #log(f"Sorted MOM {today.strftime('%Y-%m-%d')}: {sorted_assets_by_momentum}")
-            '''for asset in self.tickers:
-                if asset in sorted_assets_by_momentum:
-                    #allocations[asset] = (1 - cp_allocation) / positive_momentum_assets
-                    counter += 1
-                    allocations[asset] = float(1 / self.RiskON)
-                else:
-                    allocations[asset] = 0.0 '''
 
             safe_asset_allocation = 0.0
             remaining_allocation = 1.0
