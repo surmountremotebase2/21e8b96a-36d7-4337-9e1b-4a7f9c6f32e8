@@ -54,6 +54,8 @@ class TradingStrategy(Strategy):
         dayweek = today.weekday()
 
         dataDF = pd.DataFrame(datatick).T
+        dataDF['date'] = pd.to_datetime(dataDF['date'])
+        dataDF.set_index('date', inplace=True)
         log(f'{dataDF.iloc[-1]}')
         '''dataDF['QQQ_Returns'] = dataDF["QQQ"].loc["close"].pct_change()
         # Calculate the standard deviation of daily returns (daily volatility)
