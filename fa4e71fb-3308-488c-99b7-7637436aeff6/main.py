@@ -53,9 +53,6 @@ class TradingStrategy(Strategy):
         today = pd.to_datetime(today)
         dayweek = today.weekday()
 
-        momentum_scores = self.calculate_momentum_scores(data)
-        ema = EMA("QQQ", datatick, self.STMA)[-1]
-
         dataDF = pd.DataFrame(datatick)
 
         dataDF['QQQ_Returns'] = dataDF['QQQ'].pct_change()
