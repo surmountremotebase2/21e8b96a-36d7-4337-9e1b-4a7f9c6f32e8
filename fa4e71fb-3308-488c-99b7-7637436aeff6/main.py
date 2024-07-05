@@ -56,8 +56,8 @@ class TradingStrategy(Strategy):
         dataDFQQQ = pd.DataFrame(datatick[-253:]["QQQ"]["close"])
         
         
-        #dataDF['date'] = pd.to_datetime(dataDF.loc['date'])
-        #dataDF.set_index('date', inplace=True)
+        dataDFQQQ['date'] = pd.to_datetime(dataDF.loc['date'])
+        dataDFQQQ.set_index('date', inplace=True)
         log(f'{dataDFQQQ.iloc[-1]}')
 
         dataDFQQQ['QQQ_Returns'] = dataDFQQQ.pct_change()
