@@ -9,7 +9,7 @@ from datetime import date, time, datetime, timedelta
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define the global asset classes and the crash protection asset
-        self.tickers = ["QQQ", "MTUM", "XLV", "DBC", "TQQQ", "SPY", "TECL", "XLK", "SOXX", "IJT"]
+        self.tickers = ["QQQ", "XLV", "DBC", "TQQQ", "SPY", "TECL", "XLK", "SOXX", "IJT"]
         self.SafeAssets = ["IEF", "TLT", "BIL"]
         self.Canary = ["GLD", "SLV", "XLI", "XLU", "UUP", "DBB"]
         self.RiskAsset = "TQQQ"
@@ -45,21 +45,13 @@ class TradingStrategy(Strategy):
 
     def run(self, data):
         allocations = {}
-        is_last_day = False
+
         today = date.today() #GET Today's date
         datatick = data["ohlcv"]
         today = datatick[-1]["QQQ"]["date"]
         # Convert the strings to datetime objects using to_datetime
         today = pd.to_datetime(today)
         dayweek = today.weekday()
-        #log(f"WeekDay: {str(dayweek)}")
-        # Check if tomorrow belongs to the same month as today
-        is_last_day = today.month != (today + timedelta(days=2)).month
-        if dayweek == self.DAYOFWEEK:
-            is_last_day = True
-
-        if is_last_day or self.init == 0:
-            self.init = 1
 
         momentum_scores = self.calculate_momentum_scores(data)
         ema = EMA("QQQ", datatick, self.STMA)[-1]
