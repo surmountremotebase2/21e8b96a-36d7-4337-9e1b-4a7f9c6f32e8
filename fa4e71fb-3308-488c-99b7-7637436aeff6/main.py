@@ -9,9 +9,11 @@ from datetime import date, time, datetime, timedelta
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define the global asset classes and the crash protection asset
-        self.tickers = ["QQQ", "MTUM", "XLV", "DBC", "UUP", "SPY", "TLT", "IEF", "GLD", "XLK", "SOXX", "IJT"]
+        self.tickers = ["QQQ", "MTUM", "XLV", "DBC", "TQQQ", "SPY", "TECL", "XLK", "SOXX", "IJT"]
         self.SafeAssets = ["IEF", "TLT", "GLD", "BIL"]
         self.Canary = ["GLD", "SLV", "XLI", "XLU", "XLI", "UUP", "DBB"]
+        self.RiskAsset = "TQQQ"
+        self.SafeAsset = "BIL"
 
         self.INIT_WAITD = 15
         self.VOLA_LOOKBACK = 126
@@ -90,7 +92,12 @@ class TradingStrategy(Strategy):
             self.bull = True
         self.count += 1
 
-        allocations[asset] = safe_asset_allocation
+        if self.bull:
+            allocations[self.SafeAsset] = 0
+            allocations[self.RiskAsset] = 1.0
+        else:
+            allocations[self.SafeAsset] = 1.0
+            allocations[self.RiskAsset] = 0
 
         return TargetAllocation(allocations)
 
