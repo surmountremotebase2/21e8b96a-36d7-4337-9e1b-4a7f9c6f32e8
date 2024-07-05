@@ -59,7 +59,7 @@ class TradingStrategy(Strategy):
         dataDF['date'] = pd.to_datetime(dataDF.loc['date'])
         dataDF.set_index('date', inplace=True)
 
-        '''dataDF['QQQ_Returns'] = dataDF["QQQ"].loc["close"].pct_change()
+        dataDF['QQQ_Returns'] = dataDF['QQQ'].loc['close'].pct_change()
         # Calculate the standard deviation of daily returns (daily volatility)
         daily_volatility = dataDF['QQQ_Returns'].std()
         QQQVola = daily_volatility * np.sqrt(252)
@@ -83,7 +83,7 @@ class TradingStrategy(Strategy):
             self.outday = self.count
         if self.count >= (self.outday + WAITDays):
             self.bull = True
-        self.count += 1'''
+        self.count += 1
 
         if self.bull:
             allocations[self.SafeAsset] = 0
