@@ -55,7 +55,7 @@ class TradingStrategy(Strategy):
 
         dataDF = pd.DataFrame(datatick)
 
-        dataDF['QQQ_Returns'] = dataDF['QQQ'].pct_change()
+        dataDF['QQQ_Returns'] = dataDF['QQQ']['close'].pct_change()
         # Calculate the standard deviation of daily returns (daily volatility)
         daily_volatility = dataDF['QQQ_Returns'].std()
         QQQVola = daily_volatility * np.sqrt(252)
