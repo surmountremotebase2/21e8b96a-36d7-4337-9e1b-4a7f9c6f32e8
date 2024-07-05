@@ -15,8 +15,11 @@ class TradingStrategy(Strategy):
 
         self.INIT_WAITD = 15
         self.VOLA_LOOKBACK = 126
-        self.LOOKD_CONST = 85
+        self.LOOKD_CONST = 83
+        self.EXCL_D = 21
         self.RiskFlag = False
+        self.bull = True
+        self.count = 0
 
         self.RiskON = 3  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
@@ -64,8 +67,7 @@ class TradingStrategy(Strategy):
         dataDF['QQQ_Returns'] = dataDF['QQQ'].pct_change()
         # Calculate the standard deviation of daily returns (daily volatility)
         daily_volatility = dataDF['QQQ_Returns'].std()
-        trading_days_per_year = 252
-        QQQVola = daily_volatility * np.sqrt(trading_days_per_year)
+        QQQVola = daily_volatility * np.sqrt(252)
         WAITDays = int(QQQVola * self.LOOKD_CONST)
         RETLookback = int((1.0 - QQQVola) * self.LOOKD_CONST)
 
@@ -81,68 +83,14 @@ class TradingStrategy(Strategy):
         #log(f"{macd_signal}")
         mrktclose = datatick[-1]["QQQ"]["close"]
         
+        if self.RiskFlag:
+            self.bull = False
+            self.outday = self.count
+        if self.count >= (self.outday + WAITDays):
+            self.bull = True
+        self.count += 1
 
-
-        qqq_prices = pd.DataFrame([x["QQQ"]["close"] for x in datatick[-60:]])
-        # Calculate the daily price change
-        daily_change = qqq_prices.diff()
-        # Calculate the 50-day ROC using the first price as the reference
-        qqqroc = ( (qqq_prices.iloc[-1] - qqq_prices.iloc[0]) / qqq_prices.iloc[0]) * 100  # Multiply by 100 to express as percentage
-       
-        # Calculate number of assets with positive momentum
-        positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
-
-        #sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:self.RiskON]
-        sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:5]
-        TopMom = sorted_assets_by_momentum[0]
-        #log(f"TopMom: {TopMom}")
-
-        # Determine the allocation to crash protection asset
-        #if (positive_momentum_assets <= 4 and TopMom in self.SafeAssets) and (xlu > xli and TopMom in self.SafeAssets):
-        if ( (positive_momentum_assets <= 7 and TopMom in self.CPAssets)  or xlu > xli):
-            #log(f"RISK OFF: SHV")
-            # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
-            #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
-            #sorted_cpassets_by_momentum = sorted(cpmomentum_scores, key=momentum_scores.get, reverse=True)
-            # Calculate number of assets with positive momentum
-            #allocations[self.crash_protection_asset1] = 0.3
-            for asset in self.tickers:
-                allocations[asset] = 0.0            
-            if TopMom in self.SafeAssets and positive_momentum_assets > 0:
-                allocations[TopMom] = 0.5
-                allocations[self.crash_protection_asset2] = 0.5
-            else:
-                allocations[self.crash_protection_asset2] = 1.0
-
-        else:
-            
-            cp_allocation = 0.0
-            allocations[self.crash_protection_asset2] = cp_allocation
-
-
-            safe_asset_allocation = 0.0
-            remaining_allocation = 1.0
-
-            # Check for Safe Assets in sorted_momentum
-            #for asset in self.SafeAssets:
-            for asset in self.CPAssets:
-                if asset in sorted_assets_by_momentum:
-                    # Allocate 1/4 to the first Safe Asset found
-                    safe_asset_allocation = 0.5
-                    remaining_allocation -= safe_asset_allocation
-                    allocations[asset] = safe_asset_allocation
-                    break  # Exit the loop after finding the first Safe Asset
-
-            # Allocate remaining to Risk-ON assets (max 3)
-            num_allocations = 0
-            for asset in sorted_assets_by_momentum:
-                if num_allocations >= self.RiskON:
-                    break  # Reached maximum allocation count
-                #if asset not in self.SafeAssets:
-                if asset not in self.CPAssets:
-                    allocations[asset] = remaining_allocation / (self.RiskON - num_allocations)
-                    num_allocations += 1
-                    remaining_allocation -= allocations[asset]
+        allocations[asset] = safe_asset_allocation
 
         return TargetAllocation(allocations)
 
