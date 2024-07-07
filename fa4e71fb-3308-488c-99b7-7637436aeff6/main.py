@@ -54,7 +54,7 @@ class TradingStrategy(Strategy):
         dayweek = today.weekday()
 
         dataDF = pd.DataFrame(datatick)
-        log(f'{datatick.iloc[-1]}')
+        #log(f'{datatick.iloc[-1]}')
         
         dataDFQQQ = pd.DataFrame([data['QQQ']])
         log(f'{dataDFQQQ.iloc[-1]}')
