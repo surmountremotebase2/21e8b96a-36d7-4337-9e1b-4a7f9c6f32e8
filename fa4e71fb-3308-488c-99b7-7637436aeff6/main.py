@@ -56,7 +56,7 @@ class TradingStrategy(Strategy):
         dataDF = pd.DataFrame(datatick)
         #log(f'{datatick.iloc[-1]}')
         
-        dataDFQQQ = pd.DataFrame([data['QQQ']])
+        dataDFQQQ = pd.DataFrame([dataDF['QQQ']])
         log(f'{dataDFQQQ.iloc[-1]}')
         dataDFQQQ['date'] = pd.to_datetime(dataDFQQQ['date'])
         dataDFQQQ.set_index('date', inplace=True)
