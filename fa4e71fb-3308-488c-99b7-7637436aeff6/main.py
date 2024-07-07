@@ -54,11 +54,11 @@ class TradingStrategy(Strategy):
         dayweek = today.weekday()
 
         dataDF = pd.DataFrame(datatick)
-        log(f'{dataDF.iloc[-1]}')
+        log(f'{datatick.iloc[-1]}')
         
-        dataDFQQQ = pd.DataFrame(dataDF.loc['QQQ'])
+        dataDFQQQ = pd.DataFrame([data['QQQ']])
         log(f'{dataDFQQQ.iloc[-1]}')
-        dataDFQQQ['date'] = pd.to_datetime(dataDFQQQ.loc['date'])
+        dataDFQQQ['date'] = pd.to_datetime(dataDFQQQ['date'])
         dataDFQQQ.set_index('date', inplace=True)
         log(f'{dataDFQQQ.iloc[-1]}')
 
