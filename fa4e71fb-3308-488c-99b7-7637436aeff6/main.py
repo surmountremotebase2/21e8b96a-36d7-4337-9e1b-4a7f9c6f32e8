@@ -22,6 +22,7 @@ class TradingStrategy(Strategy):
         self.RiskFlag = False
         self.bull = True
         self.count = 0
+        self.outday = 0
 
         self.RiskON = 3  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
