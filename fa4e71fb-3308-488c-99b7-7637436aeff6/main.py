@@ -107,7 +107,7 @@ class TradingStrategy(Strategy):
             momentum_scores = self.calculate_momentum_scores(data)
             positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
             sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)
-            if len(sorted_assets_by_momentum) > 0:
+            if len(sorted_assets_by_momentum) > 0 and positive_momentum_assets > 0:
                 TopMom = sorted_assets_by_momentum[0]
             else:
                 TopMom = 'XLV'
@@ -116,6 +116,15 @@ class TradingStrategy(Strategy):
             allocations[self.SafeAsset] = 0
             allocations[self.RiskAsset] = 1.0
         else:
+            safe_scores = self.calculate_safe_scores
+            positive_safe_assets = sum(m > 0 for m in safe_scores.values())
+            sorted_safe_by_momentum = sorted(safe_scores, key=safe_scores.get, reverse=True)
+            if len(sorted_assets_by_momentum) > 0 and positive_safe_assets > 0:
+                TopSafeMom = sorted_safe_by_momentum[0]
+            else:
+                TopSafeMom = 'BIL'
+            self.SafeAsset = TopSafeMom
+
             allocations[self.SafeAsset] = 1.0
             allocations[self.RiskAsset] = 0
 
@@ -130,7 +139,7 @@ class TradingStrategy(Strategy):
         datatick = data["ohlcv"]
         for asset in self.tickers:
             close_data = data["ohlcv"][-1][asset]['close']
-            close_prices = [x[asset]['close'] for x in datatick[-self.LTMOM:]]
+            close_prices = [x[asset]['close'] for x in datatick[-self.VOLA_LOOKBACK:]]
             #close_prices = pd.DataFrame(close_prices)
             sma = self.calculate_sma(asset, data["ohlcv"])
             ema = EMA(asset, datatick, 15)[-1]
@@ -138,6 +147,28 @@ class TradingStrategy(Strategy):
             if sma > 0:  # Avoid division by zero
                 #momentum_score = ( (((close_data / sma)) -1) + ((close_data - close_prices[-self.STMOM]) / close_prices[-self.STMOM]) *2 )
                 momentum_score = ( (close_data / sma) - 1 ) - ( (close_data / ema) - 1 )
+            else:
+                momentum_score = 0.0
+
+            momentum_scores[asset] = momentum_score
+        return momentum_scores
+
+    def calculate_safe_scores(self, data):
+        """
+        Calculate momentum scores for asset classes based on the formula:
+        MOMt = [(closet / SMA(t..t-12)) – 1]
+        """
+        momentum_scores = {}
+        datatick = data["ohlcv"]
+        for asset in self.SafeAssets:
+            close_data = data["ohlcv"][-1][asset]['close']
+            close_prices = [x[asset]['close'] for x in datatick[-self.STMA:]]
+            #close_prices = pd.DataFrame(close_prices)
+            ema = EMA(asset, datatick, 15)[-1]
+            #ema = 0
+            if ema > 0:  # Avoid division by zero
+                #momentum_score = ( (((close_data / sma)) -1) + ((close_data - close_prices[-self.STMOM]) / close_prices[-self.STMOM]) *2 )
+                momentum_score = ( (close_data / ema) - 1 )
             else:
                 momentum_score = 0.0
 
