@@ -59,6 +59,7 @@ class TradingStrategy(Strategy):
         #log(f'{datatick.iloc[-1]}')
 
         QQQClose = [x['QQQ']['close'] for x in datatick[-self.LTMOM:]]
+        SPYClose = [x['SPY']['close'] for x in datatick[-self.LTMOM:]]
         DATA['XLU'] = [x['XLU']['close'] for x in datatick[-self.LTMOM:]]
         DATA['XLI'] = [x['XLI']['close'] for x in datatick[-self.LTMOM:]]
         DATA['GLD'] = [x['GLD']['close'] for x in datatick[-self.LTMOM:]]
@@ -69,13 +70,17 @@ class TradingStrategy(Strategy):
         dates = [x['QQQ']['date'] for x in datatick[-self.LTMOM:]]
         dates = pd.to_datetime(dates)
         dataDFQQQ = pd.DataFrame(QQQClose, columns=['close'], index=dates)
+        dataDFSPY = pd.DataFrame(SPYClose, columns=['close'], index=dates)
         dataDF = pd.DataFrame(DATA, columns=['XLU', 'XLI', 'GLD', 'SLV', 'UUP', 'DBB'], index=dates)
         dataDFQQQ['QQQ_Returns'] = dataDFQQQ['close'].pct_change()
+        dataDFSPY['SPY_Returns'] = dataDFSPY['close'].pct_change()
 
         # Calculate the standard deviation of daily returns (daily volatility)
-        daily_volatility = dataDFQQQ['QQQ_Returns'].std()
+        #daily_volatility = dataDFQQQ['QQQ_Returns'].std()
+        daily_volatility = dataDFSPY['SPY_Returns'].std()
         QQQVola = daily_volatility * np.sqrt(252)
-        WAITDays = int(QQQVola * self.LOOKD_CONST)
+        WAITDays = int(QQQVola * self.LOOKD_CONST * .7)
+        #RETLookback = int((1.0 - QQQVola) * self.LOOKD_CONST)
         RETLookback = int((1.0 - QQQVola) * self.LOOKD_CONST)
 
         xluret = dataDF["XLU"].pct_change(RETLookback).iloc[-1]
