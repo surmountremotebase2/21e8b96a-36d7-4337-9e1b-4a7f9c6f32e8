@@ -56,29 +56,32 @@ class TradingStrategy(Strategy):
         dataDF = pd.DataFrame()
         #log(f'{datatick.iloc[-1]}')
 
-        close_prices = [x['QQQ']['close'] for x in datatick[-self.LTMOM:]]
-        log(f'{close_prices}')
+        QQQClose = [x['QQQ']['close'] for x in datatick[-self.LTMOM:]]
+        XLUClose = [x['XLU']['close'] for x in datatick[-self.LTMOM:]]
+        XLIClose = [x['XLI']['close'] for x in datatick[-self.LTMOM:]]
+        GLDClose = [x['GLD']['close'] for x in datatick[-self.LTMOM:]]
+        SLVClose = [x['SLV']['close'] for x in datatick[-self.LTMOM:]]
+        UUPClose = [x['UUP']['close'] for x in datatick[-self.LTMOM:]]
+        DBBClose = [x['DBB']['close'] for x in datatick[-self.LTMOM:]]
+        #log(f'{close_prices}')
         dates = [x['QQQ']['date'] for x in datatick[-self.LTMOM:]]
         dates = pd.to_datetime(dates)
-        dataDFQQQ = pd.DataFrame(close_prices, columns=['close'], index=dates)
-
-        log(f'{dataDFQQQ}')
-        #dataDFQQQ['date'] = pd.to_datetime(dataDFQQQ.loc['QQQ']['date'])
-        #dataDFQQQ.set_index('date', inplace=True)
-
+        dataDFQQQ = pd.DataFrame(QQQClose, columns=['close'], index=dates)
+        dataDF = pd.DataFrame([XLUClose, XLIClose, GLDClose, SLVClose, UUPClose, DBBClose], columns=['XLU', 'XLI', 'GLD', 'SLV', 'UUP', 'DBB'], index=dates)
         dataDFQQQ['QQQ_Returns'] = dataDFQQQ['close'].pct_change()
+
         # Calculate the standard deviation of daily returns (daily volatility)
         daily_volatility = dataDFQQQ['QQQ_Returns'].std()
         QQQVola = daily_volatility * np.sqrt(252)
         WAITDays = int(QQQVola * self.LOOKD_CONST)
         RETLookback = int((1.0 - QQQVola) * self.LOOKD_CONST)
 
-        xluret = dataDF["XLU"].loc['close'].pct_change(RETLookback).iloc[-1]
-        xliret = dataDF["XLI"].loc['close'].pct_change(RETLookback).iloc[-1]
-        gldret = dataDF["GLD"].loc['close'].pct_change(RETLookback).iloc[-1]
-        slvret = dataDF["SLV"].loc['close'].pct_change(RETLookback).iloc[-1]
-        uupret = dataDF["UUP"].loc['close'].pct_change(RETLookback).iloc[-1]
-        dbbret = dataDF["DBB"].loc['close'].pct_change(RETLookback).iloc[-1]
+        xluret = dataDF["XLU"].pct_change(RETLookback).iloc[-1]
+        xliret = dataDF["XLI"].pct_change(RETLookback).iloc[-1]
+        gldret = dataDF["GLD"].pct_change(RETLookback).iloc[-1]
+        slvret = dataDF["SLV"].pct_change(RETLookback).iloc[-1]
+        uupret = dataDF["UUP"].pct_change(RETLookback).iloc[-1]
+        dbbret = dataDF["DBB"].pct_change(RETLookback).iloc[-1]
 
         self.RiskFlag = ( (gldret > slvret) and (xluret > xliret) and (uupret > dbbret) )
 
