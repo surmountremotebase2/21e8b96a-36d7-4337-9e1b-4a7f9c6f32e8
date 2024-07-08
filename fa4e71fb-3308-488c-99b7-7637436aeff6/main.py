@@ -80,7 +80,7 @@ class TradingStrategy(Strategy):
         daily_volatility = dataDFQQQ['QQQ_Returns'].std()
         #daily_volatility = dataDFSPY['SPY_Returns'].std()
         QQQVola = daily_volatility * np.sqrt(252)
-        WAITDays = int(QQQVola * self.LOOKD_CONST * .6)
+        WAITDays = int(QQQVola * self.LOOKD_CONST * .8)
         #RETLookback = int((1.0 - QQQVola) * self.LOOKD_CONST)
         RETLookback = int((1.0 - QQQVola) * self.LOOKD_CONST)
 
