@@ -119,7 +119,7 @@ class TradingStrategy(Strategy):
             safe_scores = self.calculate_safe_scores(data)
             positive_safe_assets = sum(m > 0 for m in safe_scores.values())
             sorted_safe_by_momentum = sorted(safe_scores, key=safe_scores.get, reverse=True)
-            if len(sorted_assets_by_momentum) > 0 and positive_safe_assets > 0:
+            if len(sorted_safe_by_momentum) > 0 and positive_safe_assets > 0:
                 TopSafeMom = sorted_safe_by_momentum[0]
             else:
                 TopSafeMom = 'BIL'
