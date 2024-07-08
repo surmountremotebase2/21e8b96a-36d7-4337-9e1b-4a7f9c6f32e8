@@ -12,7 +12,7 @@ class TradingStrategy(Strategy):
         self.tickers = ["QQQ", "XLV", "DBC", "TQQQ", "SPY", "TECL", "XLK", "SOXX", "IJT"]
         self.SafeAssets = ["IEF", "TLT", "BIL"]
         self.Canary = ["GLD", "SLV", "XLI", "XLU", "UUP", "DBB"]
-        self.RiskAsset = "TQQQ"
+        self.RiskAsset = "QQQ"
         self.SafeAsset = "BIL"
 
         self.INIT_WAITD = 15
