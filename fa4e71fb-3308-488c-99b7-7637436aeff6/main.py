@@ -103,6 +103,15 @@ class TradingStrategy(Strategy):
         self.count += 1
 
         if self.bull:
+            momentum_scores = self.calculate_momentum_scores(data)
+            positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
+            sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)
+            if len(sorted_assets_by_momentum) > 0:
+                TopMom = sorted_assets_by_momentum[0]
+            else:
+                TopMom = 'XLV'
+            self.RiskAsset = TopMom
+
             allocations[self.SafeAsset] = 0
             allocations[self.RiskAsset] = 1.0
         else:
