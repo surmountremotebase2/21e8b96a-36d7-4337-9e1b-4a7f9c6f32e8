@@ -27,7 +27,7 @@ class TradingStrategy(Strategy):
         self.RiskOFF = 2 #Number of Risk OFF Assets
         self.LTMA = 100  #Long Term Moving Average
         self.STMOM = 20   #Short Term Momentum
-        self.LTMOM = 128   #Short Term Momentum
+        self.LTMOM = 252   #Short Term Momentum
         self.STMA = 20
         self.DAYOFWEEK = 4
         self.init = 0
@@ -53,16 +53,17 @@ class TradingStrategy(Strategy):
         today = pd.to_datetime(today)
         dayweek = today.weekday()
 
-        dataDF = pd.DataFrame(datatick)
+        dataDF = pd.DataFrame()
         #log(f'{datatick.iloc[-1]}')
+
+        close_prices = [x[asset]['close'] for x in datatick['QQQ'][-self.LTMOM:]]
+        close_prices = [x[asset]['close'] for x in datatick[-self.LTMOM:]]
         
         dataDFQQQ = pd.DataFrame([dataDF['QQQ'].loc['close']]).T
-        #log(f'{dataDFQQQ}')
-        dataDFQQQ = pd.DataFrame(dataDFQQQ['QQQ'], columns=["date", "open", "close"])
-        log(f'{dataDFQQQ}')
+
+        log(f'{close_prices}')
         #dataDFQQQ['date'] = pd.to_datetime(dataDFQQQ.loc['QQQ']['date'])
         #dataDFQQQ.set_index('date', inplace=True)
-        log(f'{dataDFQQQ.iloc[-1]}')
 
         dataDFQQQ['QQQ_Returns'] = dataDFQQQ['close'].pct_change()
         # Calculate the standard deviation of daily returns (daily volatility)
