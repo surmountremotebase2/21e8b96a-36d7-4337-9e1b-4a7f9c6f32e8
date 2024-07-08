@@ -45,6 +45,7 @@ class TradingStrategy(Strategy):
 
     def run(self, data):
         allocations = {}
+        DATA = {}
 
         today = date.today() #GET Today's date
         datatick = data["ohlcv"]
@@ -53,21 +54,21 @@ class TradingStrategy(Strategy):
         today = pd.to_datetime(today)
         dayweek = today.weekday()
 
-        dataDF = pd.DataFrame()
+        #dataDF = pd.DataFrame()
         #log(f'{datatick.iloc[-1]}')
 
         QQQClose = [x['QQQ']['close'] for x in datatick[-self.LTMOM:]]
-        XLUClose = [x['XLU']['close'] for x in datatick[-self.LTMOM:]]
-        XLIClose = [x['XLI']['close'] for x in datatick[-self.LTMOM:]]
-        GLDClose = [x['GLD']['close'] for x in datatick[-self.LTMOM:]]
-        SLVClose = [x['SLV']['close'] for x in datatick[-self.LTMOM:]]
-        UUPClose = [x['UUP']['close'] for x in datatick[-self.LTMOM:]]
-        DBBClose = [x['DBB']['close'] for x in datatick[-self.LTMOM:]]
+        DATA['XLU'] = [x['XLU']['close'] for x in datatick[-self.LTMOM:]]
+        DATA['XLI'] = [x['XLI']['close'] for x in datatick[-self.LTMOM:]]
+        DATA['GLD'] = [x['GLD']['close'] for x in datatick[-self.LTMOM:]]
+        DATA['SLV'] = [x['SLV']['close'] for x in datatick[-self.LTMOM:]]
+        DATA['UUP'] = [x['UUP']['close'] for x in datatick[-self.LTMOM:]]
+        DATA['DBB'] = [x['DBB']['close'] for x in datatick[-self.LTMOM:]]
         #log(f'{close_prices}')
         dates = [x['QQQ']['date'] for x in datatick[-self.LTMOM:]]
         dates = pd.to_datetime(dates)
         dataDFQQQ = pd.DataFrame(QQQClose, columns=['close'], index=dates)
-        dataDF = pd.DataFrame([XLUClose, XLIClose, GLDClose, SLVClose, UUPClose, DBBClose], columns=['XLU', 'XLI', 'GLD', 'SLV', 'UUP', 'DBB'], index=dates)
+        dataDF = pd.DataFrame(DATA, columns=['XLU', 'XLI', 'GLD', 'SLV', 'UUP', 'DBB'], index=dates)
         dataDFQQQ['QQQ_Returns'] = dataDFQQQ['close'].pct_change()
 
         # Calculate the standard deviation of daily returns (daily volatility)
