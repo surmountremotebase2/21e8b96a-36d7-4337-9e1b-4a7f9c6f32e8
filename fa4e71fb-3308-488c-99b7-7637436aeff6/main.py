@@ -76,8 +76,8 @@ class TradingStrategy(Strategy):
         dataDFSPY['SPY_Returns'] = dataDFSPY['close'].pct_change()
 
         # Calculate the standard deviation of daily returns (daily volatility)
-        #daily_volatility = dataDFQQQ['QQQ_Returns'].std()
-        daily_volatility = dataDFSPY['SPY_Returns'].std()
+        daily_volatility = dataDFQQQ['QQQ_Returns'].std()
+        #daily_volatility = dataDFSPY['SPY_Returns'].std()
         QQQVola = daily_volatility * np.sqrt(252)
         WAITDays = int(QQQVola * self.LOOKD_CONST)
         #RETLookback = int((1.0 - QQQVola) * self.LOOKD_CONST)
@@ -123,15 +123,14 @@ class TradingStrategy(Strategy):
             close_prices = [x[asset]['close'] for x in datatick[-self.LTMOM:]]
             #close_prices = pd.DataFrame(close_prices)
             sma = self.calculate_sma(asset, data["ohlcv"])
-            ema = EMA(asset, datatick, 15)[-1]
+            ema = EMA(asset, datatick, 21)[-1]
             #ema = 0
             if sma > 0:  # Avoid division by zero
-                momentum_score = ( (((close_data / sma)) -1) + ((close_data - close_prices[-self.STMOM]) / close_prices[-self.STMOM]) *2 )
-                #momentum_score = ( (close_data / sma) - 1 )
+                #momentum_score = ( (((close_data / sma)) -1) + ((close_data - close_prices[-self.STMOM]) / close_prices[-self.STMOM]) *2 )
+                momentum_score = ( (close_data / sma) - 1 ) - ( (close_data / ema) - 1 )
             else:
                 momentum_score = 0.0
-            if ema > 0:
-                momentum_score = momentum_score + ( (close_data - ema) / ema) 
+
             momentum_scores[asset] = momentum_score
         return momentum_scores
 
@@ -139,7 +138,7 @@ class TradingStrategy(Strategy):
         """
         Calculate Simple Moving Average (SMA) for an asset over the last 13 months.
         """
-        close_prices = [x[asset]['close'] for x in data[-self.LTMA:]]
+        close_prices = [x[asset]['close'] for x in data[-self.LOOKD_CONST:]]
         sma = pd.DataFrame(close_prices).mean()
         if sma[0] == 0:
             return 0.0
