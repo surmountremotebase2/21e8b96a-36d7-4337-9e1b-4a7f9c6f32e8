@@ -30,6 +30,7 @@ class TradingStrategy(Strategy):
         self.LTMA = 100  #Long Term Moving Average
         self.STMOM = 20   #Short Term Momentum
         self.LTMOM = 252   #Short Term Momentum
+        self.VolaThreashold = .21
         self.STMA = 20
         self.DAYOFWEEK = 4
         self.init = 0
@@ -109,7 +110,7 @@ class TradingStrategy(Strategy):
 
             positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
             sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)
-            if QQQVola > .25:
+            if QQQVola > self.VolaThreashold:
                 sorted_assets_by_momentum.remove('TECL')
             if len(sorted_assets_by_momentum) > 0 and positive_momentum_assets > 0:
                 TopMom = sorted_assets_by_momentum[0]
