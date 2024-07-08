@@ -56,7 +56,7 @@ class TradingStrategy(Strategy):
         dataDF = pd.DataFrame(datatick)
         #log(f'{datatick.iloc[-1]}')
         
-        dataDFQQQ = pd.DataFrame([dataDF['QQQ']]).T
+        dataDFQQQ = pd.DataFrame([dataDF['QQQ']['close']]).T
         #log(f'{dataDFQQQ}')
         dataDFQQQ = pd.DataFrame(dataDFQQQ['QQQ'], columns=["date", "open", "close"])
         log(f'{dataDFQQQ}')
