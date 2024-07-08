@@ -56,9 +56,9 @@ class TradingStrategy(Strategy):
         dataDF = pd.DataFrame()
         #log(f'{datatick.iloc[-1]}')
 
-        close_prices = [x['close'] for x in datatick[-self.LTMOM:]["QQQ"]]
+        close_prices = [x['QQQ']['close'] for x in datatick[-self.LTMOM:]]
         log(f'{close_prices}')
-        dates = [x[asset]['date'] for x in datatick[-self.LTMOM:]["QQQ"]]
+        dates = [x['QQQ']['date'] for x in datatick[-self.LTMOM:]]
         dates = pd.to_datetime(dates)
         dataDFQQQ = pd.DataFrame(close_prices, columns=['close'], index=dates)
 
