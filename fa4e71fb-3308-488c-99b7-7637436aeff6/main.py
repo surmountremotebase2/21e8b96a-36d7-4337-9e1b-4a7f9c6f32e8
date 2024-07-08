@@ -83,7 +83,7 @@ class TradingStrategy(Strategy):
         WAITDays = int(QQQVola * self.LOOKD_CONST * .8)
         #RETLookback = int((1.0 - QQQVola) * self.LOOKD_CONST)
         RETLookback = int((1.0 - QQQVola) * self.LOOKD_CONST)
-        log(f'{QQQVola}')
+        #log(f'{QQQVola}')
 
         xluret = dataDF["XLU"].pct_change(RETLookback).iloc[-1]
         xliret = dataDF["XLI"].pct_change(RETLookback).iloc[-1]
