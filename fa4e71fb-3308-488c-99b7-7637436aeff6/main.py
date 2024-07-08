@@ -58,11 +58,12 @@ class TradingStrategy(Strategy):
         
         dataDFQQQ = pd.DataFrame([dataDF['QQQ']]).T
         log(f'{dataDFQQQ}')
-        #dataDFQQQ['date'] = pd.to_datetime(dataDFQQQ.loc['date'])
-        #dataDFQQQ.set_index('date', inplace=True)
-        #log(f'{dataDFQQQ.iloc[-1]}')
+        dataDFQQQ = pd.DataFrame(dataDFQQQ['QQQ'])
+        dataDFQQQ['date'] = pd.to_datetime(dataDFQQQ['date'])
+        dataDFQQQ.set_index('date', inplace=True)
+        log(f'{dataDFQQQ.iloc[-1]}')
 
-        dataDFQQQ['QQQ_Returns'] = dataDFQQQ.loc['QQQ']['close'].pct_change()
+        dataDFQQQ['QQQ_Returns'] = dataDFQQQ['QQQ']['close'].pct_change()
         # Calculate the standard deviation of daily returns (daily volatility)
         daily_volatility = dataDFQQQ['QQQ_Returns'].std()
         QQQVola = daily_volatility * np.sqrt(252)
