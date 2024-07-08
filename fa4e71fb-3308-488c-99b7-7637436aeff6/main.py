@@ -116,7 +116,7 @@ class TradingStrategy(Strategy):
             allocations[self.SafeAsset] = 0
             allocations[self.RiskAsset] = 1.0
         else:
-            safe_scores = self.calculate_safe_scores
+            safe_scores = self.calculate_safe_scores(data)
             positive_safe_assets = sum(m > 0 for m in safe_scores.values())
             sorted_safe_by_momentum = sorted(safe_scores, key=safe_scores.get, reverse=True)
             if len(sorted_assets_by_momentum) > 0 and positive_safe_assets > 0:
