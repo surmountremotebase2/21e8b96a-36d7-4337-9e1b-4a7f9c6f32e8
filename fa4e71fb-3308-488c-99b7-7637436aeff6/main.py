@@ -31,7 +31,7 @@ class TradingStrategy(Strategy):
         self.LTMA = 100  #Long Term Moving Average
         self.STMOM = 20   #Short Term Momentum
         self.LTMOM = 252   #Short Term Momentum
-        self.VolaThreashold = .25
+        self.VolaThreashold = .21
         self.STMA = 20
         self.DAYOFWEEK = 4
         self.init = 0
@@ -116,7 +116,7 @@ class TradingStrategy(Strategy):
             if len(sorted_assets_by_momentum) > 0 and positive_momentum_assets > 0:
                 TopMom = sorted_assets_by_momentum[0]
             else:
-                TopMom = 'GLD'
+                TopMom = 'XLV'
             self.RiskAsset = TopMom
 
             allocations[self.SafeAsset] = 0
