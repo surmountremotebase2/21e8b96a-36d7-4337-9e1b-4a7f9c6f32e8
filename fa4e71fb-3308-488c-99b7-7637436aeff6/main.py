@@ -10,7 +10,7 @@ class TradingStrategy(Strategy):
     def __init__(self):
         # Define the global asset classes and the crash protection asset
         #self.tickers = ["QQQ", "XLV", "DBC", "TQQQ", "SPY", "TECL", "XLK", "SOXX", "IJT"]
-        self.tickers = ["QQQ", "XLV", "DBC", "SPY", "TECL", "XLK", "SOXX", "IJT"]
+        self.tickers = ["QQQ", "XLV", "DBC", "TECL", "XLK", "SOXX", "IJT", "FEZ", "EWJ"]
         self.SafeAssets = ["IEF", "TLT", "BIL"]
         self.Canary = ["GLD", "SLV", "XLI", "XLU", "UUP", "DBB"]
         self.RiskAsset = "QQQ"
@@ -61,7 +61,7 @@ class TradingStrategy(Strategy):
         #log(f'{datatick.iloc[-1]}')
 
         QQQClose = [x['QQQ']['close'] for x in datatick[-self.LTMOM:]]
-        SPYClose = [x['SPY']['close'] for x in datatick[-self.LTMOM:]]
+        #SPYClose = [x['SPY']['close'] for x in datatick[-self.LTMOM:]]
         DATA['XLU'] = [x['XLU']['close'] for x in datatick[-self.LTMOM:]]
         DATA['XLI'] = [x['XLI']['close'] for x in datatick[-self.LTMOM:]]
         DATA['GLD'] = [x['GLD']['close'] for x in datatick[-self.LTMOM:]]
@@ -72,10 +72,10 @@ class TradingStrategy(Strategy):
         dates = [x['QQQ']['date'] for x in datatick[-self.LTMOM:]]
         dates = pd.to_datetime(dates)
         dataDFQQQ = pd.DataFrame(QQQClose, columns=['close'], index=dates)
-        dataDFSPY = pd.DataFrame(SPYClose, columns=['close'], index=dates)
+        #dataDFSPY = pd.DataFrame(SPYClose, columns=['close'], index=dates)
         dataDF = pd.DataFrame(DATA, columns=['XLU', 'XLI', 'GLD', 'SLV', 'UUP', 'DBB'], index=dates)
         dataDFQQQ['QQQ_Returns'] = dataDFQQQ['close'].pct_change()
-        dataDFSPY['SPY_Returns'] = dataDFSPY['close'].pct_change()
+        #dataDFSPY['SPY_Returns'] = dataDFSPY['close'].pct_change()
 
         # Calculate the standard deviation of daily returns (daily volatility)
         daily_volatility = dataDFQQQ['QQQ_Returns'].std()
