@@ -10,8 +10,8 @@ class TradingStrategy(Strategy):
     def __init__(self):
         # Define the global asset classes and the crash protection asset
         #self.tickers = ["QQQ", "XLV", "DBC", "TQQQ", "SPY", "TECL", "XLK", "SOXX", "IJT"]
-        self.tickers = ["QQQ", "DBC", "TECL", "XLK", "SOXX", "IJT"]
-        self.SafeAssets = ["IEF", "TLT", "BIL", "TIP", "XLV", "GLD"]
+        self.tickers = ["QQQ", "DBC", "XLV", "TECL", "XLK", "SOXX", "IJT"]
+        self.SafeAssets = ["IEF", "TLT", "BIL", "TIP", "GLD"]
         self.Canary = ["SLV", "XLI", "XLU", "UUP", "DBB"]
         self.RiskAsset = "QQQ"
         self.SafeAsset = "BIL"
