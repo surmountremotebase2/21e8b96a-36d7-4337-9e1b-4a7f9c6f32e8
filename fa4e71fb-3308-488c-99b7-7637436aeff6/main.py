@@ -11,7 +11,7 @@ class TradingStrategy(Strategy):
         # Define the global asset classes and the crash protection asset
         #self.tickers = ["QQQ", "XLV", "DBC", "TQQQ", "SPY", "TECL", "XLK", "SOXX", "IJT"]
         self.tickers = ["QQQ", "DBC", "TECL", "XLK", "SOXX", "IJT"]
-        self.SafeAssets = ["IEF", "TLT", "BIL", "XLV", "GLD"]
+        self.SafeAssets = ["IEF", "TLT", "BIL", "TIP", "XLV", "GLD"]
         self.Canary = ["SLV", "XLI", "XLU", "UUP", "DBB"]
         self.RiskAsset = "QQQ"
         self.SafeAsset = "BIL"
