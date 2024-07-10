@@ -84,7 +84,7 @@ class TradingStrategy(Strategy):
         QQQVola = daily_volatility * np.sqrt(252)
         WAITDays = int(QQQVola * self.LOOKD_CONST * .8)
         #RETLookback = int((1.0 - QQQVola) * self.LOOKD_CONST)
-        RETLookback = int((1.0 - QQQVola) * self.LOOKD_CONST)
+        RETLookback = int((1.0 - QQQVola) * self.LOOKD_CONST * .8)
         #log(f'{QQQVola}')
 
         xluret = dataDF["XLU"].pct_change(RETLookback).iloc[-1]
