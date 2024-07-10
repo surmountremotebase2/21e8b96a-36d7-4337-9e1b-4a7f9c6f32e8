@@ -15,6 +15,7 @@ class TradingStrategy(Strategy):
         self.Canary = ["SLV", "XLI", "XLU", "UUP", "DBB"]
         self.RiskAsset = "QQQ"
         self.SafeAsset = "BIL"
+        self.HighRiskAssets = ["QQQ", "TECL", "XLK"]
 
         self.INIT_WAITD = 15
         self.VOLA_LOOKBACK = 126
@@ -111,11 +112,11 @@ class TradingStrategy(Strategy):
             positive_momentum_assets = sum(m > 0 for m in momentum_scores.values())
             sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)
             if QQQVola > self.VolaThreashold:
-                sorted_assets_by_momentum.remove('TECL')
+                sorted_assets_by_momentum.remove(self.HighRiskAssets)
             if len(sorted_assets_by_momentum) > 0 and positive_momentum_assets > 0:
                 TopMom = sorted_assets_by_momentum[0]
             else:
-                TopMom = 'XLV'
+                TopMom = 'GLD'
             self.RiskAsset = TopMom
 
             allocations[self.SafeAsset] = 0
