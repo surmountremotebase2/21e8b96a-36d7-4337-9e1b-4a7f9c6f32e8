@@ -15,7 +15,7 @@ class TradingStrategy(Strategy):
         self.Canary = ["SLV", "XLI", "XLU", "UUP", "DBB"]
         self.RiskAsset = "QQQ"
         self.SafeAsset = "BIL"
-        self.HighRiskAssets = ["TECL", "QQQ", "XLK"]
+        self.HighRiskAssets = ["TECL", "QQQ", "XLK", "IJT"]
 
         self.INIT_WAITD = 15
         self.VOLA_LOOKBACK = 126
