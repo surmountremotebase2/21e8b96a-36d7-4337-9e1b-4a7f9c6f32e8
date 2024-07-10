@@ -31,7 +31,7 @@ class TradingStrategy(Strategy):
         self.LTMA = 100  #Long Term Moving Average
         self.STMOM = 20   #Short Term Momentum
         self.LTMOM = 252   #Short Term Momentum
-        self.VolaThreashold = .18
+        self.VolaThreashold = .25
         self.STMA = 20
         self.DAYOFWEEK = 4
         self.init = 0
