@@ -1,11 +1,10 @@
-
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.technical_indicators import RSI
 from surmount.logging import log
 
 class TradingStrategy(Strategy):
     def __init__(self):
-        self.tickers = ["QQQ", "BIL"]  # Define the assets we are interested in
+        self.tickers = ["QQQ", "BIL", "TECL"]  # Define the assets we are interested in
 
     @property
     def assets(self):
@@ -39,7 +38,7 @@ class TradingStrategy(Strategy):
             
             # RSI buy signal check
             if latest_rsi < 30:
-                allocation_dict["QQQ"] = 1.0  # Allocate 100% to QQQ
+                allocation_dict["TECL"] = 1.0  # Allocate 100% to QQQ
             # Condition to sell QQQ and buy BIL
             elif current_close > previous_high:
                 allocation_dict["BIL"] = 1.0  # Allocate 100% to BIL
