@@ -20,7 +20,7 @@ class TradingStrategy(Strategy):
         
         # Calculate 3-day RSI for QQQ
         rsi_values = RSI("QQQ", data["ohlcv"], length=3)
-        ema = EMA("QQQ", data["ohlcv"], length=200)
+        ema = EMA("QQQ", data["ohlcv"], length=100)
         
         if not rsi_values or len(rsi_values) < 2:
             # Not enough data to calculate RSI or act upon it
@@ -41,7 +41,7 @@ class TradingStrategy(Strategy):
             
             # RSI buy signal check
            
-            if latest_rsi < 26:
+            if latest_rsi < 26 and current_close > latest_ema:
                 allocation_dict["TQQQ"] = 1.0  # Allocate 100% to QQQ
             # Condition to sell QQQ and buy BIL
             elif current_close > previous_high:
