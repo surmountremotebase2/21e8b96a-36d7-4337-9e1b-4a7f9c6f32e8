@@ -20,7 +20,7 @@ class TradingStrategy(Strategy):
         
         # Calculate 3-day RSI for QQQ
         rsi_values = RSI("QQQ", data["ohlcv"], length=3)
-        ema = EMA("QQQ", data["ohlcv"], length=100)
+        ema = EMA("QQQ", data["ohlcv"], length=126)
         
         if not rsi_values or len(rsi_values) < 2:
             # Not enough data to calculate RSI or act upon it
