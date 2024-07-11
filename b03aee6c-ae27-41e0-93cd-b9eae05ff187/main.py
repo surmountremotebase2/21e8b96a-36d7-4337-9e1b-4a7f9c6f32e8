@@ -34,7 +34,7 @@ class TradingStrategy(Strategy):
         data = data["ohlcv"]
         
         # Ensure there is enough data for comparison
-        if len(qqq_data) >= 2:
+        if len(data) >= 2:
             current_close = data[-1]["QQQ"]["close"]
             tecl_close = data[-1]["TECL"]["close"]
             previous_high = data[-2]["QQQ"]["high"]
