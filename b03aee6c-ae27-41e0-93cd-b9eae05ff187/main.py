@@ -1,5 +1,5 @@
 from surmount.base_class import Strategy, TargetAllocation
-from surmount.technical_indicators import RSI
+from surmount.technical_indicators import RSI, EMA
 from surmount.logging import log
 
 class TradingStrategy(Strategy):
@@ -20,6 +20,7 @@ class TradingStrategy(Strategy):
         
         # Calculate 3-day RSI for QQQ
         rsi_values = RSI("QQQ", data["ohlcv"], length=3)
+        ema = EMA("QQQ", data["ohlcv"], length=5)
         
         if not rsi_values or len(rsi_values) < 2:
             # Not enough data to calculate RSI or act upon it
@@ -27,6 +28,7 @@ class TradingStrategy(Strategy):
         
         # Get previous and latest RSI values
         latest_rsi = rsi_values[-1]
+        latest_ema = ema[-1]
 
         # Access the OHLCV data for QQQ to compare current close with previous high
         qqq_data = data["ohlcv"]
@@ -42,7 +44,7 @@ class TradingStrategy(Strategy):
             # Condition to sell QQQ and buy BIL
             elif current_close > previous_high:
                 allocation_dict["BIL"] = 1.0  # Allocate 100% to BIL
-            elif latest_rsi > 85:
+            elif latest_rsi > 85 or current_close < latest_ema:
                 allocation_dict["BIL"] = 1.0  # Allocate 100% to BIL
             # If no conditions met, hold current positions
         else:
