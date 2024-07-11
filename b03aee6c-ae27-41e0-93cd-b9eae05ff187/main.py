@@ -42,6 +42,8 @@ class TradingStrategy(Strategy):
             # Condition to sell QQQ and buy BIL
             elif current_close > previous_high:
                 allocation_dict["BIL"] = 1.0  # Allocate 100% to BIL
+            elif latest_rsi > 85:
+                allocation_dict["BIL"] = 1.0  # Allocate 100% to BIL
             # If no conditions met, hold current positions
         else:
             # Not enough data for comparing close and high, do nothing
