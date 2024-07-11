@@ -37,7 +37,7 @@ class TradingStrategy(Strategy):
         if len(data) >= 2:
             current_close = data[-1]["QQQ"]["close"]
             tecl_close = data[-1]["TQQQ"]["close"]
-            previous_high = data[-2]["QQQ"]["high"]
+            previous_high = data[-3]["QQQ"]["high"]
             
             # RSI buy signal check
             if latest_rsi < 26:
