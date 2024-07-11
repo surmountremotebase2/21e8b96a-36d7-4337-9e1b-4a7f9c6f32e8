@@ -20,7 +20,7 @@ class TradingStrategy(Strategy):
         
         # Calculate 3-day RSI for QQQ
         rsi_values = RSI("QQQ", data["ohlcv"], length=3)
-        ema = EMA("QQQ", data["ohlcv"], length=50)
+        ema = EMA("QQQ", data["ohlcv"], length=126)
         
         if not rsi_values or len(rsi_values) < 2:
             # Not enough data to calculate RSI or act upon it
@@ -37,7 +37,7 @@ class TradingStrategy(Strategy):
         if len(data) >= 2:
             current_close = data[-1]["QQQ"]["close"]
             tecl_close = data[-1]["TQQQ"]["close"]
-            previous_high = data[-3]["QQQ"]["high"]
+            previous_high = data[-2]["QQQ"]["high"]
             
             # RSI buy signal check
            
