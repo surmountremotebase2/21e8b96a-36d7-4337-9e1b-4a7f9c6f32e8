@@ -1,3 +1,4 @@
+
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.technical_indicators import RSI
 from surmount.logging import log
@@ -47,4 +48,4 @@ class TradingStrategy(Strategy):
             # Not enough data for comparing close and high, do nothing
             log("Not enough data for action")
         
-        return TargetAllocator(allocation_dict)
+        return TargetAllocation(allocation_dict)
