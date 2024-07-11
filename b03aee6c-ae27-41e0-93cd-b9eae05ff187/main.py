@@ -40,12 +40,12 @@ class TradingStrategy(Strategy):
             previous_high = data[-3]["QQQ"]["high"]
             
             # RSI buy signal check
-            if latest_rsi < 26:
+            if latest_rsi < 30:
                 allocation_dict["TQQQ"] = 1.0  # Allocate 100% to QQQ
             # Condition to sell QQQ and buy BIL
             elif current_close > previous_high:
                 allocation_dict["BIL"] = 1.0  # Allocate 100% to BIL
-            elif latest_rsi < 8:
+            elif latest_rsi < 12:
                 allocation_dict["BIL"] = 1.0  # Allocate 100% to BIL
             # If no conditions met, hold current positions
         else:
