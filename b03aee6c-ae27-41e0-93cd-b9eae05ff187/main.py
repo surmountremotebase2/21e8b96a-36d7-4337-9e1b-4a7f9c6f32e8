@@ -41,7 +41,7 @@ class TradingStrategy(Strategy):
             
             # RSI buy signal check
            
-            if latest_rsi < 26 and current_close > latest_ema:
+            if latest_rsi < 30 and current_close > latest_ema:
                 allocation_dict["TQQQ"] = 1.0  # Allocate 100% to QQQ
             # Condition to sell QQQ and buy BIL
             elif current_close > previous_high:
