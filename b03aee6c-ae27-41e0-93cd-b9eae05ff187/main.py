@@ -16,7 +16,7 @@ class TradingStrategy(Strategy):
 
     def run(self, data):
         # Initialize allocation dictionary
-        allocation_dict = {"QQQ": 0, "BIL": 0}
+        allocation_dict = {"TECL": 0, "BIL": 0}
         
         # Calculate 3-day RSI for QQQ
         rsi_values = RSI("QQQ", data["ohlcv"], length=3)
