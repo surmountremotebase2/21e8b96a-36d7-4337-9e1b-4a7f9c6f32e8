@@ -36,7 +36,7 @@ class TradingStrategy(Strategy):
         else:
             # Calculate the 50-day SMA of the H-L difference for both SPY and TLT
             datatick = data["ohlcv"]
-            ohlcv_data_spy = datatick["SPY"][-252:]
+            ohlcv_data_spy = datatick[-252:]["SPY"]
             ohlcv_data_tlt = data["ohlcv"][-252:]["TLT"]
 
             if len(ohlcv_data_spy) > 50 and len(ohlcv_data_tlt) > 50:  # Ensure there's enough data
