@@ -37,7 +37,7 @@ class TradingStrategy(Strategy):
         else:
             # Calculate the 50-day SMA of the H-L difference for both SPY and TLT
             datatick = data["ohlcv"]
-            datatick = pd.DataFrame(datatick)
+            datatick = pd.DataFrame(datatick).T
             ohlcv_data_spy = datatick.loc["SPY"]
             ohlcv_data_tlt = data["ohlcv"][-252:]["TLT"]
 
