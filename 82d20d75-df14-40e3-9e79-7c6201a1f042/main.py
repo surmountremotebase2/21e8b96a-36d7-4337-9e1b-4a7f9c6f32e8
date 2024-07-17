@@ -56,8 +56,12 @@ class TradingStrategy(Strategy):
                 condition_tlt = todays_change_tlt >= 1.25 * avg_h_l_tlt
 
                 if condition_spy and condition_tlt:
-                    allocation_dict = {"SPY": 1, "TLT": -1}  # Go long SPY and short TLT
+                    allocation_dict = {"SPY": 1, "TLT": 0}  # Go long SPY and short TLT
                     self.in_position = True  # Mark that we've entered a position
                     self.days_since_position += 1  # Start counting the days
 
         return TargetAllocation(allocation_dict)
+
+
+
+        
