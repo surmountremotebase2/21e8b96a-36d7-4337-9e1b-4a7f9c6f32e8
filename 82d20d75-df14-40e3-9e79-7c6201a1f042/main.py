@@ -7,7 +7,7 @@ class TradingStrategy(Strategy):
         # Defining the tickers of interest
         self.tickers = ["SPY", "TLT"]
         # Defining the data_list to fetch historical high and low prices for calculating moving averages
-        self.data_list = [Asset(i) for i in self.tickers]
+        self.data_list = self.tickers
         # To keep track of the days since entered the position
         self.days_since_position = 0
         # To store if we have entered a position
@@ -61,7 +61,3 @@ class TradingStrategy(Strategy):
                     self.days_since_position += 1  # Start counting the days
 
         return TargetAllocation(allocation_dict)
-
-
-
-        
