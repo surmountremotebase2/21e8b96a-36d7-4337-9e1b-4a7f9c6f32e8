@@ -35,8 +35,8 @@ class TradingStrategy(Strategy):
             self.days_since_position = 0  # Reset the counter
         else:
             # Calculate the 50-day SMA of the H-L difference for both SPY and TLT
-            ohlcv_data_spy = data["ohlcv"]["SPY"][-252:]
-            ohlcv_data_tlt = data["ohlcv"]["TLT"][-252:]
+            ohlcv_data_spy = data["ohlcv"][-252:]["SPY"]
+            ohlcv_data_tlt = data["ohlcv"][-252:]["TLT"]
 
             if len(ohlcv_data_spy) > 50 and len(ohlcv_data_tlt) > 50:  # Ensure there's enough data
                 h_l_spy = [day["high"] - day["low"] for day in ohlcv_data_spy[-51:]]  # Last 51 days (including today)
