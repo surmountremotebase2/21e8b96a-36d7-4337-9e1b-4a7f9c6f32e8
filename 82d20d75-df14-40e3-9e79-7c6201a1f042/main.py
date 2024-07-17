@@ -1,6 +1,7 @@
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.data import Asset
 from surmount.technical_indicators import SMA
+import pandas as pd
 
 class TradingStrategy(Strategy):
     def __init__(self):
@@ -36,7 +37,8 @@ class TradingStrategy(Strategy):
         else:
             # Calculate the 50-day SMA of the H-L difference for both SPY and TLT
             datatick = data["ohlcv"]
-            ohlcv_data_spy = datatick.loc["SPY"]
+            datatick = pd.DataFrame(datatick)
+            ohlcv_data_spy = datatick.iloc["SPY"]
             ohlcv_data_tlt = data["ohlcv"][-252:]["TLT"]
 
             if len(ohlcv_data_spy) > 50 and len(ohlcv_data_tlt) > 50:  # Ensure there's enough data
