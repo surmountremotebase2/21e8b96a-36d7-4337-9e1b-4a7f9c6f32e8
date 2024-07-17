@@ -40,6 +40,8 @@ class TradingStrategy(Strategy):
             datatick = pd.DataFrame(datatick).T
             ohlcv_data_spy = datatick.loc["SPY"]
             ohlcv_data_tlt = datatick.loc["TLT"]
+            if self.days_since_position == 0:
+                log(f'{ohlcv_data_tlt}')
 
             if len(ohlcv_data_spy) > 50 and len(ohlcv_data_tlt) > 50:  # Ensure there's enough data
                 h_l_spy = [day["high"] - day["low"] for day in ohlcv_data_spy[-51:]]  # Last 51 days (including today)
