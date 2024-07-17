@@ -22,10 +22,6 @@ class TradingStrategy(Strategy):
     def assets(self):
         return self.tickers
 
-    @property
-    def data(self):
-        return self.data_list
-
     def run(self, data):
         allocation_dict = {"SPY": 0, "TLT": 0}  # Default to no allocation
 
