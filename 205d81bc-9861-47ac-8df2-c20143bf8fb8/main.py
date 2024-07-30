@@ -30,7 +30,7 @@ class TradingStrategy(Strategy):
             # Williams %R calculation for the previous day
             highest_high = np.max(highs[:-1])
             lowest_low = np.min(lows[:-1])
-            close_yesterday = closes[-2]
+            close_yesterday = closes[-1]
             williams_r_yesterday = ((highest_high - close_yesterday) / (highest_high - lowest_low)) * -100
 
             # Williams %R calculation for today
