@@ -24,7 +24,7 @@ class TradingStrategy(Strategy):
         d = data["ohlcv"] # Getting OHLCV data for QQQ
         #allocation = 0
         
-        if len(d) >= 2:  # We need at least 2 days of data to proceed
+        if len(d) >= 4:  # We need at least 2 days of data to proceed
             closes = np.array([item["QQQ"]["close"] for item in d[-4:]])  # Last 3 days close prices [for current day and 2 days back]
             highs = np.array([item["QQQ"]["high"] for item in d[-4:]])  # Last 3 days high prices
             lows = np.array([item["QQQ"]["low"] for item in d[-4:]])  # Last 3 days low prices
