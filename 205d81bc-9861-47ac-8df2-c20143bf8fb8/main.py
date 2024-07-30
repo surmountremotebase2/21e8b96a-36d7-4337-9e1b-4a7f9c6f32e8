@@ -6,7 +6,7 @@ from datetime import date, time, datetime, timedelta
 
 class TradingStrategy(Strategy):
     def __init__(self):
-        self.tickers = ["QQQ"]
+        self.tickers = ["QQQ", "TQQQ"]
 
     @property
     def assets(self):
@@ -46,4 +46,4 @@ class TradingStrategy(Strategy):
             if close_today > highs[-2] or williams_r_today > -30:  # Exit conditions
                 allocation = 0  # Sell signal
             
-        return TargetAllocation({"QQQ": allocation})
+        return TargetAllocation({"TQQQ": allocation})
