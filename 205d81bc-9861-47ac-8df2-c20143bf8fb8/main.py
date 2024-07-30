@@ -20,7 +20,7 @@ class TradingStrategy(Strategy):
     def run(self, data):
         allocation = {"TQQQ": 0, "BIL": 1}
         d = data["ohlcv"] # Getting OHLCV data for QQQ
-        allocation = 0
+        #allocation = 0
         
         if len(d) >= 2:  # We need at least 2 days of data to proceed
             closes = np.array([item["QQQ"]["close"] for item in d[-3:]])  # Last 3 days close prices [for current day and 2 days back]
