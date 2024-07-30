@@ -7,6 +7,7 @@ from datetime import date, time, datetime, timedelta
 class TradingStrategy(Strategy):
     def __init__(self):
         self.tickers = ["QQQ", "TQQQ", "BIL"]
+        self.bull = False
 
     @property
     def assets(self):
@@ -28,8 +29,8 @@ class TradingStrategy(Strategy):
             lows = np.array([item["QQQ"]["low"] for item in d[-3:]])  # Last 3 days low prices
 
             # Williams %R calculation for the previous day
-            highest_high = np.max(highs[:-2])
-            lowest_low = np.min(lows[:-2])
+            highest_high = np.max(highs[:-3])
+            lowest_low = np.min(lows[:-3])
             close_yesterday = closes[-2]
             williams_r_yesterday = ((highest_high - close_yesterday) / (highest_high - lowest_low)) * -100
 
@@ -45,8 +46,10 @@ class TradingStrategy(Strategy):
             if williams_r_yesterday < -95:
                 allocation["TQQQ"] = 1
                 allocation["BIL"] = 0
-            if close_today > highs[-2] or williams_r_today > -25:  # Exit conditions
+                self.bull = True
+            if close_today > highs[-2] or williams_r_today > -25 or (self.bull and close_today < lowest_low):  # Exit conditions
                 allocation["TQQQ"] = 0
                 allocation["BIL"] = 1
+                self.bull = False
             
         return TargetAllocation(allocation)
