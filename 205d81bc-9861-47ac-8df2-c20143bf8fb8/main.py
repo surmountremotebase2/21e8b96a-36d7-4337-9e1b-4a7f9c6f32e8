@@ -42,10 +42,10 @@ class TradingStrategy(Strategy):
             #log(f"Williams %R Yesterday: {williams_r_yesterday}, Williams %R Today: {williams_r_today}")
 
             # Buy signal based on Williams %R and conditions for selling
-            if williams_r_yesterday < -90:
+            if williams_r_yesterday < -95:
                 allocation["TQQQ"] = 1
                 allocation["BIL"] = 0
-            if close_today > highs[-2] or williams_r_today > -30:  # Exit conditions
+            if close_today > highs[-2] or williams_r_today > -25:  # Exit conditions
                 allocation["TQQQ"] = 0
                 allocation["BIL"] = 1
             
