@@ -28,9 +28,9 @@ class TradingStrategy(Strategy):
             lows = np.array([item["QQQ"]["low"] for item in d[-3:]])  # Last 3 days low prices
 
             # Williams %R calculation for the previous day
-            highest_high = np.max(highs[:-1])
-            lowest_low = np.min(lows[:-1])
-            close_yesterday = closes[-1]
+            highest_high = np.max(highs[:-2])
+            lowest_low = np.min(lows[:-2])
+            close_yesterday = closes[-2]
             williams_r_yesterday = ((highest_high - close_yesterday) / (highest_high - lowest_low)) * -100
 
             # Williams %R calculation for today
