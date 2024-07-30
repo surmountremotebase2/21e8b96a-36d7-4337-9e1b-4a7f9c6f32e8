@@ -6,7 +6,7 @@ from datetime import date, time, datetime, timedelta
 
 class TradingStrategy(Strategy):
     def __init__(self):
-        self.tickers = ["QQQ", "TQQQ"]
+        self.tickers = ["QQQ", "TQQQ", "BIL"]
 
     @property
     def assets(self):
@@ -18,6 +18,7 @@ class TradingStrategy(Strategy):
         return "1day"
 
     def run(self, data):
+        allocation = {"TQQQ": 0, "BIL": 1}
         d = data["ohlcv"] # Getting OHLCV data for QQQ
         allocation = 0
         
@@ -42,8 +43,10 @@ class TradingStrategy(Strategy):
 
             # Buy signal based on Williams %R and conditions for selling
             if williams_r_yesterday < -90:
-                allocation = 1  # Entry condition met, going long
+                allocation["TQQQ"] = 1
+                allocation["BIL"] = 0
             if close_today > highs[-2] or williams_r_today > -30:  # Exit conditions
-                allocation = 0  # Sell signal
+                allocation["TQQQ"] = 0
+                allocation["BIL"] = 1
             
-        return TargetAllocation({"TQQQ": allocation})
+        return TargetAllocation(allocation)
