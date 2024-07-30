@@ -38,7 +38,7 @@ class TradingStrategy(Strategy):
             close_today = closes[-1]
             williams_r_today = ((highest_high_today - close_today) / (highest_high_today - lowest_low_today)) * -100
 
-            log(f"Williams %R Yesterday: {williams_r_yesterday}, Williams %R Today: {williams_r_today}")
+            #log(f"Williams %R Yesterday: {williams_r_yesterday}, Williams %R Today: {williams_r_today}")
 
             # Buy signal based on Williams %R and conditions for selling
             if williams_r_yesterday < -90:
