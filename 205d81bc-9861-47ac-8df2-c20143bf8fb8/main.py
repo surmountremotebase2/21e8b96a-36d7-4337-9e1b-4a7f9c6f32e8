@@ -23,8 +23,8 @@ class TradingStrategy(Strategy):
         
         if len(d) >= 2:  # We need at least 2 days of data to proceed
             closes = np.array([item["QQQ"]["close"] for item in d[-3:]])  # Last 3 days close prices [for current day and 2 days back]
-            highs = np.array([item["high"] for item in d[-3:]])  # Last 3 days high prices
-            lows = np.array([item["low"] for item in d[-3:]])  # Last 3 days low prices
+            highs = np.array([item["QQQ"]["high"] for item in d[-3:]])  # Last 3 days high prices
+            lows = np.array([item["QQQ"]["low"] for item in d[-3:]])  # Last 3 days low prices
 
             # Williams %R calculation for the previous day
             highest_high = np.max(highs[:-1])
