@@ -49,7 +49,7 @@ class TradingStrategy(Strategy):
                 allocation["BIL"] = 0
                 self.bull = True
                 self.allocation = allocation
-            if close_today > highs[-2] or williams_r_today > -25 or close_today < lowest_low:  # Exit conditions
+            if close_today > highs[-2] or williams_r_today > -25:  # Exit conditions
                 allocation["TQQQ"] = 0
                 allocation["BIL"] = 1
                 self.bull = False
