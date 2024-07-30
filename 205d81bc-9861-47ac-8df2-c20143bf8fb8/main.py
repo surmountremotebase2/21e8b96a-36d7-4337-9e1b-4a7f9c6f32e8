@@ -8,6 +8,7 @@ class TradingStrategy(Strategy):
     def __init__(self):
         self.tickers = ["QQQ", "TQQQ", "BIL"]
         self.bull = False
+        self.allocation = {}
 
     @property
     def assets(self):
@@ -47,9 +48,13 @@ class TradingStrategy(Strategy):
                 allocation["TQQQ"] = 1
                 allocation["BIL"] = 0
                 self.bull = True
+                self.allocation = allocation
             if close_today > highs[-2] or williams_r_today > -25 or (self.bull and close_today < lowest_low):  # Exit conditions
                 allocation["TQQQ"] = 0
                 allocation["BIL"] = 1
                 self.bull = False
+                self.allocation = allocation
+            if self.bull:
+                allocation = self.allocation
             
         return TargetAllocation(allocation)
