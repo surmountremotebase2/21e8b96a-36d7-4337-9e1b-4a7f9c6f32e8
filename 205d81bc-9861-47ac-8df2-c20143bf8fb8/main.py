@@ -18,7 +18,7 @@ class TradingStrategy(Strategy):
         return "1day"
 
     def run(self, data):
-        d = data["ohlcv"][-252:]["QQQ"]  # Getting OHLCV data for QQQ
+        d = data["ohlcv"]["QQQ"]  # Getting OHLCV data for QQQ
         allocation = 0
         
         if len(d) >= 2:  # We need at least 2 days of data to proceed
