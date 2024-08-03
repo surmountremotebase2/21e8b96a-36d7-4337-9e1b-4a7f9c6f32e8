@@ -16,12 +16,13 @@ class TradingStrategy(Strategy):
         #                      "MTUM", "SPLV", "SOXX"]
         self.tickers = ["QQQ", "TECL", "TQQQ", "DBC", "UUP", "RSP", "SH", "TLT", "IEF", "GLD", "XLK", "SOXX", "IJT"]
         self.crash_protection_asset1 = "TIP"
-        self.crash_protection_asset2 = "SHV"
+        self.crash_protection_asset2 = "BIL"
         #self.SafeAssets = ["IEF", "TLT", "GLD", "DBC", "UUP"]
         self.SafeAssets = ["IEF", "TLT", "GLD", "DBC"]
         #self.CPAssets = ["IEF", "TLT", "SH", "GLD"]
         self.CPAssets = ["IEF", "TLT", "SH"]
         self.cplist = [self.crash_protection_asset2, "XLI", "XLU"]
+        self.uvxy = ["UVXY"]
         self.RiskON = 2  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
         self.LTMA = 100  #Long Term Moving Average
@@ -41,7 +42,7 @@ class TradingStrategy(Strategy):
     @property
     def assets(self):
         # Include the crash protection asset in the list
-        return self.tickers + self.cplist
+        return self.tickers + self.cplist + self.uvxy
 
     def run(self, data):
         allocations = {}
@@ -70,6 +71,7 @@ class TradingStrategy(Strategy):
         teclmrktclose = datatick[-1]["TECL"]["close"]
         mrktrsi = RSI("QQQ", datatick, 15)[-1]
         mrktema = EMA("SPY", datatick, 10)[-1]
+        uvxyrsi = RSI("UVXY", datatick, 10)[-1]
 
         qqq_prices = pd.DataFrame([x["QQQ"]["close"] for x in datatick[-60:]])
         # Calculate the daily price change
@@ -96,6 +98,9 @@ class TradingStrategy(Strategy):
 
         # Determine the allocation to crash protection asset
         #if (positive_momentum_assets <= 4 and TopMom in self.SafeAssets) and (xlu > xli and TopMom in self.SafeAssets):
+        if uvxyrsi > 30:
+            allocations["UVXY"] = 0.3
+            allocations[self.crash_protection_asset2] = 0.7
         if ( (positive_momentum_assets <= 4 and TopMom in self.CPAssets)  or xlu > xli):
             #log(f"RISK OFF: SHV")
             # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
@@ -104,7 +109,7 @@ class TradingStrategy(Strategy):
             # Calculate number of assets with positive momentum
             #allocations[self.crash_protection_asset1] = 0.3
             for asset in self.tickers:
-                allocations[asset] = 0.0            
+                allocations[asset] = 0.0
             if TopMom in self.SafeAssets and positive_momentum_assets > 0:
                 allocations[TopMom] = 0.5
                 allocations[self.crash_protection_asset2] = 0.5
