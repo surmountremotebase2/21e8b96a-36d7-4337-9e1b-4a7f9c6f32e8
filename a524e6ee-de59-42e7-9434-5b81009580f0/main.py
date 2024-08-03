@@ -22,7 +22,6 @@ class TradingStrategy(Strategy):
         #self.CPAssets = ["IEF", "TLT", "SH", "GLD"]
         self.CPAssets = ["IEF", "TLT", "SH"]
         self.cplist = [self.crash_protection_asset2, "XLI", "XLU"]
-        self.uvxy = ["UVXY"]
         self.RiskON = 2  #Number of Risk ON Assets
         self.RiskOFF = 2 #Number of Risk OFF Assets
         self.LTMA = 100  #Long Term Moving Average
@@ -82,8 +81,8 @@ class TradingStrategy(Strategy):
         #log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
         #positive_momentum_assets = 3
         # Determine allocations for assets with positive momentum
-        #if (mrktclose < mrktema and (qqqroc.iloc[-1] < 0)):
-        if (mrktclose < mrktema and (mrktrsi > 30)):
+        if xlu > xli:
+        #if (mrktclose < mrktema and (mrktrsi > 30)):
             del momentum_scores["TECL"]
             del momentum_scores["TQQQ"]
         
