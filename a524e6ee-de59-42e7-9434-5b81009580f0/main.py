@@ -83,7 +83,7 @@ class TradingStrategy(Strategy):
         #positive_momentum_assets = 3
         # Determine allocations for assets with positive momentum
         #if (mrktclose < mrktema and (qqqroc.iloc[-1] < 0)):
-        if (mrktclose < mrktema and (mrktrsi > 35)):
+        if (mrktclose < mrktema and (mrktrsi < 60)):
             del momentum_scores["TECL"]
             del momentum_scores["TQQQ"]
         
