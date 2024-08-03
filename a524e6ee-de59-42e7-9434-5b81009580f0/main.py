@@ -91,7 +91,7 @@ class TradingStrategy(Strategy):
 
         sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)
         #sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:5]
-        TopMom = sorted_assets_by_momentum[1]
+        TopMom = sorted_assets_by_momentum[0]
         #log(f"TopMom: {TopMom}")
 
         # Determine the allocation to crash protection asset
