@@ -71,7 +71,7 @@ class TradingStrategy(Strategy):
         teclmrktclose = datatick[-1]["TECL"]["close"]
         mrktrsi = RSI("QQQ", datatick, 15)[-1]
         mrktema = EMA("SPY", datatick, 10)[-1]
-        uvxyrsi = RSI("UVXY", datatick, 10)[-1]
+        uvxyrsi = RSI("UVXY", datatick, 9)[-1]
 
         qqq_prices = pd.DataFrame([x["QQQ"]["close"] for x in datatick[-60:]])
         # Calculate the daily price change
@@ -98,10 +98,8 @@ class TradingStrategy(Strategy):
 
         # Determine the allocation to crash protection asset
         #if (positive_momentum_assets <= 4 and TopMom in self.SafeAssets) and (xlu > xli and TopMom in self.SafeAssets):
-        if uvxyrsi > 30:
-            allocations["UVXY"] = 0.3
-            allocations[self.crash_protection_asset2] = 0.7
-        elif ( (positive_momentum_assets <= 4 and TopMom in self.CPAssets)  or xlu > xli):
+        
+        if ( (positive_momentum_assets <= 4 and TopMom in self.CPAssets)  or xlu > xli):
             #log(f"RISK OFF: SHV")
             # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
             #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
@@ -115,7 +113,9 @@ class TradingStrategy(Strategy):
                 allocations[self.crash_protection_asset2] = 0.5
             else:
                 allocations[self.crash_protection_asset2] = 1.0
-
+        elif uvxyrsi > 35 and mrktrsi < 50:
+            allocations["UVXY"] = 0.3
+            allocations[self.crash_protection_asset2] = 0.7
         else:
             
             cp_allocation = 0.0
