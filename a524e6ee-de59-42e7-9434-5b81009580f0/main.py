@@ -34,7 +34,8 @@ class TradingStrategy(Strategy):
 
     @property
     def interval(self):
-        return "1day"
+        #return "1day"
+        return "1hour"
 
 
     @property
@@ -45,7 +46,7 @@ class TradingStrategy(Strategy):
     def run(self, data):
         allocations = {}
         is_last_day = False
-        today = date.today() #GET Today's date
+        #today = date.today() #GET Today's date
         datatick = data["ohlcv"]
         today = datatick[-1]["QQQ"]["date"]
         # Convert the strings to datetime objects using to_datetime
