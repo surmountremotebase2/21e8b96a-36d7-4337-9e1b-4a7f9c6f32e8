@@ -112,9 +112,7 @@ class TradingStrategy(Strategy):
                 allocations[self.crash_protection_asset2] = 0.5
             else:
                 allocations[self.crash_protection_asset2] = 1.0
-        elif uvxyrsi > 30 and mrktrsi < 60:
-            allocations["UVXY"] = 0.3
-            allocations[self.crash_protection_asset2] = 0.7
+
         else:
             
             cp_allocation = 0.0
