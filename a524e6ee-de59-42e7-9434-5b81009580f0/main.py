@@ -66,7 +66,7 @@ class TradingStrategy(Strategy):
         xlu = (datatick[-1]["XLU"]["close"] - datatick[-45]["XLU"]["close"]) / datatick[-45]["XLU"]["close"]
         xli = (datatick[-1]["XLI"]["close"] - datatick[-45]["XLI"]["close"]) / datatick[-45]["XLI"]["close"]
         #log(f"{macd_signal}")
-        mrktclose = datatick[-1]["QQQ"]["close"]
+        mrktclose = datatick[-1]["SPY"]["close"]
         teclmrktclose = datatick[-1]["TECL"]["close"]
         mrktrsi = RSI("QQQ", datatick, 15)[-1]
         mrktema = EMA("SPY", datatick, 10)[-1]
@@ -82,7 +82,7 @@ class TradingStrategy(Strategy):
         #log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
         #positive_momentum_assets = 3
         # Determine allocations for assets with positive momentum
-        if (mrktclose < mrktema and (qqqroc.iloc[-1] < 10)):
+        if (mrktclose < mrktema and (qqqroc.iloc[-1] < -5)):
             del momentum_scores["TECL"]
             del momentum_scores["TQQQ"]
         
