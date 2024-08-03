@@ -14,7 +14,7 @@ class TradingStrategy(Strategy):
         #                      #"EWJ", "EEM", "XLK", "HYG", "XLU", "XLV", "LQD",
         #                      "XLK", "XLV", "XLE", "FEZ", "STIP", "TLT", "IEF", "EWJ", "GLD",
         #                      "MTUM", "SPLV", "SOXX"]
-        self.tickers = ["QQQ", "TECL", "TQQQ", "DBC", "UUP", "RSP", "SH", "TLT", "IEF", "GLD", "XLK", "SOXX", "IJT"]
+        self.tickers = ["QQQ", "TECL", "TQQQ", "DBC", "UUP", "RSP", "SH", "TLT", "IEF", "GLD", "XLK", "SOXX", "IJT", "UVXY"]
         self.crash_protection_asset1 = "TIP"
         self.crash_protection_asset2 = "BIL"
         #self.SafeAssets = ["IEF", "TLT", "GLD", "DBC", "UUP"]
@@ -42,7 +42,7 @@ class TradingStrategy(Strategy):
     @property
     def assets(self):
         # Include the crash protection asset in the list
-        return self.tickers + self.cplist + self.uvxy
+        return self.tickers + self.cplist
 
     def run(self, data):
         allocations = {}
