@@ -39,8 +39,8 @@ class TradingStrategy(Strategy):
             lows = np.array([item["SPY"]["low"] for item in d[-16:]])  # Last 3 days low prices
 
             # Williams %R calculation for the previous day
-            highest_high = np.max(highs[:-5])
-            lowest_low = np.min(lows[:-5])
+            highest_high = np.max(highs[:-3])
+            lowest_low = np.min(lows[:-3])
             close_yesterday = closes[-2]
 
             williams_r_yesterday = ((highest_high - close_yesterday) / (highest_high - lowest_low)) * -100
@@ -54,7 +54,7 @@ class TradingStrategy(Strategy):
             #log(f"Williams %R Yesterday: {williams_r_yesterday}, Williams %R Today: {williams_r_today}")
 
             # Buy signal based on Williams %R and conditions for selling
-            if williams_r_yesterday < -95:
+            if williams_r_yesterday < -100:
                 allocation["TQQQ"] = 1
                 allocation["BIL"] = 0
                 self.bull = True
