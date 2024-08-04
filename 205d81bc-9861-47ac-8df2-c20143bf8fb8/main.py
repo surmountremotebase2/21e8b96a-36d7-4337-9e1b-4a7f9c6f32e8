@@ -64,7 +64,7 @@ class TradingStrategy(Strategy):
                 allocation["BIL"] = 1
                 self.bull = False
                 self.allocation = allocation
-            if self.bull:
-                allocation = self.allocation
+            
+            allocation = self.allocation
             
         return TargetAllocation(allocation)
