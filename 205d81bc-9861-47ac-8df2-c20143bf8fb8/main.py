@@ -6,7 +6,7 @@ from datetime import date, time, datetime, timedelta
 
 class TradingStrategy(Strategy):
     def __init__(self):
-        self.tickers = ["QQQ", "TQQQ", "BIL"]
+        self.tickers = ["SPY", "QQQ", "TQQQ", "BIL"]
         self.bull = False
         self.allocation = {}
 
@@ -25,14 +25,24 @@ class TradingStrategy(Strategy):
         #allocation = 0
         
         if len(d) >= 4:  # We need at least 2 days of data to proceed
-            closes = np.array([item["QQQ"]["close"] for item in d[-3:]])  # Last 3 days close prices [for current day and 2 days back]
+            '''closes = np.array([item["QQQ"]["close"] for item in d[-3:]])  # Last 3 days close prices [for current day and 2 days back]
             highs = np.array([item["QQQ"]["high"] for item in d[-3:]])  # Last 3 days high prices
             lows = np.array([item["QQQ"]["low"] for item in d[-3:]])  # Last 3 days low prices
 
             # Williams %R calculation for the previous day
             highest_high = np.max(highs[:-2])
             lowest_low = np.min(lows[:-2])
+            close_yesterday = closes[-2]'''
+
+            closes = np.array([item["SPY"]["close"] for item in d[-16:]])  # Last 3 days close prices [for current day and 2 days back]
+            highs = np.array([item["SPY"]["high"] for item in d[-16:]])  # Last 3 days high prices
+            lows = np.array([item["SPY"]["low"] for item in d[-16:]])  # Last 3 days low prices
+
+            # Williams %R calculation for the previous day
+            highest_high = np.max(highs[:-15])
+            lowest_low = np.min(lows[:-15])
             close_yesterday = closes[-2]
+
             williams_r_yesterday = ((highest_high - close_yesterday) / (highest_high - lowest_low)) * -100
 
             # Williams %R calculation for today
