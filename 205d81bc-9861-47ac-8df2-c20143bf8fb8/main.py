@@ -54,7 +54,7 @@ class TradingStrategy(Strategy):
             #log(f"Williams %R Yesterday: {williams_r_yesterday}, Williams %R Today: {williams_r_today}")
 
             # Buy signal based on Williams %R and conditions for selling
-            if williams_r_yesterday < -98:
+            if williams_r_yesterday < -98 and williams_r_yesterday > -130:
                 allocation["TQQQ"] = 1
                 allocation["BIL"] = 0
                 self.bull = True
