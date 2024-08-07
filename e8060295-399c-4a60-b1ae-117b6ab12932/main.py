@@ -20,7 +20,7 @@ class TradingStrategy(Strategy):
             0.025, 0.025, 0.02, 0.02, 0.02, 0.02, 0.02, 0.015, 0.015,
             0.015, 0.015, 0.015, 0.015
         ]
-        self.count = 0
+        self.count = 5
 
     @property
     def interval(self):
@@ -42,7 +42,7 @@ class TradingStrategy(Strategy):
 
 
     def run(self, data):
-        self.count += 7
+        self.count -= 1
         spy_data = [entry['SPY']['close'] for entry in data['ohlcv'] if 'SPY' in entry]
         spy_dates = [entry['SPY']['date'] for entry in data['ohlcv'] if 'SPY' in entry]
         spy_data = pd.DataFrame(spy_data, columns=['close'])
@@ -75,7 +75,8 @@ class TradingStrategy(Strategy):
             if spy_data['vol_current'].iloc[-1] > spy_data['vol_future'].iloc[-1]:
                 #log(f"Switching to cash allocation due to high volatility")
                 return TargetAllocation({ticker: 0 for ticker in self.tickers})
-            else:
+                self.count = 5
+            elif self.count < 1:
                 #log(f"Switching to cash allocation due to high volatility")
                 allocation_dict = {self.tickers[i]: self.weights[i] for i in range(len(self.tickers))}
                 return TargetAllocation(allocation_dict)
