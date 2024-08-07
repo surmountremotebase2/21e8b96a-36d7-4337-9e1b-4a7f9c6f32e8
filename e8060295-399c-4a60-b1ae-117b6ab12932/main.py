@@ -63,16 +63,19 @@ class TradingStrategy(Strategy):
                                             
             #log(f"{spy_data['vol_future'].iloc[-1]}")
             volaT = np.percentile(spy_data['vol_current'], 50)
-            volaH = np.percentile(spy_data['vol_current'], 90)
+            volaH = np.percentile(spy_data['vol_current'], 80)
 
             #if self.count % 7 == 0:
             allocation_dict = {self.tickers[i]: self.weights[i] for i in range(len(self.tickers))}
 
                 # Check if the current ATR or Realized Volatility is above the 7th or 8th decile
-            if (spy_data['vol_current'].iloc[-1] > spy_data['vol_future'].iloc[-1] and spy_data['vol_current'].iloc[-1] > volaT) or spy_data['vol_current'].iloc[-1] > volaH:
+            if (spy_data['vol_current'].iloc[-1] > spy_data['vol_future'].iloc[-1] and spy_data['vol_current'].iloc[-1] > volaT):
                 #log(f"Switching to cash allocation due to high volatility")
                 return TargetAllocation({ticker: 0 for ticker in self.tickers})
-                self.count = 15
+                if spy_data['vol_current'].iloc[-1] > volaH:
+                    self.count = 20
+                else:
+                    self.count = 15
             elif self.count < 1:
                 #log(f"Switching to cash allocation due to high volatility")
                 allocation_dict = {self.tickers[i]: self.weights[i] for i in range(len(self.tickers))}
