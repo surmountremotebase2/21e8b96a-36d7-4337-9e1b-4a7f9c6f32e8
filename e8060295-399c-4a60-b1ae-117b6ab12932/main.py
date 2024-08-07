@@ -51,19 +51,19 @@ class TradingStrategy(Strategy):
         spy_data['log_returns'] = np.log(spy_data.close/spy_data.close.shift(1))
         spy_data = spy_data.fillna(0)
         INTERVAL_WINDOW = 50
-        n_future = 15
+        n_future = 7
 
         if len(spy_data) > n_future:
 
             #log(f"{spy_data['log_returns'].iloc[-1]}")
             # GET BACKWARD LOOKING REALIZED VOLATILITY
             spy_data['vol_current'] = spy_data.log_returns.rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
-            spy_data['vol_current'] = spy_data['vol_current'].rolling(3).mean().fillna(0)
+            #spy_data['vol_current'] = spy_data['vol_current'].rolling(3).mean().fillna(0)
             #log(f"{spy_data['vol_current'].iloc[-1]}")
 
             # GET FORWARD LOOKING REALIZED VOLATILITY 
             spy_data['vol_future'] = spy_data.log_returns.shift(n_future).fillna(0).rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
-            spy_data['vol_future'] = spy_data['vol_future'].rolling(15).mean().fillna(0)
+            #spy_data['vol_future'] = spy_data['vol_future'].rolling(15).mean().fillna(0)
                                             
             #log(f"{spy_data['vol_future'].iloc[-1]}")
             volaT = np.percentile(spy_data['vol_current'], 40)
@@ -75,7 +75,7 @@ class TradingStrategy(Strategy):
             if spy_data['vol_current'].iloc[-1] > spy_data['vol_future'].iloc[-1]:
                 #log(f"Switching to cash allocation due to high volatility")
                 return TargetAllocation({ticker: 0 for ticker in self.tickers})
-                self.count = 10
+                self.count = 15
             elif self.count < 1:
                 #log(f"Switching to cash allocation due to high volatility")
                 allocation_dict = {self.tickers[i]: self.weights[i] for i in range(len(self.tickers))}
