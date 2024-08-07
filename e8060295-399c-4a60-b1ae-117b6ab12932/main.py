@@ -63,7 +63,7 @@ class TradingStrategy(Strategy):
                                             
             #log(f"{spy_data['vol_future'].iloc[-1]}")
             volaT = np.percentile(spy_data['vol_current'], 50)
-            volaH = np.percentile(spy_data['vol_current'], 80)
+            volaH = np.percentile(spy_data['vol_current'], 90)
 
             #if self.count % 7 == 0:
             allocation_dict = {self.tickers[i]: self.weights[i] for i in range(len(self.tickers))}
