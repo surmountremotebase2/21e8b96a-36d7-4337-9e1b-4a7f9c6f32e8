@@ -12,7 +12,7 @@ class TradingStrategy(Strategy):
         ]
         self.bench = ["SPY"]
         self.weights = [
-            0.25, 0.25, 0.25, 0.25
+            0.2, 0.2, 0.2, 0.2, 0.2
         ]
         self.count = 5
 
