@@ -75,7 +75,7 @@ class TradingStrategy(Strategy):
             if spy_data['vol_current'].iloc[-1] > spy_data['vol_future'].iloc[-1]:
                 #log(f"Switching to cash allocation due to high volatility")
                 return TargetAllocation({ticker: 0 for ticker in self.tickers})
-                self.count = 5
+                self.count = 10
             elif self.count < 1:
                 #log(f"Switching to cash allocation due to high volatility")
                 allocation_dict = {self.tickers[i]: self.weights[i] for i in range(len(self.tickers))}
