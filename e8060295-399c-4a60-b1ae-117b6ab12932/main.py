@@ -8,10 +8,7 @@ class TradingStrategy(Strategy):
 
     def __init__(self):
         self.tickers = [
-            "AMZN", "AAPL", "META", "GOOGL", "MSFT", "NVDA", "PYPL", "SHOP",
-            "SQ", "TSLA", "TTD", "ADBE", "ATVI", "NFLX", "TWLO", "ZM", "ROKU",
-            "PTON", "SNAP", "SE", "SPOT", "PINS", "UBER", "LYFT", "DOCU", "ETSY",
-            "ZG", "W", "CHWY", "CRWD"
+            "AMZN", "AAPL", "META", "GOOGL", "MSFT"
         ]
         self.bench = ["SPY"]
         self.weights = [
