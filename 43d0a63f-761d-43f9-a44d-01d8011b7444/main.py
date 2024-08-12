@@ -8,6 +8,7 @@ class TradingStrategy(Strategy):
         self.ticker = ["SPY", "QQQ", "BIL"]
         self.RiskOn = "QQQ"
         self.RiskOff = "BIL"
+        self.count = 5
 
     @property
     def assets(self):
