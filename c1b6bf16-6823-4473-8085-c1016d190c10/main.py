@@ -32,12 +32,12 @@ class TradingStrategy(Strategy):
         tlt_data = pd.DataFrame(tlt_data, columns=['close'])
         #tlt_data['returns'] = 100 * tlt_data.close.pct_change().dropna()
         
-        today_date = tlt_dates.iloc[-1]
+        today_date = tlt_dates[-1]
         month_start = today_date.replace(day=1)
         month_end = (month_start + pd.offsets.MonthEnd(1)).date()
         
-        last_trading_day_tmv = tmv_dates.iloc[-1]
-        last_trading_day_tlt = tlt_dates.iloc[-1]
+        last_trading_day_tmv = tmv_dates[-1]
+        last_trading_day_tlt = tlt_dates[-1]
 
         allocation = {self.LongBond: 0, self.ShortBond: 0}
         
