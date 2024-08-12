@@ -32,7 +32,8 @@ class TradingStrategy(Strategy):
         tlt_data = pd.DataFrame(tlt_data, columns=['close'])
         #tlt_data['returns'] = 100 * tlt_data.close.pct_change().dropna()
         
-        today_date = datetime.strptime(tlt_dates[-1], "%Y-%m-%d")
+        today_date = tlt_dates[-1].split(" ")[0]
+        today_date = datetime.strptime(today_date, "%Y-%m-%d")
         log(f"{tlt_dates[-1]}")
         log(f"{today_date}")
         
