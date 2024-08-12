@@ -2,6 +2,7 @@ from surmount.base_class import Strategy, TargetAllocation
 from surmount.technical_indicators import RSI, EMA, SMA
 from surmount.logging import log
 import pandas as pd
+import numpy as np
 
 class TradingStrategy(Strategy):
     def __init__(self):
