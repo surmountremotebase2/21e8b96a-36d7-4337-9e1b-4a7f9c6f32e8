@@ -57,9 +57,7 @@ class TradingStrategy(Strategy):
             spy_data['vol_future'] = spy_data['vol_future'].bfill()
             volaT = np.percentile(spy_data['vol_current'], 50)
             volaH = np.percentile(spy_data['vol_current'], 80)
-            allocation_dict = {self.tickers[i]: self.weights[i] for i in range(len(self.tickers))}
 
-                # Check if the current ATR or Realized Volatility is above the 7th or 8th decile
             if (spy_data['vol_current'].iloc[-1] > spy_data['vol_future'].iloc[-1] and spy_data['vol_current'].iloc[-1] > volaT):
 
                 allocation[self.RiskOn] = 0
