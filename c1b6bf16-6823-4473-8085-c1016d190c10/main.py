@@ -16,7 +16,7 @@ class TradingStrategy(Strategy):
 
     @property
     def assets(self):
-        return [self.LongBond, self.ShortBond]
+        return [self.LongBond + self.ShortBond]
 
 
     def run(self, data):
