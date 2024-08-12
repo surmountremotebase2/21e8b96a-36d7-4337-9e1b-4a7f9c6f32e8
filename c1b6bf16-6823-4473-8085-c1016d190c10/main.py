@@ -1,8 +1,9 @@
-
 from surmount.base_class import Strategy, TargetAllocation
-from surmount.data import OHLCV
-from datetime import datetime
+from surmount.technical_indicators import RSI, EMA, SMA
+from surmount.logging import log
 import pandas as pd
+import numpy as np
+from datetime import datetime
 
 class TradingStrategy(Strategy):
     def __init__(self):
