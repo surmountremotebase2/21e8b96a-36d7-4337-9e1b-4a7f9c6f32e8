@@ -34,14 +34,14 @@ class TradingStrategy(Strategy):
         
         today_date = tlt_dates[-1].split(" ")[0]
         today_date = datetime.strptime(today_date, "%Y-%m-%d")
-        log(f"{tlt_dates[-1]}")
-        log(f"{today_date}")
         
         month_start = today_date.replace(day=1)
         month_end = (month_start + pd.offsets.MonthEnd(1)).date()
         
-        last_trading_day_tmv = tmv_dates[-1]
-        last_trading_day_tlt = tlt_dates[-1]
+        last_trading_day_tmv = tmv_dates[-1].split(" ")[0]
+        last_trading_day_tmv = datetime.strptime(last_trading_day_tmv, "%Y-%m-%d")
+        last_trading_day_tlt = tlt_dates[-1].split(" ")[0]
+        last_trading_day_tlt = datetime.strptime(last_trading_day_tlt, "%Y-%m-%d")
 
         allocation = {self.LongBond: 0, self.ShortBond: 0}
         
