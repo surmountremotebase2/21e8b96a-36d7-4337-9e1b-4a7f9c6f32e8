@@ -27,7 +27,7 @@ class TradingStrategy(Strategy):
         tmv_dates = [entry[self.ShortBond]['date'] for entry in data['ohlcv'] if self.ShortBond in entry]
         
         tlt_data = pd.DataFrame(tlt_data, columns=['close'])
-        tlt_data['returns'] = 100 * tlt_data.close.pct_change().dropna()
+        #tlt_data['returns'] = 100 * tlt_data.close.pct_change().dropna()
         
         today_date = tlt_dates.iloc[-1]
         month_start = today_date.replace(day=1)
