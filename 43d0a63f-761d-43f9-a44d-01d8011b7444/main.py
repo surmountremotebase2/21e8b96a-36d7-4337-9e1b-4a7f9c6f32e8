@@ -36,8 +36,8 @@ class TradingStrategy(Strategy):
     def run(self, data):
         allocation = {}
         self.count -= 1
-        spy_data = [entry['QQQ']['close'] for entry in data['ohlcv'] if 'SPY' in entry]
-        spy_dates = [entry['QQQ']['date'] for entry in data['ohlcv'] if 'SPY' in entry]
+        spy_data = [entry['QQQ']['close'] for entry in data['ohlcv'] if 'QQQ' in entry]
+        spy_dates = [entry['QQQ']['date'] for entry in data['ohlcv'] if 'QQQ' in entry]
         spy_data = pd.DataFrame(spy_data, columns=['close'])
         spy_data['returns'] = 100 * spy_data.close.pct_change().dropna()
         # CALCULATE LOG RETURNS BASED ON ABOVE FORMULA
