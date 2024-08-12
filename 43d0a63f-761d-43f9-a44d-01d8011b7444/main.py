@@ -32,6 +32,7 @@ class TradingStrategy(Strategy):
 
 
     def run(self, data):
+        allocation = {}
         self.count -= 1
         spy_data = [entry['QQQ']['close'] for entry in data['ohlcv'] if 'SPY' in entry]
         spy_dates = [entry['QQQ']['date'] for entry in data['ohlcv'] if 'SPY' in entry]
@@ -58,19 +59,22 @@ class TradingStrategy(Strategy):
                 # Check if the current ATR or Realized Volatility is above the 7th or 8th decile
             if (spy_data['vol_current'].iloc[-1] > spy_data['vol_future'].iloc[-1] and spy_data['vol_current'].iloc[-1] > volaT):
 
-                allocation_dict = {self.RiskOn: 0; self.RiskOff: 1.0}
+                allocation[self.RiskOn] = 0
+                allocation[self.RiskOff] = 1.0
                 if spy_data['vol_current'].iloc[-1] > volaH:
                     self.count = 20
                 else:
                     self.count = 15
             elif self.count < 1:
 
-                allocation_dict = {self.RiskOn: 1.0; self.RiskOff: 0}
-
+                allocation[self.RiskOn] = 1.0
+                allocation[self.RiskOff] = 0
             else:
-                allocation_dict = {self.RiskOn: 0; self.RiskOff: 1.0}
+                allocation[self.RiskOn] = 0
+                allocation[self.RiskOff] = 1.0
             
-            return TargetAllocation(allocation_dict)
+            return TargetAllocation(allocation)
         else:
-            allocation_dict = {self.RiskOn: 0; self.RiskOff: 1.0}
-            return TargetAllocation(allocation_dict)
+            allocation[self.RiskOn] = 0
+            allocation[self.RiskOff] = 1.0
+            return TargetAllocation(allocation)
