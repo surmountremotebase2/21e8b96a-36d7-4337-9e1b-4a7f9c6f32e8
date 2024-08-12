@@ -8,15 +8,17 @@ class TradingStrategy(Strategy):
     def __init__(self):
         self.ShortBond = "TMV"
         self.LongBond = "TLT"
-
-
-    @property
-    def interval(self):
-        return "1day"
+        self.tickers = [self.LongBond, self.ShortBond]
 
     @property
     def assets(self):
-        return [self.LongBond + self.ShortBond]
+        # Defines the asset to trade
+        return self.tickers
+
+    @property
+    def interval(self):
+        # Sets the strategy to run on daily data
+        return "1day"
 
 
     def run(self, data):
