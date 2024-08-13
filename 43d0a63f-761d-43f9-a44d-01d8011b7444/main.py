@@ -68,7 +68,7 @@ class TradingStrategy(Strategy):
                 else:
                     self.count = 5
             
-            elif self.count < 1 and mrktRSI[-1] < 70:
+            elif self.count < 1:
                 allocation[self.RiskOn] = 1.0
                 allocation[self.RiskOff] = 0
             else:
