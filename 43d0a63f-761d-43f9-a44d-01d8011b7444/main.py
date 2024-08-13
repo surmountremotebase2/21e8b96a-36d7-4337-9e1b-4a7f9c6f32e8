@@ -55,7 +55,7 @@ class TradingStrategy(Strategy):
             # GET FORWARD LOOKING REALIZED VOLATILITY 
             spy_data['vol_future'] = spy_data.log_returns.shift(n_future).fillna(0).rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
             spy_data['vol_future'] = spy_data['vol_future'].bfill()
-            volaT = np.percentile(spy_data['vol_current'], 50)
+            volaT = np.percentile(spy_data['vol_current'], 55)
             volaH = np.percentile(spy_data['vol_current'], 80)
 
             if (spy_data['vol_current'].iloc[-1] > spy_data['vol_future'].iloc[-1] and spy_data['vol_current'].iloc[-1] > volaT):
@@ -63,11 +63,11 @@ class TradingStrategy(Strategy):
                 allocation[self.RiskOn] = 0
                 allocation[self.RiskOff] = 1.0
                 if spy_data['vol_current'].iloc[-1] > volaH:
-                    self.count = 10
+                    self.count = 20
                 else:
-                    self.count = 7
+                    self.count = 20
+            
             elif self.count < 1:
-
                 allocation[self.RiskOn] = 1.0
                 allocation[self.RiskOff] = 0
             else:
