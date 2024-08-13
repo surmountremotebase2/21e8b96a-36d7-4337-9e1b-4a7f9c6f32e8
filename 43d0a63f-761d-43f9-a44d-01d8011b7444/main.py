@@ -49,10 +49,10 @@ class TradingStrategy(Strategy):
         n_future = 20
 
 
-        if len(spy_data) > n_future:
+        if len(mrktData) > n_future:
             # GET BACKWARD LOOKING REALIZED VOLATILITY
-            mrktData['vol_current'] = spy_data.log_returns.rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
-            mrktData['vol_current'] = spy_data['vol_current'].bfill()
+            mrktData['vol_current'] = mrktData.log_returns.rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
+            mrktData['vol_current'] = mrktData['vol_current'].bfill()
             # GET FORWARD LOOKING REALIZED VOLATILITY 
             mrktData['vol_future'] = mrktData.log_returns.shift(n_future).fillna(0).rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
             mrktData['vol_future'] = mrktData['vol_future'].bfill()
@@ -61,7 +61,7 @@ class TradingStrategy(Strategy):
             mrktEMA = EMA(self.mrkt, data["ohlcv"], length=100)
             mrktClose = mrktData.close.iloc[-1]
 
-            if (spy_data['vol_current'].iloc[-1] > spy_data['vol_future'].iloc[-1] and spy_data['vol_current'].iloc[-1] > volaT):
+            if (mrktData['vol_current'].iloc[-1] > mrktData['vol_future'].iloc[-1] and mrktData['vol_current'].iloc[-1] > volaT):
 
                 allocation[self.RiskOn] = 0
                 allocation[self.RiskOff] = 1.0
