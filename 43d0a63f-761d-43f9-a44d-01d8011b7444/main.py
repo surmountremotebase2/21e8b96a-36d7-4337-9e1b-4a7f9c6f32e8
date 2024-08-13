@@ -77,6 +77,7 @@ class TradingStrategy(Strategy):
             
             return TargetAllocation(allocation)
         else:
+            
             allocation[self.RiskOn] = 0
             allocation[self.RiskOff] = 1.0
             return TargetAllocation(allocation)
