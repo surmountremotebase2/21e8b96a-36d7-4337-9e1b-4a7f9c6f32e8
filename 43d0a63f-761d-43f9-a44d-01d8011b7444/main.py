@@ -43,7 +43,7 @@ class TradingStrategy(Strategy):
         mrktData = pd.DataFrame(mrktData, columns=['close'])
         #spy_data['returns'] = 100 * spy_data.close.pct_change().dropna()
         # CALCULATE LOG RETURNS BASED ON ABOVE FORMULA
-        mrktData['log_returns'] = np.log(mrktData.close/spy_data.close.shift(1))
+        mrktData['log_returns'] = np.log(mrktData.close/mrktData.close.shift(1))
         mrktData = mrktData.fillna(0)
         INTERVAL_WINDOW = 60
         n_future = 20
