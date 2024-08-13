@@ -7,8 +7,8 @@ import numpy as np
 class TradingStrategy(Strategy):
     def __init__(self):
         # Only trading with "USO" ETF
-        self.ticker = ["SPY", "QQQ", "TECL", "BIL"]
-        self.RiskOn = "TECL"
+        self.ticker = ["SPY", "QQQ", "QQQ", "BIL"]
+        self.RiskOn = "QQQ"
         self.RiskOff = "BIL"
         self.count = 5
 
@@ -38,9 +38,9 @@ class TradingStrategy(Strategy):
         allocation = {}
         self.count -= 1
         spy_data = [entry['QQQ']['close'] for entry in data['ohlcv'] if 'QQQ' in entry]
-        spy_dates = [entry['QQQ']['date'] for entry in data['ohlcv'] if 'QQQ' in entry]
+        #spy_dates = [entry['QQQ']['date'] for entry in data['ohlcv'] if 'QQQ' in entry]
         spy_data = pd.DataFrame(spy_data, columns=['close'])
-        spy_data['returns'] = 100 * spy_data.close.pct_change().dropna()
+        #spy_data['returns'] = 100 * spy_data.close.pct_change().dropna()
         # CALCULATE LOG RETURNS BASED ON ABOVE FORMULA
         spy_data['log_returns'] = np.log(spy_data.close/spy_data.close.shift(1))
         spy_data = spy_data.fillna(0)
@@ -57,8 +57,9 @@ class TradingStrategy(Strategy):
             spy_data['vol_future'] = spy_data['vol_future'].bfill()
             volaT = np.percentile(spy_data['vol_current'], 55)
             volaH = np.percentile(spy_data['vol_current'], 80)
+            mrktRSI = RSI("QQQ", data['ohlcv'], 10)
 
-            if (spy_data['vol_current'].iloc[-1] > spy_data['vol_future'].iloc[-1] and spy_data['vol_current'].iloc[-1] > volaT):
+            if (spy_data['vol_current'].iloc[-1] > spy_data['vol_future'].iloc[-1] and spy_data['vol_current'].iloc[-1] > volaT and mrktRSI > 50):
 
                 allocation[self.RiskOn] = 0
                 allocation[self.RiskOff] = 1.0
