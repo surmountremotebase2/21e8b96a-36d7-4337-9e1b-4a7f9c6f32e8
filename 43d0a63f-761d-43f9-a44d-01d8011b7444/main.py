@@ -58,7 +58,7 @@ class TradingStrategy(Strategy):
             mrktData['vol_future'] = mrktData['vol_future'].bfill()
             volaT = np.percentile(mrktData['vol_current'], 55)
             volaH = np.percentile(mrktData['vol_current'], 80)
-            mrktEMA = EMA(self.mrkt, data["ohlcv"], length=100)
+            mrktEMA = EMA(self.mrkt, data["ohlcv"], length=50)
             mrktClose = mrktData.close.iloc[-1]
 
             if (mrktData['vol_current'].iloc[-1] > mrktData['vol_future'].iloc[-1] and mrktData['vol_current'].iloc[-1] > volaT):
