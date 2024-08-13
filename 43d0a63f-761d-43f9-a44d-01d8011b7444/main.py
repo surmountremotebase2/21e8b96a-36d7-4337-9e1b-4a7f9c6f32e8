@@ -7,7 +7,7 @@ import numpy as np
 class TradingStrategy(Strategy):
     def __init__(self):
         # Only trading with "USO" ETF
-        self.ticker = ["SPY", "QQQ", "QQQ", "BIL"]
+        self.ticker = ["SPY", "QQQ", "BIL"]
         self.RiskOn = "QQQ"
         self.RiskOff = "BIL"
         self.count = 5
