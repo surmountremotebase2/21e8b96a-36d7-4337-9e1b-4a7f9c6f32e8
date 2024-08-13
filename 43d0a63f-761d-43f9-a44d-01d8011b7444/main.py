@@ -63,9 +63,9 @@ class TradingStrategy(Strategy):
                 allocation[self.RiskOn] = 0
                 allocation[self.RiskOff] = 1.0
                 if spy_data['vol_current'].iloc[-1] > volaH:
-                    self.count = 20
+                    self.count = 10
                 else:
-                    self.count = 15
+                    self.count = 7
             elif self.count < 1:
 
                 allocation[self.RiskOn] = 1.0
