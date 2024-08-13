@@ -57,7 +57,7 @@ class TradingStrategy(Strategy):
             spy_data['vol_future'] = spy_data['vol_future'].bfill()
             volaT = np.percentile(spy_data['vol_current'], 55)
             volaH = np.percentile(spy_data['vol_current'], 80)
-            mrktRSI = RSI("QQQ", data["ohlcv"], length=5)
+            mrktEMA = EMA("QQQ", data["ohlcv"], length=100)
 
             if (spy_data['vol_current'].iloc[-1] > spy_data['vol_future'].iloc[-1] and spy_data['vol_current'].iloc[-1] > volaT):
 
