@@ -8,6 +8,7 @@ class TradingStrategy(Strategy):
     def __init__(self):
         # Only trading with "USO" ETF
         self.ticker = ["SPY", "QQQ", "BIL"]
+        self.mrkt = "QQQ"
         self.RiskOn = "QQQ"
         self.RiskOff = "BIL"
         self.count = 5
@@ -37,27 +38,28 @@ class TradingStrategy(Strategy):
     def run(self, data):
         allocation = {}
         self.count -= 1
-        spy_data = [entry['QQQ']['close'] for entry in data['ohlcv'] if 'QQQ' in entry]
+        mrktData = [entry[self.mrkt]['close'] for entry in data['ohlcv'] if self.mrkt in entry]
         #spy_dates = [entry['QQQ']['date'] for entry in data['ohlcv'] if 'QQQ' in entry]
-        spy_data = pd.DataFrame(spy_data, columns=['close'])
+        mrktData = pd.DataFrame(mrktData, columns=['close'])
         #spy_data['returns'] = 100 * spy_data.close.pct_change().dropna()
         # CALCULATE LOG RETURNS BASED ON ABOVE FORMULA
-        spy_data['log_returns'] = np.log(spy_data.close/spy_data.close.shift(1))
-        spy_data = spy_data.fillna(0)
+        mrktData['log_returns'] = np.log(mrktData.close/spy_data.close.shift(1))
+        mrktData = mrktData.fillna(0)
         INTERVAL_WINDOW = 60
         n_future = 20
 
 
         if len(spy_data) > n_future:
             # GET BACKWARD LOOKING REALIZED VOLATILITY
-            spy_data['vol_current'] = spy_data.log_returns.rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
-            spy_data['vol_current'] = spy_data['vol_current'].bfill()
+            mrktData['vol_current'] = spy_data.log_returns.rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
+            mrktData['vol_current'] = spy_data['vol_current'].bfill()
             # GET FORWARD LOOKING REALIZED VOLATILITY 
-            spy_data['vol_future'] = spy_data.log_returns.shift(n_future).fillna(0).rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
-            spy_data['vol_future'] = spy_data['vol_future'].bfill()
-            volaT = np.percentile(spy_data['vol_current'], 55)
-            volaH = np.percentile(spy_data['vol_current'], 80)
-            mrktEMA = EMA("QQQ", data["ohlcv"], length=100)
+            mrktData['vol_future'] = mrktData.log_returns.shift(n_future).fillna(0).rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
+            mrktData['vol_future'] = mrktData['vol_future'].bfill()
+            volaT = np.percentile(mrktData['vol_current'], 55)
+            volaH = np.percentile(mrktData['vol_current'], 80)
+            mrktEMA = EMA(self.mrkt, data["ohlcv"], length=100)
+            mrktClose = mrktData.close.iloc[-1]
 
             if (spy_data['vol_current'].iloc[-1] > spy_data['vol_future'].iloc[-1] and spy_data['vol_current'].iloc[-1] > volaT):
 
