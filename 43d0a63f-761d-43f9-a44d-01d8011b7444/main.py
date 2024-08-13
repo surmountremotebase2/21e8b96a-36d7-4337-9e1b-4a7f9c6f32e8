@@ -35,7 +35,7 @@ class TradingStrategy(Strategy):
 
 
     def run(self, data):
-        #allocation = {}
+        allocation = {}
         self.count -= 1
         spy_data = [entry['QQQ']['close'] for entry in data['ohlcv'] if 'QQQ' in entry]
         #spy_dates = [entry['QQQ']['date'] for entry in data['ohlcv'] if 'QQQ' in entry]
