@@ -14,7 +14,7 @@ class TradingStrategy(Strategy):
         self.weights = [
             0.15, 0.10, 0.10, 0.10, 0.12, 0.11, 0.10, 0.02, 0.10, 0.09
         ]
-        self.mrkt = "QQQ"
+        self.mrkt = "TQQQ"
         self.count = 5
 
     @property
