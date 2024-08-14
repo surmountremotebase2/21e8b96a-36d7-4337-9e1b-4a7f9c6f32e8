@@ -15,7 +15,7 @@ class TradingStrategy(Strategy):
             0.15, 0.10, 0.10, 0.10, 0.12, 0.11, 0.10, 0.02, 0.10, 0.09
         ]
         self.mrkt = "LMT"
-        self.count = 5
+        self.count = 3
 
     @property
     def interval(self):
@@ -64,7 +64,7 @@ class TradingStrategy(Strategy):
                 mrktData['vol_future'] = mrktData['vol_future'].bfill()
                 volaT = np.percentile(mrktData['vol_current'], 70)
                 volaH = np.percentile(mrktData['vol_current'], 85)
-                mrktEMA = EMA(self.mrkt, data["ohlcv"], length=100)
+                mrktEMA = EMA(self.mrkt, data["ohlcv"], length=200)
                 mrktClose = mrktData.close.iloc[-1]
 
                 if (mrktData['vol_current'].iloc[-1] > mrktData['vol_future'].iloc[-1] and mrktData['vol_current'].iloc[-1] > volaT):
