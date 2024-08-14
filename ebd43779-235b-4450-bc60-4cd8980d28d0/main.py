@@ -14,8 +14,8 @@ class TradingStrategy(Strategy):
         self.weights = [
             0.15, 0.10, 0.10, 0.10, 0.12, 0.11, 0.10, 0.02, 0.10, 0.09
         ]
-        self.mrkt = "RSP"
-        self.count = 3
+        self.mrkt = "SPY"
+        self.count = 5
 
     @property
     def interval(self):
@@ -75,7 +75,7 @@ class TradingStrategy(Strategy):
                         self.count = 5
                     allocation_dict = {ticker: 0 for ticker in self.tickers}
 
-                elif self.count < 1 and mrktClose > mrktEMA[-1]:
+                elif self.count < 1 and mrktClose > mrktEMA[-2]:
                     total_weight = sum(self.weights)
                     allocation_dict = {self.tickers[i]: self.weights[i]/total_weight for i in range(len(self.tickers))}
                 else:
