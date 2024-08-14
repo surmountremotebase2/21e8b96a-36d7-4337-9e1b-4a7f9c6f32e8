@@ -42,7 +42,7 @@ class TradingStrategy(Strategy):
                 # Normalize the weights to add up to 1
                 total_weight = sum(self.weights)
                 allocation_dict = {self.tickers[i]: self.weights[i]/total_weight for i in range(len(self.tickers))}
-                return TargetAllocation(allocation_dict)
+                #return TargetAllocation(allocation_dict)
             
             if len(mrktData) > n_future:
                 # GET BACKWARD LOOKING REALIZED VOLATILITY
