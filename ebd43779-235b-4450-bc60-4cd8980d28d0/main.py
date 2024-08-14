@@ -61,7 +61,7 @@ class TradingStrategy(Strategy):
                 # GET FORWARD LOOKING REALIZED VOLATILITY 
                 mrktData['vol_future'] = mrktData.log_returns.shift(n_future).fillna(0).rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
                 mrktData['vol_future'] = mrktData['vol_future'].bfill()
-                volaT = np.percentile(mrktData['vol_current'], 60)
+                volaT = np.percentile(mrktData['vol_current'], 65)
                 volaH = np.percentile(mrktData['vol_current'], 80)
                 mrktEMA = EMA(self.mrkt, data["ohlcv"], length=200)
                 mrktClose = mrktData.close.iloc[-1]
