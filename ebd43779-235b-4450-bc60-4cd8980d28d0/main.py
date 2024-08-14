@@ -61,8 +61,8 @@ class TradingStrategy(Strategy):
                 # GET FORWARD LOOKING REALIZED VOLATILITY 
                 mrktData['vol_future'] = mrktData.log_returns.shift(n_future).fillna(0).rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
                 mrktData['vol_future'] = mrktData['vol_future'].bfill()
-                volaT = np.percentile(mrktData['vol_current'], 65)
-                volaH = np.percentile(mrktData['vol_current'], 80)
+                volaT = np.percentile(mrktData['vol_current'], 70)
+                volaH = np.percentile(mrktData['vol_current'], 85)
                 mrktEMA = EMA(self.mrkt, data["ohlcv"], length=200)
                 mrktClose = mrktData.close.iloc[-1]
 
@@ -73,6 +73,7 @@ class TradingStrategy(Strategy):
                     else:
                         self.count = 5
                     allocation_dict = {ticker: 0 for ticker in self.tickers}
+
                 elif self.count < 1 and mrktClose > mrktEMA[-1]:
                     total_weight = sum(self.weights)
                     allocation_dict = {self.tickers[i]: self.weights[i]/total_weight for i in range(len(self.tickers))}
