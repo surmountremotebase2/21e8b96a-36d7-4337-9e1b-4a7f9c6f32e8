@@ -14,7 +14,7 @@ class TradingStrategy(Strategy):
         self.weights = [
             0.15, 0.10, 0.10, 0.10, 0.12, 0.11, 0.10, 0.02, 0.10, 0.09
         ]
-        self.mrkt = "LMT"
+        self.mrkt = "RSP"
         self.count = 3
 
     @property
@@ -23,8 +23,8 @@ class TradingStrategy(Strategy):
 
     @property
     def assets(self):
-        #return self.tickers + [self.mrkt]
-        return self.tickers
+        return self.tickers + [self.mrkt]
+        #return self.tickers
 
 
     def realized_volatility_daily(self, series_log_return):
