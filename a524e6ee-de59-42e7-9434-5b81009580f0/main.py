@@ -9,7 +9,6 @@ from datetime import date, time, datetime, timedelta
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define the global asset classes and the crash protection asset
-        #self.tickers = ["SPY", "QQQ", "TECL", "IWM", "VGK", 
         #self.tickers = ["SPY", "QQQ", "TECL", "DBC",
         #                      #"EWJ", "EEM", "XLK", "HYG", "XLU", "XLV", "LQD",
         #                      "XLK", "XLV", "XLE", "FEZ", "STIP", "TLT", "IEF", "EWJ", "GLD",
@@ -76,13 +75,7 @@ class TradingStrategy(Strategy):
         daily_change = qqq_prices.diff()
         # Calculate the 50-day ROC using the first price as the reference
         qqqroc = ( (qqq_prices.iloc[-1] - qqq_prices.iloc[-45]) / qqq_prices.iloc[0]) * 100  # Multiply by 100 to express as percentage
-        #log(f"ROC {qqqroc}")
-        # Log the allocation for the current run.
-        
-        #log(f"NUM POS MOM {today.strftime('%Y-%m-%d')}: {positive_momentum_assets}")
-        #positive_momentum_assets = 3
-        # Determine allocations for assets with positive momentum
-        #if xlu > xli:
+
         if (mrktclose < mrktema and (mrktrsi > 30)) or xlu > xli:
             del momentum_scores["TECL"]
             del momentum_scores["TQQQ"]
@@ -93,18 +86,9 @@ class TradingStrategy(Strategy):
         sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:4]
         #sorted_assets_by_momentum = sorted(momentum_scores, key=momentum_scores.get, reverse=True)[:5]
         TopMom = sorted_assets_by_momentum[0]
-        #log(f"TopMom: {TopMom}")
 
-        # Determine the allocation to crash protection asset
-        #if (positive_momentum_assets <= 4 and TopMom in self.SafeAssets) and (xlu > xli and TopMom in self.SafeAssets):
-        
         if ( (positive_momentum_assets <= 4 and TopMom in self.CPAssets) or xlu > xli):
-            #log(f"RISK OFF: SHV")
-            # Allocate everything to crash protection asset if 6 or fewer assets have positive momentum
-            #cpmomentum_scores = self.calculate_cpmomentum_scores(data)
-            #sorted_cpassets_by_momentum = sorted(cpmomentum_scores, key=momentum_scores.get, reverse=True)
-            # Calculate number of assets with positive momentum
-            #allocations[self.crash_protection_asset1] = 0.3
+
             for asset in self.tickers:
                 allocations[asset] = 0.0
             if TopMom in self.SafeAssets and positive_momentum_assets > 0:
@@ -117,9 +101,6 @@ class TradingStrategy(Strategy):
             
             cp_allocation = 0.0
             allocations[self.crash_protection_asset2] = cp_allocation
-
-            #log(f"Sorted MOM {today.strftime('%Y-%m-%d')}: {sorted_assets_by_momentum}")
-
             safe_asset_allocation = 0.0
             remaining_allocation = 1.0
 
@@ -138,7 +119,6 @@ class TradingStrategy(Strategy):
             for asset in sorted_assets_by_momentum:
                 if num_allocations >= self.RiskON:
                     break  # Reached maximum allocation count
-                #if asset not in self.SafeAssets:
                 if asset not in self.CPAssets:
                     allocations[asset] = remaining_allocation / (self.RiskON - num_allocations)
                     num_allocations += 1
