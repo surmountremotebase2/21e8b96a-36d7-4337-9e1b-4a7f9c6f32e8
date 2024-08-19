@@ -11,7 +11,7 @@ class TradingStrategy(Strategy):
         self.LongBond = "TLT"
         self.Equity = "QQQ"
         self.Gold = "GLD"
-        self.tickers = [self.LongBond, self.ShortBond]
+        self.tickers = [self.LongBond, self.ShortBond, self.Equity, self.Gold]
 
     @property
     def assets(self):
