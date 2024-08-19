@@ -12,6 +12,8 @@ class TradingStrategy(Strategy):
         self.Equity = "QQQ"
         self.Gold = "GLD"
         self.tickers = [self.LongBond, self.ShortBond, self.Equity, self.Gold]
+        self.mrkt = "TLT"
+        self.count = 5
 
     @property
     def assets(self):
@@ -23,44 +25,69 @@ class TradingStrategy(Strategy):
         # Sets the strategy to run on daily data
         return "1day"
 
+    def realized_volatility_daily(self, series_log_return):
+        """
+        Get the daily realized volatility which is calculated as the square root
+        of sum of squares of log returns within a specific window interval 
+        """
+        n = len(series_log_return)
+        vola =  np.sqrt(np.sum(series_log_return**2)/(n - 1))
+        return vola
+
 
     def run(self, data):
+        allocation_dict = {ticker: 0 for ticker in self.tickers}
 
-        tlt_data = [entry[self.LongBond]['close'] for entry in data['ohlcv'] if self.LongBond in entry]
-        tlt_dates = [entry[self.LongBond]['date'] for entry in data['ohlcv'] if self.LongBond in entry]
-        tmv_data = [entry[self.ShortBond]['close'] for entry in data['ohlcv'] if self.ShortBond in entry]
-        tmv_dates = [entry[self.ShortBond]['date'] for entry in data['ohlcv'] if self.ShortBond in entry]
-        
-        tlt_data = pd.DataFrame(tlt_data, columns=['close'])
-        #tlt_data['returns'] = 100 * tlt_data.close.pct_change().dropna()
-        
-        today_date = tlt_dates[-1].split(" ")[0]
-        today_date = datetime.strptime(today_date, "%Y-%m-%d")
-        
-        month_start = today_date.replace(day=1)
-        month_end = (month_start + pd.offsets.MonthEnd(1)).date()
-        
-        last_trading_day_tmv = tmv_dates[-1].split(" ")[0]
-        last_trading_day_tmv = datetime.strptime(last_trading_day_tmv, "%Y-%m-%d")
-        last_trading_day_tlt = tlt_dates[-1].split(" ")[0]
-        last_trading_day_tlt = datetime.strptime(last_trading_day_tlt, "%Y-%m-%d")
+        if len(data) > 0:
+            today = datetime.strptime(str(next(iter(data['ohlcv'][-1].values()))['date']), '%Y-%m-%d %H:%M:%S')
+            yesterday = datetime.strptime(str(next(iter(data['ohlcv'][-2].values()))['date']), '%Y-%m-%d %H:%M:%S')
+            self.count -= 1
+            
+            mrktData = [entry[self.mrkt]['close'] for entry in data['ohlcv'] if self.mrkt in entry]
+            mrktData = pd.DataFrame(mrktData, columns=['close'])
+            mrktData['log_returns'] = np.log(mrktData.close/mrktData.close.shift(1))
+            mrktData = mrktData.fillna(0)
+            INTERVAL_WINDOW = 60
+            n_future = 20
 
-        allocation = {self.LongBond: 0, self.ShortBond: 0}
-        
-        # Determine if it's time to trade TMV or TLT based on the calendar day
-        if today_date == month_end:
-            allocation[self.ShortBond] = 1  # Buy TMV at month's end
-            allocation[self.LongBond] = 0
-        elif today_date.day == 7 and last_trading_day_tmv >= today_date:
-            allocation[self.ShortBond] = 0  # Sell TMV at the close of the new month's seventh day
-            allocation[self.LongBond] = 0
-            allocation[self.Gold] = 0
-            allocation[self.Equity] = 0
-            #allocation[self.Equity] = 1
-        elif today_date.day == 8 and last_trading_day_tlt >= today_date:
-            allocation[self.LongBond] = 1  # Buy TLT on the eighth day of the new month
-            allocation[self.ShortBond] = 0
-            #allocation[self.Gold] = .5
+            tlt_data = [entry[self.LongBond]['close'] for entry in data['ohlcv'] if self.LongBond in entry]
+            tlt_dates = [entry[self.LongBond]['date'] for entry in data['ohlcv'] if self.LongBond in entry]
+            tmv_data = [entry[self.ShortBond]['close'] for entry in data['ohlcv'] if self.ShortBond in entry]
+            tmv_dates = [entry[self.ShortBond]['date'] for entry in data['ohlcv'] if self.ShortBond in entry]
+            
+            tlt_data = pd.DataFrame(tlt_data, columns=['close'])
+            #tlt_data['returns'] = 100 * tlt_data.close.pct_change().dropna()
+            
+            today_date = tlt_dates[-1].split(" ")[0]
+            today_date = datetime.strptime(today_date, "%Y-%m-%d")
+            
+            month_start = today_date.replace(day=1)
+            month_end = (month_start + pd.offsets.MonthEnd(1)).date()
+            
+            last_trading_day_tmv = tmv_dates[-1].split(" ")[0]
+            last_trading_day_tmv = datetime.strptime(last_trading_day_tmv, "%Y-%m-%d")
+            last_trading_day_tlt = tlt_dates[-1].split(" ")[0]
+            last_trading_day_tlt = datetime.strptime(last_trading_day_tlt, "%Y-%m-%d")
 
-        
-        return TargetAllocation(allocation)
+            allocation = {self.LongBond: 0, self.ShortBond: 0}
+            
+            # Determine if it's time to trade TMV or TLT based on the calendar day
+            if today_date == month_end:
+                allocation[self.ShortBond] = 1  # Buy TMV at month's end
+                allocation[self.LongBond] = 0
+            elif today_date.day == 7 and last_trading_day_tmv >= today_date:
+                allocation[self.ShortBond] = 0  # Sell TMV at the close of the new month's seventh day
+                allocation[self.LongBond] = 0
+                allocation[self.Gold] = 0
+                allocation[self.Equity] = 0
+                #allocation[self.Equity] = 1
+            elif today_date.day == 8 and last_trading_day_tlt >= today_date:
+                allocation[self.LongBond] = 1  # Buy TLT on the eighth day of the new month
+                allocation[self.ShortBond] = 0
+                #allocation[self.Gold] = .5
+
+            
+            return TargetAllocation(allocation)
+
+        else:
+            return TargetAllocation(allocation)
