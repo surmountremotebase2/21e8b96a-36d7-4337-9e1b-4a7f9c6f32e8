@@ -74,7 +74,7 @@ class TradingStrategy(Strategy):
             mrktData['vol_future'] = mrktData.log_returns.shift(n_future).fillna(0).rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
             mrktData['vol_future'] = mrktData['vol_future'].bfill()
 
-            mrktEMA = EMA(self.mrkt, data["ohlcv"], length=200)
+            mrktEMA = EMA(self.mrkt, data["ohlcv"], length=100)
             mrktClose = mrktData.close.iloc[-1]
 
             if (mrktData['vol_current'].iloc[-1] > mrktData['vol_future'].iloc[-1]) and mrktClose < mrktEMA[-1]:
