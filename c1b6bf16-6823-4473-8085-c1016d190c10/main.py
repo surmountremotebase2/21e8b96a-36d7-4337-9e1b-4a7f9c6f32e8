@@ -70,7 +70,7 @@ class TradingStrategy(Strategy):
             last_trading_day_tlt = datetime.strptime(last_trading_day_tlt, "%Y-%m-%d")
 
             if len(mrktData) > n_future:
-                if (mrktData['vol_current'].iloc[-1] > mrktData['vol_future'].iloc[-1]:
+                if (mrktData['vol_current'].iloc[-1] > mrktData['vol_future'].iloc[-1]):
                     if today_date == month_end:
                         allocation_dict[self.ShortBond] = .5  # Buy TMV at month's end
                         allocation_dict[self.LongBond] = 0
