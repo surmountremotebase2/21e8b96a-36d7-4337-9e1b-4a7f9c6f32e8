@@ -56,7 +56,6 @@ class TradingStrategy(Strategy):
             tmv_dates = [entry[self.ShortBond]['date'] for entry in data['ohlcv'] if self.ShortBond in entry]
             
             tlt_data = pd.DataFrame(tlt_data, columns=['close'])
-            #tlt_data['returns'] = 100 * tlt_data.close.pct_change().dropna()
             
             today_date = tlt_dates[-1].split(" ")[0]
             today_date = datetime.strptime(today_date, "%Y-%m-%d")
@@ -68,6 +67,15 @@ class TradingStrategy(Strategy):
             last_trading_day_tmv = datetime.strptime(last_trading_day_tmv, "%Y-%m-%d")
             last_trading_day_tlt = tlt_dates[-1].split(" ")[0]
             last_trading_day_tlt = datetime.strptime(last_trading_day_tlt, "%Y-%m-%d")
+            mrktData['vol_current'] = mrktData.log_returns.rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
+            mrktData['vol_current'] = mrktData['vol_current'].bfill()
+            # GET FORWARD LOOKING REALIZED VOLATILITY 
+            mrktData['vol_future'] = mrktData.log_returns.shift(n_future).fillna(0).rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
+            mrktData['vol_future'] = mrktData['vol_future'].bfill()
+            volaT = np.percentile(mrktData['vol_current'], 55)
+            volaH = np.percentile(mrktData['vol_current'], 80)
+            mrktEMA = EMA(self.mrkt, data["ohlcv"], length=200)
+            mrktClose = mrktData.close.iloc[-1]
 
             if (mrktData['vol_current'].iloc[-1] > mrktData['vol_future'].iloc[-1]):
                 if today_date == month_end:
