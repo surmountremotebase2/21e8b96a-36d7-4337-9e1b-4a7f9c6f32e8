@@ -8,7 +8,7 @@ from datetime import datetime
 class TradingStrategy(Strategy):
     def __init__(self):
         self.ShortBond = "TMV"
-        self.LongBond = "TLT"
+        self.LongBond = "TMF"
         self.Equity = "QQQ"
         self.Gold = "GLD"
         self.tickers = [self.LongBond, self.ShortBond, self.Equity, self.Gold]
