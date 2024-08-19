@@ -69,47 +69,48 @@ class TradingStrategy(Strategy):
             last_trading_day_tlt = tlt_dates[-1].split(" ")[0]
             last_trading_day_tlt = datetime.strptime(last_trading_day_tlt, "%Y-%m-%d")
 
-            if (mrktData['vol_current'].iloc[-1] > mrktData['vol_future'].iloc[-1]:
-                if today_date == month_end:
-                    allocation_dict[self.ShortBond] = .5  # Buy TMV at month's end
-                    allocation_dict[self.LongBond] = 0
-                    allocation_dict[self.Equity] = .5
-                elif today_date.day == 7 and last_trading_day_tmv >= today_date:
-                    allocation_dict[self.ShortBond] = 0  # Sell TMV at the close of the new month's seventh day
-                    allocation_dict[self.LongBond] = 0
-                    allocation_dict[self.Equity] = 0
-                elif today_date.day == 8 and last_trading_day_tlt >= today_date:
-                    allocation_dict[self.LongBond] = 0  # Buy TLT on the eighth day of the new month
-                    allocation_dict[self.ShortBond] = 0
-                    allocation_dict[self.Equity] = 1
-            
-            elif self.count < 1 and mrktClose > mrktEMA[-2]:
-                if today_date == month_end:
-                    allocation_dict[self.ShortBond] = 1  # Buy TMV at month's end
-                    allocation_dict[self.LongBond] = 0
-                    allocation_dict[self.Equity] = 0
-                elif today_date.day == 7 and last_trading_day_tmv >= today_date:
-                    allocation_dict[self.ShortBond] = 0  # Sell TMV at the close of the new month's seventh day
-                    allocation_dict[self.LongBond] = 0
-                    allocation_dict[self.Equity] = 0
-                elif today_date.day == 8 and last_trading_day_tlt >= today_date:
-                    allocation_dict[self.LongBond] = 1  # Buy TLT on the eighth day of the new month
-                    allocation_dict[self.ShortBond] = 0
-                    allocation_dict[self.Equity] = 0
-            
-            else:
-                if today_date == month_end:
-                    allocation_dict[self.ShortBond] = 1  # Buy TMV at month's end
-                    allocation_dict[self.LongBond] = 0
-                    allocation_dict[self.Equity] = 0
-                elif today_date.day == 7 and last_trading_day_tmv >= today_date:
-                    allocation_dict[self.ShortBond] = 0  # Sell TMV at the close of the new month's seventh day
-                    allocation_dict[self.LongBond] = 0
-                    allocation_dict[self.Equity] = 0
-                elif today_date.day == 8 and last_trading_day_tlt >= today_date:
-                    allocation_dict[self.LongBond] = 1  # Buy TLT on the eighth day of the new month
-                    allocation_dict[self.ShortBond] = 0
-                    allocation_dict[self.Equity] = 0
+            if len(mrktData) > n_future:
+                if (mrktData['vol_current'].iloc[-1] > mrktData['vol_future'].iloc[-1]:
+                    if today_date == month_end:
+                        allocation_dict[self.ShortBond] = .5  # Buy TMV at month's end
+                        allocation_dict[self.LongBond] = 0
+                        allocation_dict[self.Equity] = .5
+                    elif today_date.day == 7 and last_trading_day_tmv >= today_date:
+                        allocation_dict[self.ShortBond] = 0  # Sell TMV at the close of the new month's seventh day
+                        allocation_dict[self.LongBond] = 0
+                        allocation_dict[self.Equity] = 0
+                    elif today_date.day == 8 and last_trading_day_tlt >= today_date:
+                        allocation_dict[self.LongBond] = 0  # Buy TLT on the eighth day of the new month
+                        allocation_dict[self.ShortBond] = 0
+                        allocation_dict[self.Equity] = 1
+                
+                elif self.count < 1 and mrktClose > mrktEMA[-2]:
+                    if today_date == month_end:
+                        allocation_dict[self.ShortBond] = 1  # Buy TMV at month's end
+                        allocation_dict[self.LongBond] = 0
+                        allocation_dict[self.Equity] = 0
+                    elif today_date.day == 7 and last_trading_day_tmv >= today_date:
+                        allocation_dict[self.ShortBond] = 0  # Sell TMV at the close of the new month's seventh day
+                        allocation_dict[self.LongBond] = 0
+                        allocation_dict[self.Equity] = 0
+                    elif today_date.day == 8 and last_trading_day_tlt >= today_date:
+                        allocation_dict[self.LongBond] = 1  # Buy TLT on the eighth day of the new month
+                        allocation_dict[self.ShortBond] = 0
+                        allocation_dict[self.Equity] = 0
+                
+                else:
+                    if today_date == month_end:
+                        allocation_dict[self.ShortBond] = 1  # Buy TMV at month's end
+                        allocation_dict[self.LongBond] = 0
+                        allocation_dict[self.Equity] = 0
+                    elif today_date.day == 7 and last_trading_day_tmv >= today_date:
+                        allocation_dict[self.ShortBond] = 0  # Sell TMV at the close of the new month's seventh day
+                        allocation_dict[self.LongBond] = 0
+                        allocation_dict[self.Equity] = 0
+                    elif today_date.day == 8 and last_trading_day_tlt >= today_date:
+                        allocation_dict[self.LongBond] = 1  # Buy TLT on the eighth day of the new month
+                        allocation_dict[self.ShortBond] = 0
+                        allocation_dict[self.Equity] = 0
 
             
             return TargetAllocation(allocation_dict)
