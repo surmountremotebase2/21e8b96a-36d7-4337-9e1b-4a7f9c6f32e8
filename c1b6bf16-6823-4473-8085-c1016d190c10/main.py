@@ -48,8 +48,8 @@ class TradingStrategy(Strategy):
             mrktData = pd.DataFrame(mrktData, columns=['close'])
             mrktData['log_returns'] = np.log(mrktData.close/mrktData.close.shift(1))
             mrktData = mrktData.fillna(0)
-            INTERVAL_WINDOW = 60
-            n_future = 20
+            INTERVAL_WINDOW = 30
+            n_future = 10
 
             tlt_data = [entry[self.LongBond]['close'] for entry in data['ohlcv'] if self.LongBond in entry]
             tlt_dates = [entry[self.LongBond]['date'] for entry in data['ohlcv'] if self.LongBond in entry]
