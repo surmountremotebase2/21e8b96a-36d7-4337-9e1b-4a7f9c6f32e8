@@ -9,7 +9,7 @@ class TradingStrategy(Strategy):
     def __init__(self):
         self.ShortBond = "TMV"
         self.LongBond = "TMF"
-        self.Equity = "QQQ"
+        self.Equity = "SPY"
         self.Gold = "GLD"
         
         self.mrkt = "TLT"
