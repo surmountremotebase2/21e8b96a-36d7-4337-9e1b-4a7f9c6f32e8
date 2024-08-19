@@ -77,7 +77,7 @@ class TradingStrategy(Strategy):
             mrktEMA = EMA(self.mrkt, data["ohlcv"], length=200)
             mrktClose = mrktData.close.iloc[-1]
 
-            if (mrktData['vol_current'].iloc[-1] > mrktData['vol_future'].iloc[-1]) and self.count > 1:
+            if (mrktData['vol_current'].iloc[-1] > mrktData['vol_future'].iloc[-1]):
                 self.count = 3
 
                 allocation_dict[self.ShortBond] = 1  # Buy TMV at month's end
