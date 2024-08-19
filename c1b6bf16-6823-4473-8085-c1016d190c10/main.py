@@ -53,13 +53,13 @@ class TradingStrategy(Strategy):
             allocation[self.LongBond] = 0
             allocation[self.Gold] = 0
             allocation[self.Equity] = .3
-        elif today_date.day == 5 and last_trading_day_tmv >= today_date:
+        elif today_date.day == 8 and last_trading_day_tmv >= today_date:
             allocation[self.ShortBond] = 0  # Sell TMV at the close of the new month's seventh day
             allocation[self.LongBond] = 0
             allocation[self.Gold] = 0
             allocation[self.Equity] = 0
             #allocation[self.Equity] = 1
-        elif today_date.day == 8 and last_trading_day_tlt >= today_date:
+        elif today_date.day == 9 and last_trading_day_tlt >= today_date:
             allocation[self.LongBond] = .5  # Buy TLT on the eighth day of the new month
             allocation[self.Gold] = .5
 
