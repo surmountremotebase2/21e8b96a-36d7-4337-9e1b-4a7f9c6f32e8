@@ -79,16 +79,16 @@ class TradingStrategy(Strategy):
 
             if (mrktData['vol_current'].iloc[-1] > mrktData['vol_future'].iloc[-1]) and mrktClose < mrktEMA[-1]:
                 self.count = 3
-                if today_date.day < 7:
+                if today_date.day < 10:
                     allocation_dict[self.ShortBond] = 1  # Buy TMV at month's end
                     allocation_dict[self.LongBond] = 0
                     allocation_dict[self.Equity] = 0
             
             elif self.count < 1 and mrktClose > mrktEMA[-2]:
                 if today_date == month_end:
-                    allocation_dict[self.ShortBond] = 1  # Buy TMV at month's end
+                    allocation_dict[self.ShortBond] = 0  # Buy TMV at month's end
                     allocation_dict[self.LongBond] = 0
-                    allocation_dict[self.Equity] = 0
+                    allocation_dict[self.Equity] = 1
                 elif today_date.day == 7 and last_trading_day_tmv >= today_date:
                     allocation_dict[self.ShortBond] = 0  # Sell TMV at the close of the new month's seventh day
                     allocation_dict[self.LongBond] = 0
