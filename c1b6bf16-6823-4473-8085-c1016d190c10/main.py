@@ -11,8 +11,9 @@ class TradingStrategy(Strategy):
         self.LongBond = "TMF"
         self.Equity = "QQQ"
         self.Gold = "GLD"
-        self.tickers = [self.LongBond, self.ShortBond, self.Equity]
+        
         self.mrkt = "TLT"
+        self.tickers = [self.LongBond, self.ShortBond, self.Equity, self.mrkt]
         self.count = 5
 
     @property
