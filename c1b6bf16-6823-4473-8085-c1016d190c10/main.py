@@ -48,14 +48,13 @@ class TradingStrategy(Strategy):
         allocation = {self.LongBond: 0, self.ShortBond: 0}
         
         # Determine if it's time to trade TMV or TLT based on the calendar day
-        #if today_date == month_end:
-        if today_date.day == 28 :
-            allocation[self.ShortBond] = .5  # Buy TMV at month's end
-            allocation[self.Gold] = .5
+        if today_date == month_end:
+            allocation[self.ShortBond] = .3  # Buy TMV at month's end
+            allocation[self.Gold] = .7
             allocation[self.Equity] = 0
-        elif today_date.day == 7 and last_trading_day_tmv >= today_date:
+        elif today_date.day == 5 and last_trading_day_tmv >= today_date:
             allocation[self.ShortBond] = 0  # Sell TMV at the close of the new month's seventh day
-            allocation[self.LongBond] = 1
+            allocation[self.LongBond] = 0
             allocation[self.Gold] = 0
             #allocation[self.Equity] = 1
         elif today_date.day == 8 and last_trading_day_tlt >= today_date:
