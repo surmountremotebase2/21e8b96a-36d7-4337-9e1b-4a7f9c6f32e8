@@ -19,7 +19,7 @@ class TradingStrategy(Strategy):
     @property
     def assets(self):
         # QQQ is the asset that will be traded in this strategy
-        return ["QQQ"]
+        return self.tickers
 
     def run(self, data):
         # Initialize QQQ stake to 0, meaning no position by default
