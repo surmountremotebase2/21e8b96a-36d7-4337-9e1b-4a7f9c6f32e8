@@ -60,7 +60,7 @@ class TradingStrategy(Strategy):
         ratioMAL = ratioDF["ratio"].rolling(LongMA).mean().fillna(0)
         spyLongMA = LongMA
         mrktMAS = EMA(self.mrkt, data["ohlcv"], 3)
-        mrktMAL = EMA(self.mrkt, data["ohlcv"], spyLongMA)
+        mrktMAL = EMA(self.mrkt, data["ohlcv"], 200)
 
         # Check if the current 20-day SMA and the lower Bollinger band are above the 100-day SMA, indicating a buy signal
         if ratioMAS.iloc[-1] > ratioMAL.iloc[-1] and mrktMAS[-1] > mrktMAL[-1]:
