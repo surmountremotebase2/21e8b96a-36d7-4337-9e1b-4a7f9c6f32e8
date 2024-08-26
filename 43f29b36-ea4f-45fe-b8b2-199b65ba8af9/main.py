@@ -51,7 +51,7 @@ class TradingStrategy(Strategy):
         LongMA = int(50 * (1 - spyvola.iloc[-1]))
         if LongMA <= 8:
             #LongMA = int(spyvola.iloc[-1] * 10)
-            LongMA = LongMA * 2
+            LongMA = int(LongMA * 2)
         ratio = [spy/gld for spy, gld in zip(spy_prices, gld_prices)]
 
         # Calculate moving averages and Bollinger Bands for the ratio
