@@ -73,6 +73,8 @@ class TradingStrategy(Strategy):
             #log("Sell signal detected.")
             #log(f"spyvola: {spyvola.iloc[-1]}  -- LongMA: {LongMA}")
             qqq_stake = 0  # Selling QQQ and going to cash
+        else:
+            qqq_stake = 0
 
         # Return the target allocation for QQQ based on the calculated signals
         return TargetAllocation({"QQQ": qqq_stake})
