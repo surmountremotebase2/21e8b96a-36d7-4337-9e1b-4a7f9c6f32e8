@@ -58,7 +58,7 @@ class TradingStrategy(Strategy):
         ratioDF = pd.DataFrame(ratio, columns=["ratio"])
         ratioMAS = ratioDF["ratio"].rolling(3).mean().fillna(0)
         ratioMAL = ratioDF["ratio"].rolling(LongMA).mean().fillna(0)
-        spyLongMA = LongMA * 2
+        spyLongMA = LongMA * 5
         mrktMAS = EMA(self.mrkt, data["ohlcv"], 3)
         mrktMAL = EMA(self.mrkt, data["ohlcv"], spyLongMA)
 
