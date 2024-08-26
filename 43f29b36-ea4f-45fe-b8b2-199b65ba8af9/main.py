@@ -58,9 +58,9 @@ class TradingStrategy(Strategy):
         ratioDF = pd.DataFrame(ratio, columns=["ratio"])
         ratioMAS = ratioDF["ratio"].rolling(3).mean().fillna(0)
         ratioMAL = ratioDF["ratio"].rolling(LongMA).mean().fillna(0)
-        spyLongMA = LongMA
+        spyLongMA = int(200 / LongMA)
         mrktMAS = EMA(self.mrkt, data["ohlcv"], 3)
-        mrktMAL = EMA(self.mrkt, data["ohlcv"], 200)
+        mrktMAL = EMA(self.mrkt, data["ohlcv"], spyLongMA)
 
         # Check if the current 20-day SMA and the lower Bollinger band are above the 100-day SMA, indicating a buy signal
         if ratioMAS.iloc[-1] > ratioMAL.iloc[-1] and mrktMAS[-1] > mrktMAL[-1]:
