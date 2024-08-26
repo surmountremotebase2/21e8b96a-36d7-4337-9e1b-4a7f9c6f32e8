@@ -63,7 +63,7 @@ class TradingStrategy(Strategy):
         mrktMAL = EMA(self.mrkt, data["ohlcv"], spyLongMA)
 
         # Check if the current 20-day SMA and the lower Bollinger band are above the 100-day SMA, indicating a buy signal
-        if ratioMAS.iloc[-1] > ratioMAL.iloc[-1] and mrktMAS[-1] > mrktMAL[-1]:
+        if ratioMAS.iloc[-2] > ratioMAL.iloc[-2] and mrktMAS[-1] > mrktMAL[-1]:
             #log("Buy signal detected.")
             #log(f"spyvola: {spyvola.iloc[-1]}  -- LongMA: {LongMA}")
             qqq_stake = 1  # Allocating 100% to QQQ based on the buy signal
