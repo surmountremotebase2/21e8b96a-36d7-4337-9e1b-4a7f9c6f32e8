@@ -34,7 +34,7 @@ class TradingStrategy(Strategy):
 
     def run(self, data):
         # Initialize QQQ stake to 0, meaning no position by default
-        qqq_stake = 0
+        qqq_stake = 1
         INTERVAL_WINDOW = 60
 
         # Ensure there's enough data for BTCUSD, GLD, and QQQ to generate signals
@@ -58,9 +58,9 @@ class TradingStrategy(Strategy):
         ratioDF = pd.DataFrame(ratio, columns=["ratio"])
         ratioMAS = ratioDF["ratio"].rolling(3).mean().fillna(0)
         ratioMAL = ratioDF["ratio"].rolling(LongMA).mean().fillna(0)
-        spyLongMA = int(512 / LongMA)
+        #spyLongMA = int(512 / LongMA)
         mrktMAS = EMA(self.mrkt, data["ohlcv"], 3)
-        mrktMAL = EMA(self.mrkt, data["ohlcv"], spyLongMA)
+        mrktMAL = EMA(self.mrkt, data["ohlcv"], 126)
 
         # Check if the current 20-day SMA and the lower Bollinger band are above the 100-day SMA, indicating a buy signal
         if ratioMAS.iloc[-1] > ratioMAL.iloc[-1] and mrktMAS[-1] > mrktMAL[-1]:
