@@ -49,7 +49,7 @@ class TradingStrategy(Strategy):
         spy_ret = np.log(spyDF.close/spyDF.close.shift(1))
         spyvola = spy_ret.rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily) * 100
         LongMA = int(100 * (1 - spyvola.iloc[-1]))
-        if LongMA <= 5:
+        if LongMA <= 10:
             LongMA = int(spyvola.iloc[-1] * 10)
 
         ratio = [spy/gld for spy, gld in zip(spy_prices, gld_prices)]
@@ -57,10 +57,10 @@ class TradingStrategy(Strategy):
         # Calculate moving averages and Bollinger Bands for the ratio
         # ratioT = {"ratio": {"close": ratio}}
         ratioDF = pd.DataFrame(ratio, columns=["ratio"])
-        ratioMAS = ratioDF["ratio"].rolling(2).mean().fillna(0)
+        ratioMAS = ratioDF["ratio"].rolling(3).mean().fillna(0)
         ratioMAL = ratioDF["ratio"].rolling(LongMA).mean().fillna(0)
         spyLongMA = int(LongMA)
-        mrktMAS = EMA(self.mrkt, data["ohlcv"], spyLongMA)
+        mrktMAS = EMA(self.mrkt, data["ohlcv"], 5)
         mrktMAL = EMA(self.mrkt, data["ohlcv"], 200)
 
         # Check if the current 20-day SMA and the lower Bollinger band are above the 100-day SMA, indicating a buy signal
