@@ -50,7 +50,7 @@ class TradingStrategy(Strategy):
         spyvola = spy_ret.rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily) * 100
         LongMA = int(82 * (1 - spyvola.iloc[-1]))
         if LongMA <= 5:
-            LongMA = int(spyvola.iloc[-1] * 10)
+            LongMA = int(spyvola.iloc[-1] * INTERVAL_WINDOW)
         ratio = [spy/gld for spy, gld in zip(spy_prices, gld_prices)]
 
         # Calculate moving averages and Bollinger Bands for the ratio
