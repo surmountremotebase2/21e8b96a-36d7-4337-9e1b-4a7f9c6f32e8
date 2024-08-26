@@ -48,7 +48,7 @@ class TradingStrategy(Strategy):
         spyDF = pd.DataFrame(spy_prices, columns=["close"])
         spy_ret = np.log(spyDF.close/spyDF.close.shift(1))
         spyvola = spy_ret.rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
-        LongMA = int(100 * (1 - spyvola.iloc[-1]))
+        LongMA = int(82 * (1 - spyvola.iloc[-1]))
         ratio = [spy/gld for spy, gld in zip(spy_prices, gld_prices)]
 
         # Calculate moving averages and Bollinger Bands for the ratio
@@ -65,6 +65,7 @@ class TradingStrategy(Strategy):
         # Check if the current 20-day SMA or the lower Bollinger band cross below the 100-day SMA, indicating a sell signal
         elif ratioMAS.iloc[-1] < ratioMAL.iloc[-1]:
             #log("Sell signal detected.")
+            log(f"spyvola: {spyvola.iloc[-1]}  -- LongMA: {LongMA}")
             qqq_stake = 0  # Selling QQQ and going to cash
 
         # Return the target allocation for QQQ based on the calculated signals
