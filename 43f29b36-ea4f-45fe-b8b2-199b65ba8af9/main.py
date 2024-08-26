@@ -6,10 +6,10 @@ from surmount.logging import log
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define the assets this strategy will handle: BTCUSD, GLD, and QQQ for trading signals and actions.
-        self.tickers = ["QQQ", "BTCUSD", "GLD"]
+        self.tickers = ["QQQ", "SPY", "GLD"]
         
         # Only QQQ is traded based on signals derived from BTCUSD/GLD ratio, so no direct data requirement for QQQ in data_list
-        self.data_list = [Asset("BTCUSD"), Asset("GLD")]  # BTCUSD and GLD data are used for signals
+        self.data_list = [Asset("SPY"), Asset("GLD")]  # BTCUSD and GLD data are used for signals
         
     @property
     def interval(self):
@@ -31,9 +31,9 @@ class TradingStrategy(Strategy):
             return TargetAllocation({"QQQ": qqq_stake})
 
         # Calculate the ratio of BTCUSD to GLD
-        btcusd_prices = [x["BTCUSD"]["close"] for x in data["ohlcv"]]
+        SPY_prices = [x["SPY"]["close"] for x in data["ohlcv"]]
         gld_prices = [x["GLD"]["close"] for x in data["ohlcv"]]
-        ratio = [btc/gld for btc, gld in zip(btcusd_prices, gld_prices)]
+        ratio = [spy/gld for spy, gld in zip(spy_prices, gld_prices)]
 
         # Calculate moving averages and Bollinger Bands for the ratio
         ratio_sma20 = SMA("ratio", {"ratio": {"close": ratio}}, 20)
