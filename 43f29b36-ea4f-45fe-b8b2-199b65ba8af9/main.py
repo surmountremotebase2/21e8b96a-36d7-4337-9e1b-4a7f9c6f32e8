@@ -36,9 +36,10 @@ class TradingStrategy(Strategy):
         ratio = [spy/gld for spy, gld in zip(spy_prices, gld_prices)]
 
         # Calculate moving averages and Bollinger Bands for the ratio
-        ratio_sma20 = SMA("ratio", {"ratio": {"close": ratio}}, 5)
-        ratio_sma100 = SMA("ratio", {"ratio": {"close": ratio}}, 100)
-        ratio_bb20 = BB("ratio", {"ratio": {"close": ratio}}, 20, 1.4)
+        ratioT = {"ratio": {"close": ratio}}
+        ratio_sma20 = EMA("ratio", ratioT, lenght=5)
+        ratio_sma100 = SMA("ratio", ratioT, 100)
+        ratio_bb20 = BB("ratio", ratioT, 20, 1.4)
 
         # Check if the current 20-day SMA and the lower Bollinger band are above the 100-day SMA, indicating a buy signal
         if ratio_sma20[-1] > ratio_sma100[-1] and ratio_bb20["lower"][-1] > ratio_sma100[-1]:
