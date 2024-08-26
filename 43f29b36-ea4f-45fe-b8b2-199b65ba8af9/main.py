@@ -35,7 +35,7 @@ class TradingStrategy(Strategy):
     def run(self, data):
         # Initialize QQQ stake to 0, meaning no position by default
         qqq_stake = 0
-        INTERVAL_WINDOW = 30
+        INTERVAL_WINDOW = 50
 
         # Ensure there's enough data for BTCUSD, GLD, and QQQ to generate signals
         if len(data["ohlcv"]) < 100:
@@ -58,7 +58,7 @@ class TradingStrategy(Strategy):
         ratioDF = pd.DataFrame(ratio, columns=["ratio"])
         ratioMAS = ratioDF["ratio"].rolling(3).mean().fillna(0)
         ratioMAL = ratioDF["ratio"].rolling(LongMA).mean().fillna(0)
-        spyLongMA = int(LongMA)
+        spyLongMA = int(LongMA * 2)
         mrktMAS = EMA(self.mrkt, data["ohlcv"], 3)
         mrktMAL = EMA(self.mrkt, data["ohlcv"], spyLongMA)
 
