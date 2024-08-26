@@ -35,6 +35,7 @@ class TradingStrategy(Strategy):
     def run(self, data):
         # Initialize QQQ stake to 0, meaning no position by default
         qqq_stake = 0
+        alloc = {}
         INTERVAL_WINDOW = 82
 
         # Ensure there's enough data for BTCUSD, GLD, and QQQ to generate signals
@@ -68,13 +69,17 @@ class TradingStrategy(Strategy):
             #log("Buy signal detected.")
             #log(f"spyvola: {spyvola.iloc[-1]}  -- LongMA: {LongMA}")
             qqq_stake = 1  # Allocating 100% to QQQ based on the buy signal
+            alloc["QQQ"] = 1
+            alloc["GLD"] = 0
 
         # Check if the current 20-day SMA or the lower Bollinger band cross below the 100-day SMA, indicating a sell signal
         elif ratioMAS.iloc[-1] <= ratioMAL.iloc[-1]:
             #log("Sell signal detected.")
             #log(f"spyvola: {spyvola.iloc[-1]}  -- LongMA: {LongMA}")
             qqq_stake = 0  # Selling QQQ and going to cash
+            alloc["QQQ"] = 0
+            alloc["GLD"] = 1
 
 
         # Return the target allocation for QQQ based on the calculated signals
-        return TargetAllocation({"QQQ": qqq_stake})
+        return TargetAllocation(alloc)
