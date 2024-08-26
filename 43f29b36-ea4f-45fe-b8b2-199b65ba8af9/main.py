@@ -57,7 +57,7 @@ class TradingStrategy(Strategy):
         # Calculate moving averages and Bollinger Bands for the ratio
         # ratioT = {"ratio": {"close": ratio}}
         ratioDF = pd.DataFrame(ratio, columns=["ratio"])
-        ratioMAS = ratioDF["ratio"]
+        ratioMAS = ratioDF["ratio"].rolling(5).mean().fillna(0)
         ratioMAL = ratioDF["ratio"].rolling(LongMA).mean().fillna(0)
         spyLongMA = int(LongMA * 2)
         mrktMAS = EMA(self.mrkt, data["ohlcv"], 3)
