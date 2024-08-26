@@ -48,8 +48,8 @@ class TradingStrategy(Strategy):
         spyDF = pd.DataFrame(spy_prices, columns=["close"])
         spy_ret = np.log(spyDF.close/spyDF.close.shift(1))
         spyvola = spy_ret.rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily) * 100
-        LongMA = int(82 * (1 - spyvola.iloc[-1]))
-        if LongMA <= 5:
+        LongMA = int(50 * (1 - spyvola.iloc[-1]))
+        if LongMA <= 8:
             LongMA = int(spyvola.iloc[-1] * 10)
         ratio = [spy/gld for spy, gld in zip(spy_prices, gld_prices)]
 
