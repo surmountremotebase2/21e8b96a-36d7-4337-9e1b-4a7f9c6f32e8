@@ -8,7 +8,7 @@ import numpy as np
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define the assets this strategy will handle: BTCUSD, GLD, and QQQ for trading signals and actions.
-        self.tickers = ["QQQ", "SPY", "GLD"]
+        self.tickers = ["QQQ", "SPY", "GLD", "BIL"]
         self.mrkt = "SPY"
         # Only QQQ is traded based on signals derived from BTCUSD/GLD ratio, so no direct data requirement for QQQ in data_list
         self.data_list = [Asset("SPY"), Asset("GLD")]  # BTCUSD and GLD data are used for signals
@@ -70,7 +70,7 @@ class TradingStrategy(Strategy):
             #log(f"spyvola: {spyvola.iloc[-1]}  -- LongMA: {LongMA}")
             qqq_stake = 1  # Allocating 100% to QQQ based on the buy signal
             alloc["QQQ"] = 1
-            alloc["GLD"] = 0
+            alloc["BIL"] = 0
 
         # Check if the current 20-day SMA or the lower Bollinger band cross below the 100-day SMA, indicating a sell signal
         elif ratioMAS.iloc[-1] <= ratioMAL.iloc[-1]:
@@ -78,7 +78,7 @@ class TradingStrategy(Strategy):
             #log(f"spyvola: {spyvola.iloc[-1]}  -- LongMA: {LongMA}")
             qqq_stake = 0  # Selling QQQ and going to cash
             alloc["QQQ"] = 0
-            alloc["GLD"] = 1
+            alloc["BIL"] = 1
 
 
         # Return the target allocation for QQQ based on the calculated signals
