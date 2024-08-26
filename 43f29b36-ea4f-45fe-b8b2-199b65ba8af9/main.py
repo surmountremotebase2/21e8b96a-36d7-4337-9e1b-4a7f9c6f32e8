@@ -36,7 +36,7 @@ class TradingStrategy(Strategy):
         ratio = [spy/gld for spy, gld in zip(spy_prices, gld_prices)]
 
         # Calculate moving averages and Bollinger Bands for the ratio
-        ratio_sma20 = SMA("ratio", {"ratio": {"close": ratio}}, 20)
+        ratio_sma20 = SMA("ratio", {"ratio": {"close": ratio}}, 5)
         ratio_sma100 = SMA("ratio", {"ratio": {"close": ratio}}, 100)
         ratio_bb20 = BB("ratio", {"ratio": {"close": ratio}}, 20, 1.4)
 
