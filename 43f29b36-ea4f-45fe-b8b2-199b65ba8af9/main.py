@@ -62,7 +62,7 @@ class TradingStrategy(Strategy):
         # Check if the current 20-day SMA and the lower Bollinger band are above the 100-day SMA, indicating a buy signal
         if ratioMAS.iloc[-1] > ratioMAL.iloc[-1]:
             #log("Buy signal detected.")
-            log(f"spyvola: {spyvola.iloc[-1]}  -- LongMA: {LongMA}")
+            #log(f"spyvola: {spyvola.iloc[-1]}  -- LongMA: {LongMA}")
             qqq_stake = 1  # Allocating 100% to QQQ based on the buy signal
 
         # Check if the current 20-day SMA or the lower Bollinger band cross below the 100-day SMA, indicating a sell signal
