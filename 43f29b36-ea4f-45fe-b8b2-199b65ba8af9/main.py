@@ -52,7 +52,7 @@ class TradingStrategy(Strategy):
         spyvola = spy_ret.rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily) * 100
         LongMA = int(82 * (1 - spyvola.iloc[-1]))
         if LongMA <= 10:
-            LongMA = int(spyvola.iloc[-1] * 5)
+            LongMA = int(spyvola.iloc[-1] * 10)
 
         ratio = [spy/gld for spy, gld in zip(spy_prices, gld_prices)]
 
@@ -63,7 +63,7 @@ class TradingStrategy(Strategy):
         ratioMAL = ratioDF["ratio"].rolling(LongMA).mean().fillna(0)
         spyLongMA = int(LongMA)
         mrktMAS = EMA(self.mrkt, data["ohlcv"], 5)
-        mrktMAL = EMA(self.mrkt, data["ohlcv"], 200)
+        mrktMAL = SMA(self.mrkt, data["ohlcv"], 200)
 
         # Check if the current 20-day SMA and the lower Bollinger band are above the 100-day SMA, indicating a buy signal
         if ratioMAS.iloc[-1] > ratioMAL.iloc[-1] and mrktMAS[-1] > mrktMAL[-1]:
