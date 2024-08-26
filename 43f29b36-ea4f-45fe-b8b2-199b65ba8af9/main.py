@@ -48,7 +48,7 @@ class TradingStrategy(Strategy):
         spyDF = pd.DataFrame(spy_prices, columns=["close"])
         spy_ret = np.log(spyDF.close/spyDF.close.shift(1))
         spyvola = spy_ret.rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
-        LongMA = int(INTERVAL_WINDOW * (1 - spyvola))
+        LongMA = int(INTERVAL_WINDOW * (1 - spyvola[-1]))
         ratio = [spy/gld for spy, gld in zip(spy_prices, gld_prices)]
 
         # Calculate moving averages and Bollinger Bands for the ratio
