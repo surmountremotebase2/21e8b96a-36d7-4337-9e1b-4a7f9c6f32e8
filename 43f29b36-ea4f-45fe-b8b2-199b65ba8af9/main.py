@@ -45,7 +45,7 @@ class TradingStrategy(Strategy):
         # Calculate the ratio of BTCUSD to GLD
         spy_prices = [x["SPY"]["close"] for x in data["ohlcv"]]
         gld_prices = [x["GLD"]["close"] for x in data["ohlcv"]]
-        spy_ret = np.log(spy_prices.close/spy_prices.close.shift(1))
+        spy_ret = np.log(spy_prices/spy_prices.shift(1))
         spyvola = spy_ret.rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
         LongMA = int(INTERVAL_WINDOW * (1 - spyvola))
         ratio = [spy/gld for spy, gld in zip(spy_prices, gld_prices)]
