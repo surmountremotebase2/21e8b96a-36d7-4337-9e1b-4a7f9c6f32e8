@@ -37,7 +37,7 @@ class TradingStrategy(Strategy):
 
         # Calculate moving averages and Bollinger Bands for the ratio
         ratioT = {"ratio": {"close": ratio}}
-        ratio_sma20 = EMA("ratio", ratioT, lenght=5)
+        ratio_sma20 = EMA("ratio", ratioT, 5)
         ratio_sma100 = SMA("ratio", ratioT, 100)
         ratio_bb20 = BB("ratio", ratioT, 20, 1.4)
 
