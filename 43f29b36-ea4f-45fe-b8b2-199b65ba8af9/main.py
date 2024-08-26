@@ -36,6 +36,7 @@ class TradingStrategy(Strategy):
         # Initialize QQQ stake to 0, meaning no position by default
         qqq_stake = 0
         alloc = {}
+        alloc["BIL"] = 1
         INTERVAL_WINDOW = 82
 
         # Ensure there's enough data for BTCUSD, GLD, and QQQ to generate signals
