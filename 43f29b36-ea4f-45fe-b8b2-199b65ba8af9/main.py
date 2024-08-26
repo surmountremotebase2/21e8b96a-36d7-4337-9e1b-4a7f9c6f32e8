@@ -31,7 +31,7 @@ class TradingStrategy(Strategy):
             return TargetAllocation({"QQQ": qqq_stake})
 
         # Calculate the ratio of BTCUSD to GLD
-        SPY_prices = [x["SPY"]["close"] for x in data["ohlcv"]]
+        spy_prices = [x["SPY"]["close"] for x in data["ohlcv"]]
         gld_prices = [x["GLD"]["close"] for x in data["ohlcv"]]
         ratio = [spy/gld for spy, gld in zip(spy_prices, gld_prices)]
 
