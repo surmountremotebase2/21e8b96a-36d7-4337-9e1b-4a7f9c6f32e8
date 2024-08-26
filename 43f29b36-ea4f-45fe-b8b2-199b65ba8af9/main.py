@@ -41,6 +41,7 @@ class TradingStrategy(Strategy):
         # ratioT = {"ratio": {"close": ratio}}
         ratioMAS = pd.DataFrame(ratio, columns=["ratio"]).rolling(10).mean().bfill()
         ratioMAL = pd.DataFrame(ratio, columns=["ratio"]).rolling(200).mean().bfill()
+        log(f"ratioMAS")
 
         # Check if the current 20-day SMA and the lower Bollinger band are above the 100-day SMA, indicating a buy signal
         if ratioMAS.iloc[-1] > ratioMAL.iloc[-1]:
