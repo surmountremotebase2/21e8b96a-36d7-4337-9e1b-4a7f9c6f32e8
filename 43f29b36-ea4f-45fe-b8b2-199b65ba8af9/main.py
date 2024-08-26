@@ -43,12 +43,12 @@ class TradingStrategy(Strategy):
         ratioMAL = pd.DataFrame(ratio).rolling(200).mean().bfill()
 
         # Check if the current 20-day SMA and the lower Bollinger band are above the 100-day SMA, indicating a buy signal
-        if ratioMAS[-1] > ratioMAL[-1]:
+        if ratioMAS.iloc[-1] > ratioMAL.iloc[-1]:
             log("Buy signal detected.")
             qqq_stake = 1  # Allocating 100% to QQQ based on the buy signal
 
         # Check if the current 20-day SMA or the lower Bollinger band cross below the 100-day SMA, indicating a sell signal
-        elif ratioMAS[-1] < ratioMAL[-1]:
+        elif ratioMAS.iloc[-1] < ratioMAL.iloc[-1]:
             log("Sell signal detected.")
             qqq_stake = 0  # Selling QQQ and going to cash
 
