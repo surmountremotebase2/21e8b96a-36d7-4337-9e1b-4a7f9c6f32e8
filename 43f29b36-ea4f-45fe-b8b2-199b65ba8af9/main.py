@@ -34,7 +34,7 @@ class TradingStrategy(Strategy):
 
     def run(self, data):
         # Initialize QQQ stake to 0, meaning no position by default
-        qqq_stake = 0
+        qqq_stake = 1
         INTERVAL_WINDOW = 50
 
         # Ensure there's enough data for BTCUSD, GLD, and QQQ to generate signals
@@ -49,9 +49,9 @@ class TradingStrategy(Strategy):
         spy_ret = np.log(spyDF.close/spyDF.close.shift(1))
         spyvola = spy_ret.rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily) * 100
         LongMA = int(50 * (1 - spyvola.iloc[-1]))
-        if LongMA <= 10:
-            LongMA = int(spyvola.iloc[-1] * 10)
-            #LongMA = int(LongMA * 2)
+        if LongMA <= 5:
+            LongMA = int(spyvola.iloc[-1] * 5)
+
         ratio = [spy/gld for spy, gld in zip(spy_prices, gld_prices)]
 
         # Calculate moving averages and Bollinger Bands for the ratio
