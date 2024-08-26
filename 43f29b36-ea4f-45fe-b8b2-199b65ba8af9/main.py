@@ -54,7 +54,7 @@ class TradingStrategy(Strategy):
         # Calculate moving averages and Bollinger Bands for the ratio
         # ratioT = {"ratio": {"close": ratio}}
         ratioDF = pd.DataFrame(ratio, columns=["ratio"])
-        ratioMAS = ratioDF["ratio"].rolling(2).mean().fillna(0)
+        ratioMAS = ratioDF["ratio"]
         ratioMAL = ratioDF["ratio"].rolling(LongMA).mean().fillna(0)
 
         # Check if the current 20-day SMA and the lower Bollinger band are above the 100-day SMA, indicating a buy signal
