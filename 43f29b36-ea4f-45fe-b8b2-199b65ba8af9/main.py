@@ -68,7 +68,7 @@ class TradingStrategy(Strategy):
             qqq_stake = 1  # Allocating 100% to QQQ based on the buy signal
 
         # Check if the current 20-day SMA or the lower Bollinger band cross below the 100-day SMA, indicating a sell signal
-        elif ratioMAS.iloc[-1] < ratioMAL.iloc[-1]:
+        elif ratioMAS.iloc[-1] <= ratioMAL.iloc[-1]:
             #log("Sell signal detected.")
             #log(f"spyvola: {spyvola.iloc[-1]}  -- LongMA: {LongMA}")
             qqq_stake = 0  # Selling QQQ and going to cash
