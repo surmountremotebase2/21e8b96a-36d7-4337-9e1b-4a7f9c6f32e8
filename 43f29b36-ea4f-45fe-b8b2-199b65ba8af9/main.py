@@ -8,7 +8,7 @@ import numpy as np
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define the assets this strategy will handle: BTCUSD, GLD, and QQQ for trading signals and actions.
-        self.tickers = ["QQQ", "SPY", "GLD", "BIL", "SLV"]
+        self.tickers = ["QQQ", "SPY", "GLD", "BIL", "SLV", "DJI"]
         self.mrkt = "SPY"
         # Only QQQ is traded based on signals derived from BTCUSD/GLD ratio, so no direct data requirement for QQQ in data_list
         self.data_list = [Asset("SPY"), Asset("GLD")]  # BTCUSD and GLD data are used for signals
@@ -45,7 +45,7 @@ class TradingStrategy(Strategy):
             return TargetAllocation({"QQQ": qqq_stake})
 
         # Calculate the ratio of BTCUSD to GLD
-        spy_prices = [x["SPY"]["close"] for x in data["ohlcv"]]
+        spy_prices = [x["DJI"]["close"] for x in data["ohlcv"]]
         gld_prices = [x["GLD"]["close"] for x in data["ohlcv"]]
         slv_prices = [x["SLV"]["close"] for x in data["ohlcv"]]
         spyDF = pd.DataFrame(spy_prices, columns=["close"])
@@ -68,8 +68,8 @@ class TradingStrategy(Strategy):
         slvm = slvDF.close.pct_change(spyLongMA).iloc[-1]
         gldm = gldDF.close.pct_change(spyLongMA).iloc[-1]
         spym = spyDF.close.pct_change(82).iloc[-1] - spyDF.close.pct_change(21).iloc[-1]
-        mrktMAS = EMA("SPY", data["ohlcv"], 5)
-        mrktMAL = EMA("SPY", data["ohlcv"], 200)
+        mrktMAS = EMA("DJI", data["ohlcv"], 5)
+        mrktMAL = EMA("DJI", data["ohlcv"], 200)
 
         # Check if the current 20-day SMA and the lower Bollinger band are above the 100-day SMA, indicating a buy signal
         #if ratioMAS.iloc[-1] > ratioMAL.iloc[-1] and mrktMAS[-1] > mrktMAL[-1]:
