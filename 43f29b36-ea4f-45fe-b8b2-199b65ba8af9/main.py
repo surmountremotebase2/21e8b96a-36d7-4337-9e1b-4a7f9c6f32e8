@@ -69,7 +69,7 @@ class TradingStrategy(Strategy):
         gldm = gldDF.close.pct_change(45).iloc[-1]
         spym = spyDF.close.pct_change(82).iloc[-1] - spyDF.close.pct_change(21).iloc[-1]
         mrktMAS = EMA("SPY", data["ohlcv"], 5)
-        mrktMAL = EMA("SPY", data["ohlcv"], spyLongMA)
+        mrktMAL = EMA("SPY", data["ohlcv"], 50)
 
         # Check if the current 20-day SMA and the lower Bollinger band are above the 100-day SMA, indicating a buy signal
         #if ratioMAS.iloc[-1] > ratioMAL.iloc[-1] and mrktMAS[-1] > mrktMAL[-1]:
