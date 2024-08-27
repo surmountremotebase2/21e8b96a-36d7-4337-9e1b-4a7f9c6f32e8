@@ -67,13 +67,13 @@ class TradingStrategy(Strategy):
         spyLongMA = int(LongMA)
         slvm = slvDF.close.pct_change(45).iloc[-1]
         gldm = gldDF.close.pct_change(45).iloc[-1]
-        spym = spyDF.close.pct_change(45).iloc[-1]
+        spym = spyDF.close.pct_change(82).iloc[-1] - spyDF.close.pct_change(21).iloc[-1]
         mrktMAS = EMA("SPY", data["ohlcv"], 5)
         mrktMAL = EMA("SPY", data["ohlcv"], 200)
 
         # Check if the current 20-day SMA and the lower Bollinger band are above the 100-day SMA, indicating a buy signal
         #if ratioMAS.iloc[-1] > ratioMAL.iloc[-1] and mrktMAS[-1] > mrktMAL[-1]:
-        if ratioMAS.iloc[-1] > ratioMAL.iloc[-1] and slvm > gldm and spym < gldm:
+        if ratioMAS.iloc[-1] > ratioMAL.iloc[-1] and slvm > gldm and spym > 0:
             #log("Buy signal detected.")
             #log(f"spyvola: {spyvola.iloc[-1]}  -- LongMA: {LongMA}")
             qqq_stake = 1  # Allocating 100% to QQQ based on the buy signal
