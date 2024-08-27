@@ -10,6 +10,7 @@ class TradingStrategy(Strategy):
         # Define the assets this strategy will handle: BTCUSD, GLD, and QQQ for trading signals and actions.
         self.tickers = ["QQQ", "SPY", "GLD", "BIL", "SLV", "RSP"]
         self.mrkt = "SPY"
+        self.count = 0
         # Only QQQ is traded based on signals derived from BTCUSD/GLD ratio, so no direct data requirement for QQQ in data_list
         self.data_list = [Asset("SPY"), Asset("GLD")]  # BTCUSD and GLD data are used for signals
         
@@ -34,7 +35,7 @@ class TradingStrategy(Strategy):
 
     def run(self, data):
         # Initialize QQQ stake to 0, meaning no position by default
-        qqq_stake = 0
+        self.count += 1
         alloc = {}
         alloc["QQQ"] = 0
         INTERVAL_WINDOW = 82
@@ -45,7 +46,7 @@ class TradingStrategy(Strategy):
             return TargetAllocation({"QQQ": qqq_stake})
 
         # Calculate the ratio of BTCUSD to GLD
-        spy_prices = [x["RSP"]["close"] for x in data["ohlcv"]]
+        spy_prices = [x["SPY"]["close"] for x in data["ohlcv"]]
         gld_prices = [x["GLD"]["close"] for x in data["ohlcv"]]
         slv_prices = [x["SLV"]["close"] for x in data["ohlcv"]]
         spyDF = pd.DataFrame(spy_prices, columns=["close"])
@@ -73,7 +74,7 @@ class TradingStrategy(Strategy):
 
         # Check if the current 20-day SMA and the lower Bollinger band are above the 100-day SMA, indicating a buy signal
         #if ratioMAS.iloc[-1] > ratioMAL.iloc[-1] and mrktMAS[-1] > mrktMAL[-1]:
-        if ratioMAS.iloc[-1] > ratioMAL.iloc[-1] and (slvm > gldm or mrktMAS[-1] > mrktMAL[-1]):
+        if ratioMAS.iloc[-1] > ratioMAL.iloc[-1] and (slvm > gldm or mrktMAS[-1] > mrktMAL[-1]) and self.count > 5:
             #log("Buy signal detected.")
             #log(f"spyvola: {spyvola.iloc[-1]}  -- LongMA: {LongMA}")
             qqq_stake = 1  # Allocating 100% to QQQ based on the buy signal
@@ -84,7 +85,7 @@ class TradingStrategy(Strategy):
         elif ratioMAS.iloc[-1] <= ratioMAL.iloc[-1] and mrktMAS[-1] < mrktMAL[-1]:
             #log("Sell signal detected.")
             #log(f"spyvola: {spyvola.iloc[-1]}  -- LongMA: {LongMA}")
-            qqq_stake = 0  # Selling QQQ and going to cash
+            self.count = 0  # Selling QQQ and going to cash
             alloc["QQQ"] = 0
             alloc["BIL"] = 1
 
