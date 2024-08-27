@@ -47,8 +47,10 @@ class TradingStrategy(Strategy):
         # Calculate the ratio of BTCUSD to GLD
         spy_prices = [x["SPY"]["close"] for x in data["ohlcv"]]
         gld_prices = [x["GLD"]["close"] for x in data["ohlcv"]]
+        slv_prices = [x["SLV"]["close"] for x in data["ohlcv"]]
         spyDF = pd.DataFrame(spy_prices, columns=["close"])
         gldDF = pd.DataFrame(gld_prices, columns=["close"])
+        slvDF = pd.DataFrame(slv_prices, columns=["close"])
         spy_ret = np.log(spyDF.close/spyDF.close.shift(1))
         spyvola = spy_ret.rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily) * 100
         LongMA = int(82 * (1 - spyvola.iloc[-1]))
@@ -63,14 +65,14 @@ class TradingStrategy(Strategy):
         ratioMAS = ratioDF["ratio"].rolling(3).mean().fillna(0)
         ratioMAL = ratioDF["ratio"].rolling(LongMA).mean().fillna(0)
         spyLongMA = int(LongMA)
-        spydm = spyDF.close.pct_change(126).iloc[-1] + spyDF.close.pct_change(21).iloc[-1]
-        glddm = gldDF.close.pct_change(126).iloc[-1] + gldDF.close.pct_change(21).iloc[-1]
+        slvm = slvDF.close.pct_change(45).iloc[-1]
+        gldm = gldDF.close.pct_change(45).iloc[-1]
         mrktMAS = EMA("SPY", data["ohlcv"], 5)
         mrktMAL = EMA("SPY", data["ohlcv"], 200)
 
         # Check if the current 20-day SMA and the lower Bollinger band are above the 100-day SMA, indicating a buy signal
         #if ratioMAS.iloc[-1] > ratioMAL.iloc[-1] and mrktMAS[-1] > mrktMAL[-1]:
-        if ratioMAS.iloc[-1] > ratioMAL.iloc[-1] and spydm > glddm:
+        if ratioMAS.iloc[-1] > ratioMAL.iloc[-1] and slvm > gldm:
             #log("Buy signal detected.")
             #log(f"spyvola: {spyvola.iloc[-1]}  -- LongMA: {LongMA}")
             qqq_stake = 1  # Allocating 100% to QQQ based on the buy signal
