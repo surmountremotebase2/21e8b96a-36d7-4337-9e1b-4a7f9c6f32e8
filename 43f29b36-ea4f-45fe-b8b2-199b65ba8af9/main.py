@@ -8,7 +8,7 @@ import numpy as np
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define the assets this strategy will handle: BTCUSD, GLD, and QQQ for trading signals and actions.
-        self.tickers = ["QQQ", "SPY", "GLD", "BIL", "SLV", "DIA"]
+        self.tickers = ["QQQ", "SPY", "GLD", "BIL", "SLV", "RSP"]
         self.mrkt = "SPY"
         # Only QQQ is traded based on signals derived from BTCUSD/GLD ratio, so no direct data requirement for QQQ in data_list
         self.data_list = [Asset("SPY"), Asset("GLD")]  # BTCUSD and GLD data are used for signals
@@ -36,7 +36,7 @@ class TradingStrategy(Strategy):
         # Initialize QQQ stake to 0, meaning no position by default
         qqq_stake = 0
         alloc = {}
-        alloc["QQQ"] = 0
+        alloc["QQQ"] = 1
         INTERVAL_WINDOW = 82
 
         # Ensure there's enough data for BTCUSD, GLD, and QQQ to generate signals
@@ -45,7 +45,7 @@ class TradingStrategy(Strategy):
             return TargetAllocation({"QQQ": qqq_stake})
 
         # Calculate the ratio of BTCUSD to GLD
-        spy_prices = [x["DIA"]["close"] for x in data["ohlcv"]]
+        spy_prices = [x["RSP"]["close"] for x in data["ohlcv"]]
         gld_prices = [x["GLD"]["close"] for x in data["ohlcv"]]
         slv_prices = [x["SLV"]["close"] for x in data["ohlcv"]]
         spyDF = pd.DataFrame(spy_prices, columns=["close"])
@@ -87,9 +87,9 @@ class TradingStrategy(Strategy):
             qqq_stake = 0  # Selling QQQ and going to cash
             alloc["QQQ"] = 0
             alloc["BIL"] = 1
-        elif (gldm < slvm and mrktMAS[-1] > mrktMAL[-1]):
-            alloc["QQQ"] = 1
-            alloc["BIL"] = 0
+        elif (gldm > slvm and mrktMAS[-1] < mrktMAL[-1]):
+            alloc["QQQ"] = 0
+            alloc["BIL"] = 1
 
 
         # Return the target allocation for QQQ based on the calculated signals
