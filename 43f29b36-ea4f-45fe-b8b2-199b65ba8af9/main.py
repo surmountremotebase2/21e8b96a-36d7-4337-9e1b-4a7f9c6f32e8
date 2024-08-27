@@ -8,7 +8,7 @@ import numpy as np
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define the assets this strategy will handle: BTCUSD, GLD, and QQQ for trading signals and actions.
-        self.tickers = ["QQQ", "SPY", "GLD", "BIL"]
+        self.tickers = ["QQQ", "SPY", "GLD", "BIL", "SLV"]
         self.mrkt = "SPY"
         # Only QQQ is traded based on signals derived from BTCUSD/GLD ratio, so no direct data requirement for QQQ in data_list
         self.data_list = [Asset("SPY"), Asset("GLD")]  # BTCUSD and GLD data are used for signals
@@ -36,7 +36,7 @@ class TradingStrategy(Strategy):
         # Initialize QQQ stake to 0, meaning no position by default
         qqq_stake = 0
         alloc = {}
-        alloc["QQQ"] = 1
+        alloc["QQQ"] = 0
         INTERVAL_WINDOW = 82
 
         # Ensure there's enough data for BTCUSD, GLD, and QQQ to generate signals
