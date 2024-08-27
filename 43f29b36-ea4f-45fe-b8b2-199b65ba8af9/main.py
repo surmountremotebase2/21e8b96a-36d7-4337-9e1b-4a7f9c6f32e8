@@ -37,8 +37,8 @@ class TradingStrategy(Strategy):
         # Initialize QQQ stake to 0, meaning no position by default
         self.count += 1
         alloc = {}
-        alloc["QQQ"] = 1
-        INTERVAL_WINDOW = 82
+        alloc["QQQ"] = 0
+        INTERVAL_WINDOW = 60
 
         # Ensure there's enough data for BTCUSD, GLD, and QQQ to generate signals
         if len(data["ohlcv"]) < 100:
