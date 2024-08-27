@@ -63,8 +63,8 @@ class TradingStrategy(Strategy):
         ratioMAS = ratioDF["ratio"].rolling(3).mean().fillna(0)
         ratioMAL = ratioDF["ratio"].rolling(LongMA).mean().fillna(0)
         spyLongMA = int(LongMA)
-        spydm = spyDF.pct_change(82) - spyDF.pct_change(21)
-        glddm = gldDF.pct_change(82) - gldDF.pct_change(21)
+        spydm = spyDF.pct_change(82).iloc[-1] - spyDF.pct_change(21).iloc[-1]
+        glddm = gldDF.pct_change(82).iloc[-1] - gldDF.pct_change(21).iloc[-1]
         mrktMAS = EMA("SPY", data["ohlcv"], 5)
         mrktMAL = EMA("SPY", data["ohlcv"], 200)
 
