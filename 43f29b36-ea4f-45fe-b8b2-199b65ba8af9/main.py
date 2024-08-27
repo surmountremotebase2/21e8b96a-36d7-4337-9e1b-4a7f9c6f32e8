@@ -64,7 +64,7 @@ class TradingStrategy(Strategy):
         ratioDF = pd.DataFrame(ratio, columns=["ratio"])
         ratioMAS = ratioDF["ratio"].rolling(3).mean().fillna(0)
         ratioMAL = ratioDF["ratio"].rolling(LongMA).mean().fillna(0)
-        spyLongMA = int(LongMA)
+        spyLongMA = int(LongMA * 2)
         slvm = slvDF.close.pct_change(spyLongMA).iloc[-1]
         gldm = gldDF.close.pct_change(spyLongMA).iloc[-1]
         spym = spyDF.close.pct_change(82).iloc[-1] - spyDF.close.pct_change(21).iloc[-1]
