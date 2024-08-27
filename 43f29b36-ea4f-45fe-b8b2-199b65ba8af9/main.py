@@ -87,6 +87,9 @@ class TradingStrategy(Strategy):
             qqq_stake = 0  # Selling QQQ and going to cash
             alloc["QQQ"] = 0
             alloc["BIL"] = 1
+        elif (gldm < slvm and mrktMAS[-1] < mrktMAL[-1])
+            alloc["QQQ"] = 1
+            alloc["BIL"] = 0
 
 
         # Return the target allocation for QQQ based on the calculated signals
