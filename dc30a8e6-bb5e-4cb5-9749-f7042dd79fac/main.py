@@ -33,11 +33,10 @@ class TradingStrategy(Strategy):
         log(str(mrktSlope[-1]))
 
         # Check if EMA7 crosses above the middle band (EMA30 here) for a BUY signal
-        if spy_ema7[-1] > middle_band and spy_ema7[-2] <= bb["mid"][-2] and mrktSlope[-1] > 0:
+        if spy_ema7[-1] > middle_band and spy_ema7[-2] <= bb["mid"][-2] and mrktSlope[-1] >= 1:
             allocation = 1.0  # BUY condition
-        # Check if EMA7 crosses below the upper band for a SELL signal
-        # Placeholder for upper band calculation. Adjust as necessary.
-        elif spy_ema7[-1] < upper_band and spy_ema7[-2] >= bb["upper"][-2] and mrktSlope < 0:  # This condition is contrary to the usual use of Keltner and might need adjustment for a real strategy
+
+        elif spy_ema7[-1] < upper_band and spy_ema7[-2] >= bb["upper"][-2] and mrktSlope[-1] < 1:  # This condition is contrary to the usual use of Keltner and might need adjustment for a real strategy
             allocation = 0.0  # SELL condition
 
         return TargetAllocation({self.tradeAsset: allocation})
