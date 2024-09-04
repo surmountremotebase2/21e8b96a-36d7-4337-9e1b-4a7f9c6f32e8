@@ -1,4 +1,3 @@
-
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.technical_indicators import EMA, BB, Slope
 from surmount.logging import log
@@ -8,7 +7,7 @@ class TradingStrategy(Strategy):
         self.tickers = ["SPY", "QQQ"]
         self.mrkt = "SPY"
         self.tradeAsset = "QQQ"
-        self.std_dev_multiplier = .8
+        self.std_dev_multiplier = .6
         self.trade = 0
 
     @property
