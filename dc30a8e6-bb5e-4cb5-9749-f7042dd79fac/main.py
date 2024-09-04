@@ -34,10 +34,10 @@ class TradingStrategy(Strategy):
         
 
         # Check if EMA7 crosses above the middle band (EMA30 here) for a BUY signal
-        if spy_ema7[-1] > middle_band and spy_ema7[-3] <= bb["mid"][-3] and mrktSlope[-1] > 1.5:
+        if spy_ema7[-1] > middle_band and spy_ema7[-3] <= bb["mid"][-3]:
             self.trade = 1
 
-        elif spy_ema7[-1] < upper_band and spy_ema7[-3] >= bb["upper"][-3] and mrktSlope[-1] < 1.5:  # This condition is contrary to the usual use of Keltner and might need adjustment for a real strategy
+        elif spy_ema7[-1] < upper_band and spy_ema7[-3] >= bb["upper"][-3]:  # This condition is contrary to the usual use of Keltner and might need adjustment for a real strategy
             log(str(mrktSlope[-1]))
             self.trade = 0
         
