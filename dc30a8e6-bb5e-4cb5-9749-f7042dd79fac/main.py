@@ -1,4 +1,3 @@
-
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.technical_indicators import EMA, BB, Slope
 from surmount.logging import log
@@ -23,7 +22,7 @@ class TradingStrategy(Strategy):
         spy_ema7 = EMA(self.mrkt, data["ohlcv"], 7)
         spy_ema30 = EMA(self.mrkt, data["ohlcv"], 30)
         bb = BB(self.mrkt, data["ohlcv"], 30, self.std_dev_multiplier)
-        mrktSlope = Slope(self.mrkt, data["ohlcv"], 30)
+        mrktSlope = Slope(self.mrkt, data["ohlcv"], 15)
         closes = [i[self.mrkt]["close"] for i in data["ohlcv"]]
 
 
@@ -34,10 +33,10 @@ class TradingStrategy(Strategy):
         
 
         # Check if EMA7 crosses above the middle band (EMA30 here) for a BUY signal
-        if spy_ema7[-1] > middle_band and spy_ema7[-2] <= bb["mid"][-2]:
+        if spy_ema7[-1] > middle_band and spy_ema7[-2] <= bb["mid"][-2] and mrktSlope[-1] > 0:
             self.trade = 1
 
-        elif spy_ema7[-1] < upper_band and spy_ema7[-2] >= bb["upper"][-2]:  # This condition is contrary to the usual use of Keltner and might need adjustment for a real strategy
+        elif spy_ema7[-1] < upper_band and spy_ema7[-2] >= bb["upper"][-2] and mrktSlope[-1] < 0:  # This condition is contrary to the usual use of Keltner and might need adjustment for a real strategy
             log(str(mrktSlope[-1]))
             self.trade = 0
         
