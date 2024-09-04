@@ -1,3 +1,4 @@
+
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.technical_indicators import EMA, BB, Slope
 from surmount.logging import log
@@ -22,7 +23,7 @@ class TradingStrategy(Strategy):
         spy_ema7 = EMA(self.mrkt, data["ohlcv"], 7)
         spy_ema30 = EMA(self.mrkt, data["ohlcv"], 30)
         bb = BB(self.mrkt, data["ohlcv"], 30, self.std_dev_multiplier)
-        mrktSlope = Slope(self.mrkt, data["ohlcv"], 15)
+        mrktSlope = Slope(self.mrkt, data["ohlcv"], 21)
         closes = [i[self.mrkt]["close"] for i in data["ohlcv"]]
 
 
