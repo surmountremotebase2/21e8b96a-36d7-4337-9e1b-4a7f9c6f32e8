@@ -23,7 +23,7 @@ class TradingStrategy(Strategy):
         spy_ema7 = EMA(self.mrkt, data["ohlcv"], 7)
         spy_ema30 = EMA(self.mrkt, data["ohlcv"], 30)
         bb = BB(self.mrkt, data["ohlcv"], 30, self.std_dev_multiplier)
-        mrktSlope = Slope(self.mrkt, data["ohlcv"], 21)
+        mrktSlope = Slope(self.mrkt, data["ohlcv"], 30)
         closes = [i[self.mrkt]["close"] for i in data["ohlcv"]]
 
 
