@@ -41,7 +41,7 @@ class TradingStrategy(Strategy):
             log(str(mrktSlope[-1]))
             self.trade = 0
         
-        if self.trade = 1:
+        if self.trade == 1:
             allocation = 1.0
         else:
             allocation = 0
