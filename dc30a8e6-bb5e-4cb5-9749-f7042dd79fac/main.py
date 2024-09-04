@@ -8,7 +8,7 @@ class TradingStrategy(Strategy):
         self.tickers = ["SPY", "QQQ"]
         self.mrkt = "SPY"
         self.tradeAsset = "QQQ"
-        self.std_dev_multiplier = .8
+        self.std_dev_multiplier = .7
         self.trade = 0
 
     @property
@@ -34,10 +34,10 @@ class TradingStrategy(Strategy):
         allocation = 0.0  # Default state is not to hold the asset
         
 
-        if spy_ema7[-1] < upper_band and spy_ema7[-2] >= bb["upper"][-2]:
+        if spy_ema7[-1] < upper_band and spy_ema7[-2] >= bb["upper"][-1]:
             #log(str(mrktSlope[-1]))
             self.trade = 0
-        elif spy_ema7[-1] > lower_band and spy_ema7[-2] <= bb["lower"][-2]:
+        elif spy_ema7[-1] > lower_band and spy_ema7[-2] <= bb["lower"][-1]:
             self.trade = 1
         
         if self.trade == 1:
