@@ -9,6 +9,7 @@ class TradingStrategy(Strategy):
         self.mrkt = "SPY"
         self.tradeAsset = "QQQ"
         self.std_dev_multiplier = 1
+        self.trade = 0
 
     @property
     def interval(self):
@@ -34,11 +35,16 @@ class TradingStrategy(Strategy):
 
         # Check if EMA7 crosses above the middle band (EMA30 here) for a BUY signal
         if spy_ema7[-1] > middle_band and spy_ema7[-2] <= bb["mid"][-2]:
-            allocation = 1.0  # BUY condition
+            self.trade = 1
 
         elif spy_ema7[-1] < upper_band and spy_ema7[-2] >= bb["upper"][-2]:  # This condition is contrary to the usual use of Keltner and might need adjustment for a real strategy
-            allocation = 0.0  # SELL condition
             log(str(mrktSlope[-1]))
+            self.trade = 0
+        
+        if self.trade = 1:
+            allocation = 1.0
+        else:
+            allocation = 0
 
         return TargetAllocation({self.tradeAsset: allocation})
 
