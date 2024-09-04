@@ -39,6 +39,7 @@ class TradingStrategy(Strategy):
             self.trade = 0
         elif spy_ema7[-1] > lower_band and spy_ema7[-2] <= bb["lower"][-1]:
             self.trade = 1
+        elif spy_ema7[-1] >= upper_band and spy_ema7[-2] >= bb["upper"][-2]
         
         if self.trade == 1:
             allocation = 1.0
