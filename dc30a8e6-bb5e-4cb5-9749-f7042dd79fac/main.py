@@ -1,4 +1,3 @@
-
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.technical_indicators import EMA, BB, Slope
 from surmount.logging import log
@@ -30,13 +29,14 @@ class TradingStrategy(Strategy):
         current_price = closes[-1]
         upper_band = bb["upper"][-1]
         middle_band = bb["mid"][-1]
+        lower_band = bb["lower"][-1]
         allocation = 0.0  # Default state is not to hold the asset
         
 
         if spy_ema7[-1] < upper_band and spy_ema7[-3] >= bb["upper"][-3]:
             log(str(mrktSlope[-1]))
             self.trade = 0
-        elif spy_ema7[-1] > middle_band and spy_ema7[-3] <= bb["mid"][-3]:
+        elif spy_ema7[-1] > lower_band and spy_ema7[-3] <= bb["lower"][-3]:
             self.trade = 1
         
         if self.trade == 1:
