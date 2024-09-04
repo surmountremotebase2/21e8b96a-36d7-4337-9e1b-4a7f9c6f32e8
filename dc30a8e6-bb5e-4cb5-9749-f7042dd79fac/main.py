@@ -33,13 +33,11 @@ class TradingStrategy(Strategy):
         allocation = 0.0  # Default state is not to hold the asset
         
 
-        # Check if EMA7 crosses above the middle band (EMA30 here) for a BUY signal
-        if spy_ema7[-1] > middle_band and spy_ema7[-3] <= bb["mid"][-3]:
-            self.trade = 1
-
-        elif spy_ema7[-1] < upper_band and spy_ema7[-3] >= bb["upper"][-3]:  # This condition is contrary to the usual use of Keltner and might need adjustment for a real strategy
+        if spy_ema7[-1] < upper_band and spy_ema7[-3] >= bb["upper"][-3]:
             log(str(mrktSlope[-1]))
             self.trade = 0
+        elif spy_ema7[-1] > middle_band and spy_ema7[-3] <= bb["mid"][-3]:
+            self.trade = 1
         
         if self.trade == 1:
             allocation = 1.0
