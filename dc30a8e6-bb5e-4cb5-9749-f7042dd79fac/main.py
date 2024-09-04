@@ -8,7 +8,7 @@ class TradingStrategy(Strategy):
         self.tickers = ["SPY", "QQQ"]
         self.mrkt = "SPY"
         self.tradeAsset = "QQQ"
-        self.std_dev_multiplier = 1.2
+        self.std_dev_multiplier = 1
         self.trade = 0
 
     @property
@@ -37,7 +37,7 @@ class TradingStrategy(Strategy):
         if spy_ema7[-1] > middle_band and spy_ema7[-3] <= bb["mid"][-3] and mrktSlope[-1] > 1.5:
             self.trade = 1
 
-        elif spy_ema7[-1] < upper_band and spy_ema7[-3] >= bb["upper"][-3] and mrktSlope[-1] < 1:  # This condition is contrary to the usual use of Keltner and might need adjustment for a real strategy
+        elif spy_ema7[-1] < upper_band and spy_ema7[-3] >= bb["upper"][-3] and mrktSlope[-1] < 1.5:  # This condition is contrary to the usual use of Keltner and might need adjustment for a real strategy
             log(str(mrktSlope[-1]))
             self.trade = 0
         
