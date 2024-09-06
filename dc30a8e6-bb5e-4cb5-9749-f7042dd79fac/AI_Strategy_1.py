@@ -1,5 +1,5 @@
 from surmount.base_class import Strategy, TargetAllocation
-from surmount.technical_indicators import EMA
+from surmount.technical_indicators import EMA, RSI
 from surmount.data import ohlcv
 import pandas as pd
 import pandas_ta as ta
@@ -46,6 +46,7 @@ class TradingStrategy(Strategy):
         kc = self.KeltnerChannel("SPY", spy_data)
         # Calculate 7-day EMA for SPY
         spy_ema7 = EMA("SPY", spy_data, 7)
+        spy_rsi = RSI("SPY", spy_data, 5)
         
         # Check if enough data available to make a decision
         if kc["middle"] is None or kc["upper"] is None or len(spy_ema7) < 2:
@@ -64,7 +65,7 @@ class TradingStrategy(Strategy):
         upper_band_today = kc["upper"][-1]
         
         # BUY logic: EMA crosses above the middle band
-        if ema7_today > middle_band_today and ema7_prev < middle_band_prev:
+        if ema7_today > middle_band_today and ema7_prev < middle_band_prev and spi_rsi:
             # Allocate 100% of the portfolio to SPY
             allocation = {"SPY": 1.0}
         # SELL logic: EMA crosses below the upper band
