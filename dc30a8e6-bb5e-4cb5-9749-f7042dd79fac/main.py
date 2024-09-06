@@ -21,7 +21,7 @@ class TradingStrategy(Strategy):
     def run(self, data):
         spy_ema7 = EMA(self.mrkt, data["ohlcv"], 7)
         spy_ema30 = EMA(self.mrkt, data["ohlcv"], 30)
-        spy_rsi = RSI(self.mrkt, data["ohlcv"], 10)
+        spy_rsi = RSI(self.mrkt, data["ohlcv"], 5)
         bb = BB(self.mrkt, data["ohlcv"], 30, self.std_dev_multiplier)
         mrktSlope = Slope(self.mrkt, data["ohlcv"], 5)
         closes = [i[self.mrkt]["close"] for i in data["ohlcv"]]
