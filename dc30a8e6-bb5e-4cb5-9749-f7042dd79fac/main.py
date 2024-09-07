@@ -9,6 +9,7 @@ class TradingStrategy(Strategy):
         self.tradeAsset = "QQQ"
         self.std_dev_multiplier = .6
         self.trade = 0
+        self.count = 0
 
     @property
     def interval(self):
