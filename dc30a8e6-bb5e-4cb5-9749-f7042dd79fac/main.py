@@ -5,7 +5,7 @@ from surmount.logging import log
 class TradingStrategy(Strategy):
     def __init__(self):
         self.tickers = ["SPY", "QQQ"]
-        self.mrkt = "SPY"
+        self.mrkt = "QQQ"
         self.tradeAsset = "QQQ"
         self.std_dev_multiplier = .6
         self.trade = 0
