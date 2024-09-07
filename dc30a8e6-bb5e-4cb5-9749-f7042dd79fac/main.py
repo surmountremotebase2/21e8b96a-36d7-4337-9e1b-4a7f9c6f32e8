@@ -46,8 +46,7 @@ class TradingStrategy(Strategy):
             self.trade = 1
             #self.count = 0
 
-        if self.trade == 1 and self.count > 0:
-            self.trade = 0
+
         
         if self.trade == 1:
             allocation = 1.0
