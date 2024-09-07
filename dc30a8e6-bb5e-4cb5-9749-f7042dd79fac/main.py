@@ -25,6 +25,7 @@ class TradingStrategy(Strategy):
         bb = BB(self.mrkt, data["ohlcv"], 30, self.std_dev_multiplier)
         mrktSlope = Slope(self.mrkt, data["ohlcv"], 5)
         closes = [i[self.mrkt]["close"] for i in data["ohlcv"]]
+        self.count =- 1
 
 
         current_price = closes[-1]
@@ -37,10 +38,14 @@ class TradingStrategy(Strategy):
         if spy_ema7[-1] < upper_band and spy_ema7[-2] >= bb["upper"][-1]:
             #log(str(mrktSlope[-1]))
             self.trade = 0
+            self.count = 5
         elif spy_ema7[-1] > lower_band and spy_ema7[-5] <= bb["lower"][-5] and spy_rsi[-1] < 40:
             self.trade = 1
         elif spy_ema7[-1] >= upper_band and spy_ema7[-2] >= bb["upper"][-2] and spy_rsi[-1] > 60:
             self.trade = 1
+
+        if self.trade = 1 and self.count > 1:
+            self.trade = 0
         
         if self.trade == 1:
             allocation = 1.0
