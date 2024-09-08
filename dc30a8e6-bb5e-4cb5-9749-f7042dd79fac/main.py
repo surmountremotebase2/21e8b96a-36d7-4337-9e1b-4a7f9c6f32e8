@@ -38,6 +38,7 @@ class TradingStrategy(Strategy):
         allocation = 0.0  # Default state is not to hold the asset
         
 
+        if spy_ema7[-1] < middle_band and spy_ema7[-5] >= bb["upper"][-5]:
         if spy_ema7[-1] < upper_band and spy_ema7[-5] >= bb["upper"][-5]:
             #log(str(mrktSlope[-1]))
             self.trade = 0
