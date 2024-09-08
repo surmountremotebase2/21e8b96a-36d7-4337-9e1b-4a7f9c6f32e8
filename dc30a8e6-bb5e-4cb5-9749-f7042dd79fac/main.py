@@ -41,12 +41,12 @@ class TradingStrategy(Strategy):
             #log(str(mrktSlope[-1]))
             self.trade = 0
             self.count = 10
-        elif spy_ema7[-1] < lower_band and spy_ema7[-3] <= bb["lower"][-3] and spy_rsi[-1] < 30:
+        elif spy_ema7[-1] < lower_band and spy_ema7[-3] <= bb["lower"][-3] and spy_rsi[-1] < 35:
             self.trade = 0
             self.count = 10
         elif spy_ema7[-1] > lower_band and spy_ema7[-3] <= bb["lower"][-3] and (spy_rsi[-3] < 35) and self.count < 1:
             self.trade = 1
-        elif spy_ema7[-1] >= upper_band and spy_ema7[-2] >= bb["upper"][-2] and spy_rsi[-1] > 60 and self.count < 1:
+        elif spy_ema7[-1] >= upper_band and spy_ema7[-3] >= bb["upper"][-3] and spy_rsi[-1] > 60 and self.count < 1:
             self.trade = 1
             #self.count = 0
 
