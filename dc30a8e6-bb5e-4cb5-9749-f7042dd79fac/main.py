@@ -44,7 +44,7 @@ class TradingStrategy(Strategy):
             self.trade = 0
             self.count = 5
 
-        elif spy_ema7[-1] < lower_band and spy_ema7[-3] <= bb["lower"][-3] and spy_rsi[-1] < 35:
+        elif spy_ema7[-1] < lower_band and spy_ema7[-3] <= bb["lower"][-3] and spy_rsi[-1] < 35 and mrktSlope[-1] < 0:
             self.trade = 0
             self.count = 5
         elif spy_ema7[-1] > lower_band and spy_ema7[-3] <= bb["lower"][-3] and (spy_rsi[-3] < 35) and self.count < 1:
