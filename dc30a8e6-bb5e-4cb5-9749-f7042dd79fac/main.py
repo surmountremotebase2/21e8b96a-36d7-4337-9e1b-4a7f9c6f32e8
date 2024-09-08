@@ -51,8 +51,8 @@ class TradingStrategy(Strategy):
             self.trade = 1
         elif spy_ema7[-1] >= upper_band and spy_ema7[-2] >= bb["upper"][-2] and spy_ema7[-3] >= bb["upper"][-3] and spy_rsi[-1] >= 65 and mrktSlope[-1] > 0 and self.count < 1:
             self.trade = 1
-            log("LONG #2")
-            log(str(spy_rsi[-1]))
+            #log("LONG #2")
+            #log(str(spy_rsi[-1]))
             #self.count = 0
 
 
