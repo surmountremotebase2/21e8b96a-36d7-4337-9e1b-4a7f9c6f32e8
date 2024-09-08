@@ -23,6 +23,7 @@ class TradingStrategy(Strategy):
     def run(self, data):
         spy_ema7 = EMA(self.mrkt, data["ohlcv"], 7)
         spy_ema30 = EMA(self.mrkt, data["ohlcv"], 30)
+        spy_ema200 = EMA(self.mrkt, data["ohlcv"], 200)
         spy_rsi = RSI(self.mrkt, data["ohlcv"], 5)
         bb = BB(self.mrkt, data["ohlcv"], 30, self.std_dev_multiplier)
         mrktSlope = Slope(self.mrkt, data["ohlcv"], 5)
@@ -40,7 +41,9 @@ class TradingStrategy(Strategy):
         if spy_ema7[-1] < upper_band and spy_ema7[-5] >= bb["upper"][-5]:
             #log(str(mrktSlope[-1]))
             self.trade = 0
-            self.count = 15
+            if spy_ema7 < spy_ema200:
+                self.count = 15
+
         elif spy_ema7[-1] < lower_band and spy_ema7[-3] <= bb["lower"][-3] and spy_rsi[-1] < 35:
             self.trade = 0
             self.count = 10
