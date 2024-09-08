@@ -7,7 +7,7 @@ class TradingStrategy(Strategy):
         self.tickers = ["SPY", "QQQ", "TQQQ"]
         self.mrkt = "QQQ"
         self.tradeAsset = "TQQQ"
-        self.std_dev_multiplier = .5
+        self.std_dev_multiplier = .7
         self.trade = 0
         self.count = 0
 
