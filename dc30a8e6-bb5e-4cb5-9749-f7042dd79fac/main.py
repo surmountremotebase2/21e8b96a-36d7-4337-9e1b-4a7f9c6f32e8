@@ -53,8 +53,8 @@ class TradingStrategy(Strategy):
 
         
         if self.trade == 1:
-            allocation1 = 0.7
-            allocation2 = 0.3
+            allocation1 = 1
+            allocation2 = 0
         else:
             allocation1 = 0
             allocation2 = 0
