@@ -5,8 +5,9 @@ from surmount.logging import log
 class TradingStrategy(Strategy):
     def __init__(self):
         self.tickers = ["SPY", "QQQ", "TQQQ"]
-        self.mrkt = "TQQQ"
-        self.tradeAsset = "TQQQ"
+        self.mrkt = "QQQ"
+        self.tradeAsset1 = "QQQ"
+        self.tradeAsset2 = "TQQQ"
         self.std_dev_multiplier = .6
         self.trade = 0
         self.count = 0
@@ -49,11 +50,12 @@ class TradingStrategy(Strategy):
 
         
         if self.trade == 1:
-            allocation = 1.0
+            allocation1 = 0.7
+            allocation2 = 0.3
         else:
             allocation = 0
 
-        return TargetAllocation({self.tradeAsset: allocation})
+        return TargetAllocation({self.tradeAsset1: allocation1, self.tradeAsset2: allocation2})
 
 # Note: This script assumes access to EMA but not directly to ATR or detailed Keltner Channel calculations.
 # Adapt based on available data and true Keltner Channel calculations including ATR for accurate signals.
