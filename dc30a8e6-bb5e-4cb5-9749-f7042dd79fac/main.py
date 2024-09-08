@@ -49,7 +49,7 @@ class TradingStrategy(Strategy):
             self.count = 10
         elif spy_ema7[-1] > lower_band and spy_ema7[-3] <= bb["lower"][-3] and (spy_rsi[-3] < 35) and self.count < 1:
             self.trade = 1
-        elif spy_ema7[-1] >= upper_band and spy_ema7[-3] >= bb["upper"][-3] and spy_rsi[-1] >= 65 and mrktSlope[-1] > 0.5 and self.count < 1:
+        elif spy_ema7[-1] >= upper_band and spy_ema7[-3] >= bb["upper"][-3] and spy_rsi[-1] >= 65 and mrktSlope[-1] > 0.5 and self.count > 1:
             self.trade = 1
             #log("LONG #2")
             #log(str(spy_rsi[-1]))
