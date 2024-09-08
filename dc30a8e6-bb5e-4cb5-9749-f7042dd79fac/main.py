@@ -40,7 +40,7 @@ class TradingStrategy(Strategy):
         if spy_ema7[-1] < upper_band and spy_ema7[-3] >= bb["upper"][-3]:
             #log(str(mrktSlope[-1]))
             self.trade = 0
-            self.count = 10
+            self.count = 15
         elif spy_ema7[-1] > lower_band and spy_ema7[-3] <= bb["lower"][-3] and (spy_rsi[-3] < 35) and self.count < 1:
             self.trade = 1
         elif spy_ema7[-1] >= upper_band and spy_ema7[-2] >= bb["upper"][-2] and spy_rsi[-1] > 60 and self.count < 1:
@@ -53,7 +53,8 @@ class TradingStrategy(Strategy):
             allocation1 = 0.7
             allocation2 = 0.3
         else:
-            allocation = 0
+            allocation1 = 0
+            allocation2 = 0
 
         return TargetAllocation({self.tradeAsset1: allocation1, self.tradeAsset2: allocation2})
 
