@@ -40,8 +40,8 @@ class TradingStrategy(Strategy):
         if spy_ema7[-1] < upper_band and spy_ema7[-3] >= bb["upper"][-3]:
             #log(str(mrktSlope[-1]))
             self.trade = 0
-            self.count = 15
-        elif spy_ema7[-1] < lower_band and spy_ema7[-3] <= bb["lower"][-3] and spy_rsi[-1] < 25:
+            self.count = 5
+        elif spy_ema7[-1] < lower_band and spy_ema7[-3] <= bb["lower"][-3] and spy_rsi[-1] < 30:
             self.trade = 0
             self.count = 5
         elif spy_ema7[-1] > lower_band and spy_ema7[-3] <= bb["lower"][-3] and (spy_rsi[-3] < 35) and self.count < 1:
