@@ -27,7 +27,7 @@ class TradingStrategy(Strategy):
         spy_rsi = RSI(self.mrkt, data["ohlcv"], 5)
         bb = BB(self.mrkt, data["ohlcv"], 30, self.std_dev_multiplier)
         mrktSlope = Slope(self.mrkt, data["ohlcv"], 110)
-        mrktSlopeS = Slope(self.mrkt, data["ohlcv"], 30)
+        mrktSlopeS = Slope(self.mrkt, data["ohlcv"], 20)
         closes = [i[self.mrkt]["close"] for i in data["ohlcv"]]
         self.count =- 1
 
@@ -38,7 +38,7 @@ class TradingStrategy(Strategy):
         lower_band = bb["lower"][-1]
         allocation = 0.0  # Default state is not to hold the asset
         
-        if spy_ema7[-1] < upper_band and spy_ema7[-5] >= bb["upper"][-5] and spy_ema7[-3] >= lower_band and (mrktSlope[-1] < 0 or spy_rsi[-1] > 60):
+        if spy_ema7[-1] < upper_band and spy_ema7[-5] >= bb["upper"][-5] and spy_ema7[-3] >= lower_band and (mrktSlopeS[-1] < 0 or spy_rsi[-1] > 60):
         #if spy_ema7[-1] < middle_band and spy_ema7[-5] >= bb["upper"][-5]:
             #log("OFF #1")
             #log(str(mrktSlope[-1]))
