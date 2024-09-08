@@ -26,7 +26,7 @@ class TradingStrategy(Strategy):
         spy_ema200 = EMA(self.mrkt, data["ohlcv"], 200)
         spy_rsi = RSI(self.mrkt, data["ohlcv"], 5)
         bb = BB(self.mrkt, data["ohlcv"], 30, self.std_dev_multiplier)
-        mrktSlope = Slope(self.mrkt, data["ohlcv"], 5)
+        mrktSlope = Slope(self.mrkt, data["ohlcv"], 45)
         closes = [i[self.mrkt]["close"] for i in data["ohlcv"]]
         self.count =- 1
 
@@ -37,19 +37,19 @@ class TradingStrategy(Strategy):
         lower_band = bb["lower"][-1]
         allocation = 0.0  # Default state is not to hold the asset
         
-        #if spy_ema7[-1] < upper_band and spy_ema7[-5] >= bb["upper"][-5]:
-        if spy_ema7[-1] < middle_band and spy_ema7[-5] >= bb["upper"][-5]:
+        if spy_ema7[-1] < upper_band and spy_ema7[-5] >= bb["upper"][-5]:
+        #if spy_ema7[-1] < middle_band and spy_ema7[-5] >= bb["upper"][-5]:
         
             #log(str(mrktSlope[-1]))
             self.trade = 0
             self.count = 10
 
-        elif spy_ema7[-1] < lower_band and spy_ema7[-3] <= bb["lower"][-3] and spy_rsi[-1] < 35:
+        elif spy_ema7[-1] < lower_band and spy_ema7[-3] <= bb["lower"][-3] and spy_rsi[-1] < 35 and mrktSlope < 0:
             self.trade = 0
             self.count = 10
         elif spy_ema7[-1] > lower_band and spy_ema7[-3] <= bb["lower"][-3] and (spy_rsi[-3] < 35) and self.count < 1:
             self.trade = 1
-        elif spy_ema7[-1] >= upper_band and spy_ema7[-2] >= bb["upper"][-2] and spy_ema7[-3] >= bb["upper"][-3] and spy_rsi[-1] >= 65 and self.count < 1:
+        elif spy_ema7[-1] >= upper_band and spy_ema7[-2] >= bb["upper"][-2] and spy_ema7[-3] >= bb["upper"][-3] and spy_rsi[-1] >= 65 and mrktSlope > 0 and self.count < 1:
             self.trade = 1
             log("LONG #2")
             log(str(spy_rsi[-1]))
