@@ -26,8 +26,8 @@ class TradingStrategy(Strategy):
         spy_ema200 = EMA(self.mrkt, data["ohlcv"], 200)
         spy_rsi = RSI(self.mrkt, data["ohlcv"], 5)
         bb = BB(self.mrkt, data["ohlcv"], 30, self.std_dev_multiplier)
-        mrktSlope = Slope(self.mrkt, data["ohlcv"], 100)
-        mrktSlopeS = Slope(self.mrkt, data["ohlcv"], 20)
+        mrktSlope = Slope(self.mrkt, data["ohlcv"], 110)
+        mrktSlopeS = Slope(self.mrkt, data["ohlcv"], 15)
         closes = [i[self.mrkt]["close"] for i in data["ohlcv"]]
         self.count =- 1
 
