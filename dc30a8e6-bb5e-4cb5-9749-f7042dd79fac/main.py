@@ -37,13 +37,12 @@ class TradingStrategy(Strategy):
         lower_band = bb["lower"][-1]
         allocation = 0.0  # Default state is not to hold the asset
         
-
+        #if spy_ema7[-1] < upper_band and spy_ema7[-5] >= bb["upper"][-5]:
         if spy_ema7[-1] < middle_band and spy_ema7[-5] >= bb["upper"][-5]:
-        if spy_ema7[-1] < upper_band and spy_ema7[-5] >= bb["upper"][-5]:
+        
             #log(str(mrktSlope[-1]))
             self.trade = 0
-            if spy_ema7 < spy_ema200:
-                self.count = 15
+            self.count = 10
 
         elif spy_ema7[-1] < lower_band and spy_ema7[-3] <= bb["lower"][-3] and spy_rsi[-1] < 35:
             self.trade = 0
