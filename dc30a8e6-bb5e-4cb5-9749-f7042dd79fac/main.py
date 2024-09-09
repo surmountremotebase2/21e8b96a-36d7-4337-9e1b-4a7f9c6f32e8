@@ -69,8 +69,8 @@ class TradingStrategy(Strategy):
             allocation1 = 0
             allocation2 = 0
 
-        #return TargetAllocation({self.tradeAsset1: allocation1, self.tradeAsset2: allocation2})
-        return TargetAllocation({self.tradeAsset1: allocation1})
+        return TargetAllocation({self.tradeAsset1: allocation1, self.tradeAsset2: allocation2})
+        #return TargetAllocation({self.tradeAsset1: allocation1})
 
 # Note: This script assumes access to EMA but not directly to ATR or detailed Keltner Channel calculations.
 # Adapt based on available data and true Keltner Channel calculations including ATR for accurate signals.
