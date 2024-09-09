@@ -4,11 +4,11 @@ from surmount.logging import log
 
 class TradingStrategy(Strategy):
     def __init__(self):
-        #self.tickers = ["SPY", "QQQ", "TQQQ"]
-        self.tickers = ["SPY", "QQQ"]
+        self.tickers = ["SPY", "QQQ", "TQQQ"]
+        #self.tickers = ["SPY", "QQQ"]
         self.mrkt = "QQQ"
         self.tradeAsset1 = "QQQ"
-        #self.tradeAsset2 = "TQQQ"
+        self.tradeAsset2 = "TQQQ"
         self.std_dev_multiplier = .6
         self.trade = 0
         self.count = 0
@@ -63,8 +63,8 @@ class TradingStrategy(Strategy):
 
         
         if self.trade == 1:
-            allocation1 = 1
-            allocation2 = 0
+            allocation1 = .7
+            allocation2 = .3
         else:
             allocation1 = 0
             allocation2 = 0
