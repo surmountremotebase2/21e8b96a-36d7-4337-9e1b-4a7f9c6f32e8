@@ -7,9 +7,7 @@ import numpy as np
 class TradingStrategy(Strategy):
 
     def __init__(self):
-        self.tickers = [
-            "AMZN", "AAPL", "META", "GOOGL", "MSFT"
-        ]
+        self.tickers = ["XLK"]
         self.bench = ["SPY"]
         self.weights = [
             0.2, 0.2, 0.2, 0.2, 0.2
