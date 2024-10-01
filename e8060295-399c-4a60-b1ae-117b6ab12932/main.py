@@ -9,9 +9,7 @@ class TradingStrategy(Strategy):
     def __init__(self):
         self.tickers = ["XLK"]
         self.bench = ["SPY"]
-        self.weights = [
-            0.2, 0.2, 0.2, 0.2, 0.2
-        ]
+        self.weights = [1]
         self.count = 5
 
     @property
