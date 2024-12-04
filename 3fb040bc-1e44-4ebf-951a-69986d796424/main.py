@@ -31,7 +31,7 @@ class TradingStrategy(Strategy):
             
             # Assuming the use of a custom Kalman filter function implemented externally
             # kf_estimated = kalman_filter_estimate(closes)
-            ema = EMA(ticker, data["ohlcv"], 5)
+            ema = SMA(ticker, data["ohlcv"], 5)
 
             # Pykalman or any advanced analysis should be implemented outside run()
             # For the sake of example, it is outlined but not fully integrated
