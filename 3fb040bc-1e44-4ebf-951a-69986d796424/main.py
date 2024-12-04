@@ -56,9 +56,3 @@ class TradingStrategy(Strategy):
             allocation_dict[ticker] = allocation
 
         return TargetAllocation(allocation_dict)
-
-# Note: This is a simplified and adapted version of the strategy.
-# It assumes that the Kalman filter estimation and any additional logic
-# have to be properly implemented according to Surmount's framework capabilities.
-# Also, exact mechanics like EmitInsights or detailed holdings management
-# are outside the scope of Surmount's strategy example structure.
