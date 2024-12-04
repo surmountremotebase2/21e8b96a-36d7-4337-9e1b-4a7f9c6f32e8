@@ -31,13 +31,14 @@ class TradingStrategy(Strategy):
             
             # Assuming the use of a custom Kalman filter function implemented externally
             # kf_estimated = kalman_filter_estimate(closes)
+            ema = EMA(ticker, data["ohlcv"], 5)
 
             # Pykalman or any advanced analysis should be implemented outside run()
             # For the sake of example, it is outlined but not fully integrated
 
             # Placeholder for the Kalman filter logic
             # Replace this with actual Kalman filter output
-            kf_estimated_last_price = closes[-1]  # Mock value for demonstration
+            kf_estimated_last_price = ema[-1]  # Mock value for demonstration
             
             current_price = closes[-1]
             upper_band = bb["upper"][-1]
@@ -49,7 +50,7 @@ class TradingStrategy(Strategy):
             if current_price > upper_band:  # Breakout above upper band
                 allocation = 0.5  # Allocating 100% to buy signal, assuming bullish sentiment
             # Exit trade if price touches the middle band or based on Kalman filter estimation
-            elif current_price < middle_band:  # Simplified condition
+            elif current_price < ema[-1]:  # Simplified condition
                 allocation = 0  # No position
 
             allocation_dict[ticker] = allocation
