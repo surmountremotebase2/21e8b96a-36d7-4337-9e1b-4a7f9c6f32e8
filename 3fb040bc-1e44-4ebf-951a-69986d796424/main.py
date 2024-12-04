@@ -1,5 +1,5 @@
 from surmount.base_class import Strategy, TargetAllocation
-from surmount.technical_indicators import BB, SMA
+from surmount.technical_indicators import BB, SMA, EMA
 from surmount.logging import log
 from surmount.data import Asset
 
@@ -31,14 +31,14 @@ class TradingStrategy(Strategy):
             
             # Assuming the use of a custom Kalman filter function implemented externally
             # kf_estimated = kalman_filter_estimate(closes)
-            ema = SMA(ticker, data["ohlcv"], 5)
+            ema = EMA(ticker, data["ohlcv"], 5)
 
             # Pykalman or any advanced analysis should be implemented outside run()
             # For the sake of example, it is outlined but not fully integrated
 
             # Placeholder for the Kalman filter logic
             # Replace this with actual Kalman filter output
-            kf_estimated_last_price = ema[-1]  # Mock value for demonstration
+            #kf_estimated_last_price = ema[-1]  # Mock value for demonstration
             
             current_price = closes[-1]
             upper_band = bb["upper"][-1]
