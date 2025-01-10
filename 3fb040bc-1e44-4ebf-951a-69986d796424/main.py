@@ -33,13 +33,6 @@ class TradingStrategy(Strategy):
             # kf_estimated = kalman_filter_estimate(closes)
             ema = EMA(ticker, data["ohlcv"], 5)
 
-            # Pykalman or any advanced analysis should be implemented outside run()
-            # For the sake of example, it is outlined but not fully integrated
-
-            # Placeholder for the Kalman filter logic
-            # Replace this with actual Kalman filter output
-            #kf_estimated_last_price = ema[-1]  # Mock value for demonstration
-            
             current_price = closes[-1]
             upper_band = bb["upper"][-1]
             middle_band = bb["mid"][-1]
