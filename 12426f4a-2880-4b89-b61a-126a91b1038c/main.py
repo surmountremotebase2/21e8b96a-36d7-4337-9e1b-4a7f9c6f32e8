@@ -1,18 +1,19 @@
 from surmount.base_class import Strategy, TargetAllocation
-from surmount.technical_indicators import RSI
+from surmount.technical_indicators import RSI, ATR
 from surmount.logging import log
 
 class TradingStrategy(Strategy):
-    def __init__(self):
-        # Define the assets to trade: QQQ (long Nasdaq 100) and SQQQ (short Nasdaq 100)
-        self.tickers = ["QQQ", "SQQQ"]
-        # No additional data sources needed beyond OHLCV
-        self.data_list = []
+    """
+    A strategy that trades QQQ hourly based on RSI and volatility (ATR) filtering.
+    - Buys when RSI indicates oversold conditions and volatility is within a moderate range.
+    - Sells (or avoids allocation) when RSI indicates overbought conditions.
+    - Uses ATR to filter out excessive volatility to reduce risk.
+    """
 
     @property
     def assets(self):
-        # Return the list of tickers this strategy will trade
-        return self.tickers
+        # Define the asset to trade: QQQ
+        return ["QQQ"]
 
     @property
     def interval(self):
@@ -21,62 +22,68 @@ class TradingStrategy(Strategy):
 
     @property
     def data(self):
-        # Return the data list (empty since we only use OHLCV)
-        return self.data_list
+        # No additional data sources needed beyond OHLCV
+        return []
 
     def run(self, data):
-        # Extract OHLCV data from the input
-        ohlcv = data["ohlcv"]
+        """
+        Execute the trading strategy based on RSI and volatility (ATR).
         
-        # Calculate RSI for QQQ with a 14-period lookback
-        rsi = RSI("QQQ", ohlcv, 14)
+        :param data: Dictionary containing OHLCV data and other requested data sources
+        :return: TargetAllocation object with allocation for QQQ
+        """
+        # Access OHLCV data
+        ohlcv_data = data["ohlcv"]
         
-        # Check if RSI data is available and has at least one value
-        if rsi is None or len(rsi) < 1:
-            log("Not enough data to calculate RSI")
-            return TargetAllocation({"QQQ": 0, "SQQQ": 0})
-        
-        # Get the latest RSI value
-        latest_rsi = rsi[-1]
-        
-        # Get current holdings, defaulting to 0 if the asset isn't held
-        holdings = data["holdings"]
-        qqq_stake = holdings.get("QQQ", 0)
-        sqqq_stake = holdings.get("SQQQ", 0)
-        
-        # Buy QQQ when RSI < 30 (oversold condition)
-        if latest_rsi < 30:
-            log("RSI < 30, buying QQQ")
-            if qqq_stake >= 0:
-                # Increase position by 0.1 if already holding, up to a max of 1
-                qqq_stake = min(1, qqq_stake + 0.1)
+        # Check if there’s enough data to calculate indicators (RSI needs 14 periods, ATR needs 14)
+        if len(ohlcv_data) < 14:
+            log("Insufficient data to calculate RSI and ATR")
+            return TargetAllocation({"QQQ": 0})
+
+        # Calculate RSI with a 14-period lookback (standard setting)
+        rsi_values = RSI("QQQ", ohlcv_data, length=14)
+        if rsi_values is None or len(rsi_values) == 0:
+            log("RSI calculation failed")
+            return TargetAllocation({"QQQ": 0})
+
+        # Calculate ATR with a 14-period lookback to measure volatility
+        atr_values = ATR("QQQ", ohlcv_data, length=14)
+        if atr_values is None or len(atr_values) == 0:
+            log("ATR calculation failed")
+            return TargetAllocation({"QQQ": 0})
+
+        # Get the latest values
+        current_rsi = rsi_values[-1]
+        current_atr = atr_values[-1]
+        current_price = ohlcv_data[-1]["QQQ"]["close"]
+
+        # Define RSI thresholds
+        oversold_threshold = 30  # RSI below 30 indicates oversold
+        overbought_threshold = 70  # RSI above 70 indicates overbought
+
+        # Define volatility filter: Use ATR as a percentage of price
+        atr_percentage = (current_atr / current_price) * 100
+        moderate_volatility_range = (0.5, 2.0)  # ATR between 0.5% and 2% of price
+
+        # Initialize allocation
+        qqq_allocation = 0
+
+        # Trading logic
+        if current_rsi < oversold_threshold:
+            # Potential buy signal: Check volatility
+            if moderate_volatility_range[0] <= atr_percentage <= moderate_volatility_range[1]:
+                log(f"Oversold RSI ({current_rsi:.2f}) with moderate volatility (ATR% = {atr_percentage:.2f}) - Buying QQQ")
+                qqq_allocation = 1  # Full allocation to QQQ
             else:
-                # Initial position if not holding
-                qqq_stake = 0.2
-            sqqq_stake = 0  # Exit any SQQQ position
-        
-        # Buy SQQQ when RSI > 70 (overbought condition)
-        elif latest_rsi > 70:
-            log("RSI > 70, buying SQQQ")
-            if sqqq_stake >= 0:
-                # Increase position by 0.1 if already holding, up to a max of 1
-                sqqq_stake = min(1, sqqq_stake + 0.1)
-            else:
-                # Initial position if not holding
-                sqqq_stake = 0.2
-            qqq_stake = 0  # Exit any QQQ position
-        
-        # Manage existing positions when RSI is between 30 and 70
+                log(f"Oversold RSI ({current_rsi:.2f}) but volatility out of range (ATR% = {atr_percentage:.2f}) - No trade")
+        elif current_rsi > overbought_threshold:
+            # Overbought: Avoid allocation
+            log(f"Overbought RSI ({current_rsi:.2f}) - No allocation to QQQ")
+            qqq_allocation = 0
         else:
-            # Sell QQQ if holding and RSI > 50 (exit condition)
-            if qqq_stake > 0 and latest_rsi > 50:
-                log("RSI > 50, selling QQQ")
-                qqq_stake = 0
-            # Sell SQQQ if holding and RSI < 50 (exit condition)
-            if sqqq_stake > 0 and latest_rsi < 50:
-                log("RSI < 50, selling SQQQ")
-                sqqq_stake = 0
-            # If no exit condition is met, stakes remain unchanged (hold position)
-        
-        # Return the target allocation with updated stakes
-        return TargetAllocation({"QQQ": qqq_stake, "SQQQ": sqqq_stake})
+            # Neutral RSI: Maintain no position unless already holding
+            log(f"Neutral RSI ({current_rsi:.2f}) - No change in allocation")
+            qqq_allocation = 0
+
+        # Return the allocation dictionary wrapped in TargetAllocation
+        return TargetAllocation({"QQQ": qqq_allocation})
