@@ -5,7 +5,7 @@ from surmount.logging import log
 class TradingStrategy(Strategy):
     def __init__(self):
         self.tickers = ["COIN", "SQ", "NVDA", "MSTR", "AMD"]
-        self.btc_ticker = "BTCUSD"
+        self.btc_ticker = "BTC-USD"
         self.data_list = []
 
     @property
