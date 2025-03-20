@@ -59,6 +59,6 @@ class TradingStrategy(Strategy):
                 self.weights[ticker] -= 0.10
         
         total_weight = sum(self.weights.values())
-        allocation = {ticker: max(0, weight / total_weight) for ticker, weight in weights.items()}
+        allocation = {ticker: max(0, weight / total_weight) for ticker, weight in self.weights.items()}
         
         return TargetAllocation(allocation)
