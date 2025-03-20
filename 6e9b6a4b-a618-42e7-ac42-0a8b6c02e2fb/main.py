@@ -26,7 +26,7 @@ class TradingStrategy(Strategy):
         # Access OHLCV data
         ohlcv = data["ohlcv"]
         if len(ohlcv) < 200:  # Ensure sufficient data for 200-day MA
-            log("Insufficient data for strategy execution")
+            #log("Insufficient data for strategy execution")
             return TargetAllocation({ticker: 0 for ticker in self.tickers})
 
         allocation_dict = {}
@@ -52,7 +52,7 @@ class TradingStrategy(Strategy):
             one_month_return = (closes[-1] / closes[-21] - 1) if len(closes) >= 21 else 0  # Approx 1 month
             rsi = RSI(ticker, ohlcv, 14)[-1] if RSI(ticker, ohlcv, 14) else 50
             if one_month_return > 0.3 or rsi > 80:
-                log(f"Profit-taking triggered for {ticker}: Return={one_month_return:.2%}, RSI={rsi:.2f}")
+                #log(f"Profit-taking triggered for {ticker}: Return={one_month_return:.2%}, RSI={rsi:.2f}")
                 momentum_scores[ticker] *= 0.85  # Reduce exposure by 15% (trim position)
 
             # Apply stop-loss rule
@@ -61,7 +61,7 @@ class TradingStrategy(Strategy):
             sma_50 = SMA(ticker, ohlcv, 50)[-1] if SMA(ticker, ohlcv, 50) else closes[-1]
             sma_200 = SMA(ticker, ohlcv, 200)[-1] if SMA(ticker, ohlcv, 200) else closes[-1]
             if drop_from_peak > 0.12 or sma_50 < sma_200:
-                log(f"Stop-loss triggered for {ticker}: Drop={drop_from_peak:.2%}, SMA50={sma_50:.2f}, SMA200={sma_200:.2f}")
+                #log(f"Stop-loss triggered for {ticker}: Drop={drop_from_peak:.2%}, SMA50={sma_50:.2f}, SMA200={sma_200:.2f}")
                 momentum_scores[ticker] = 0  # Temporarily remove stock
 
         # Adjust exposure based on momentum score
@@ -73,7 +73,7 @@ class TradingStrategy(Strategy):
         # Risk-based weighting: Wi = 1 / volatility
         total_inverse_vol = sum(1 / max(volatilities[ticker], 0.01) for ticker in self.tickers if momentum_scores[ticker] > 0)
         if total_inverse_vol == 0:
-            log("No valid allocations; all momentum scores are zero or negative")
+            #log("No valid allocations; all momentum scores are zero or negative")
             return TargetAllocation({ticker: 0 for ticker in self.tickers})
 
         # Calculate initial weights based on momentum and volatility
@@ -90,7 +90,7 @@ class TradingStrategy(Strategy):
             for ticker in self.tickers:
                 allocation_dict[ticker] /= total_allocation
                 allocation_dict[ticker] = min(max(allocation_dict[ticker], 0), 1)  # Ensure bounds
-                log(f"{ticker}: Momentum Score={momentum_scores[ticker]:.2f}, Volatility={volatilities[ticker]:.2f}, Weight={allocation_dict[ticker]:.2%}")
+                #log(f"{ticker}: Momentum Score={momentum_scores[ticker]:.2f}, Volatility={volatilities[ticker]:.2f}, Weight={allocation_dict[ticker]:.2%}")
         else:
             allocation_dict = {ticker: 0 for ticker in self.tickers}
 
