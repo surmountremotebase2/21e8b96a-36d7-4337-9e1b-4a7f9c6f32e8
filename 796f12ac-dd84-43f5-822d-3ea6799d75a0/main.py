@@ -42,12 +42,12 @@ class TradingStrategy(Strategy):
             if len(ohlcv) >= 60:  # Ensure 3 months of data
                 past_price = ohlcv[-60][ticker]['close']
                 if ticker in ["TSM", "MELI"] and current_price >= 1.5 * past_price:
-                    log(f"Profit-taking: Trimming {ticker}")
+                    #log(f"Profit-taking: Trimming {ticker}")
                     weight *= 0.5
 
             # Stop-loss rule
             if current_price <= 0.8 * max_price[ticker]:
-                log(f"Stop-loss: Trimming {ticker}")
+                #log(f"Stop-loss: Trimming {ticker}")
                 weight *= 0.5
 
             allocation[ticker] = weight
