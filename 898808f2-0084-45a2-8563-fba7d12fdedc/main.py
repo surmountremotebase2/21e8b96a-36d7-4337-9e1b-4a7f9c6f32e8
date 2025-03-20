@@ -7,6 +7,7 @@ class TradingStrategy(Strategy):
         self.tickers = ["COIN", "SQ", "NVDA", "MSTR", "AMD"]
         self.btc_ticker = "BTC-USD"
         self.data_list = []
+        self.weights = {"COIN": 0.2, "MSTR": 0.2, "SQ": 0.2, "NVDA": 0.2, "AMD": 0.2}
 
     @property
     def interval(self):
@@ -35,13 +36,13 @@ class TradingStrategy(Strategy):
         is_btc_bull = btc_prices[-1] > btc_200_ma
         is_btc_bear = btc_prices[-1] < btc_50_ma
         
-        weights = {"COIN": 0.2, "MSTR": 0.2, "SQ": 0.2, "NVDA": 0.2, "AMD": 0.2}
+        
         
         if is_btc_bull:
-            weights["COIN"] += 0.15
-            weights["MSTR"] += 0.15
+            self.weights["COIN"] += 0.15
+            self.weights["MSTR"] += 0.15
         elif is_btc_bear:
-            weights["COIN"] -= 0.10
+            self.weights["COIN"] -= 0.10
         
         for ticker in ["COIN", "MSTR"]:
             ticker_prices = [entry[ticker]["close"] for entry in ohlcv]
@@ -51,13 +52,13 @@ class TradingStrategy(Strategy):
             
             if drawdown > 0.25:
                 #log(f"Stop-loss triggered for {ticker}, reducing exposure")
-                weights[ticker] -= 0.10
+                self.weights[ticker] -= 0.10
             
             if monthly_return > 0.50:
                 #log(f"Profit-taking triggered for {ticker}, reducing exposure")
-                weights[ticker] -= 0.10
+                self.weights[ticker] -= 0.10
         
-        total_weight = sum(weights.values())
+        total_weight = sum(self.weights.values())
         allocation = {ticker: max(0, weight / total_weight) for ticker, weight in weights.items()}
         
         return TargetAllocation(allocation)
