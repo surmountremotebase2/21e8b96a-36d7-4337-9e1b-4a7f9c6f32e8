@@ -32,7 +32,9 @@ class TradingStrategy(Strategy):
 
     def run(self, data):
         ohlcv = data["ohlcv"]
-        
+        if len(ohlcv) < self.min_days:
+            log("Insufficient data for basic analysis")
+            return TargetAllocation({ticker: 0 for ticker in self.tickers}
 
         # Parse current date from latest OHLCV entry
         current_date = datetime.strptime(ohlcv[-1][self.tickers[0]]["date"], "%Y-%m-%d %H:%M:%S")
@@ -40,20 +42,20 @@ class TradingStrategy(Strategy):
 
         # Use last allocation if available and not rebalancing
         if self.last_allocation and not self.is_quarter_end(current_date):
-            log("Not quarter-end, using previous allocation")
+            #log("Not quarter-end, using previous allocation")
             return TargetAllocation(self.last_allocation)
 
         # Default to equal weights if insufficient data for full analysis
         allocation_dict = {ticker: 0.25 for ticker in self.tickers}
         if len(ohlcv) < 63:
-            log("Less than 63 days, using equal weights")
+            #log("Less than 63 days, using equal weights")
             self.last_allocation = allocation_dict
             self.last_rebalance_date = current_date
             return TargetAllocation(allocation_dict)
 
         # Quarterly rebalancing logic (only on quarter-end)
         if not self.is_quarter_end(current_date):
-            log("Not quarter-end, skipping rebalance")
+            #log("Not quarter-end, skipping rebalance")
             return TargetAllocation(self.last_allocation or allocation_dict)
 
         log("Quarter-end rebalancing triggered")
@@ -74,7 +76,7 @@ class TradingStrategy(Strategy):
         # Profit-Taking Rule: NVDA or ARM up 40% in a quarter
         for ticker in ["NVDA", "ARM"]:
             if quarterly_returns[ticker] >= 0.4:
-                log(f"{ticker} up 40%+, rebalancing to equal-weight")
+                #log(f"{ticker} up 40%+, rebalancing to equal-weight")
                 allocation_dict = {t: 0.25 for t in self.tickers}
                 break
 
@@ -82,7 +84,7 @@ class TradingStrategy(Strategy):
         if len(prices["AMD"]) >= 21:
             monthly_return = (prices["AMD"][-1] / prices["AMD"][-21]) - 1
             if monthly_return <= -0.15:
-                log("AMD dropped >15% in a month, reducing exposure by half")
+                #log("AMD dropped >15% in a month, reducing exposure by half")
                 allocation_dict["AMD"] *= 0.5
                 remaining = sum(allocation_dict[t] for t in self.tickers if t != "AMD")
                 for t in self.tickers:
@@ -94,7 +96,7 @@ class TradingStrategy(Strategy):
         msft_hist_vol = STDEV("MSFT", ohlcv, len(ohlcv))
         msft_hist_vol = msft_hist_vol[-1] if msft_hist_vol and len(msft_hist_vol) > 0 else msft_vol
         if msft_vol > msft_hist_vol * 1.5:
-            log("MSFT volatility spiked 50% above average, rebalancing")
+            #log("MSFT volatility spiked 50% above average, rebalancing")
             allocation_dict = {t: 0.25 for t in self.tickers}
 
         # Normalize allocation to sum to 1
