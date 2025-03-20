@@ -7,7 +7,7 @@ class TradingStrategy(Strategy):
     def __init__(self):
         self.tickers = ["MSFT", "ARM", "NVDA", "AMD"]
         self.data_list = []
-        self.min_days = 1
+        self.min_days = 64
         self.last_allocation = None  # Store previous allocation
         self.last_rebalance_date = None  # Track last rebalance
 
