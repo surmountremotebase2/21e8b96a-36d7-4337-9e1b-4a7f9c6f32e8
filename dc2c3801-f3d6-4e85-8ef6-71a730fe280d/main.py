@@ -33,14 +33,14 @@ class TradingStrategy(Strategy):
     def run(self, data):
         ohlcv = data["ohlcv"]
         
-
         # Parse current date from latest OHLCV entry
-        current_date = datetime.strptime(ohlcv[-1][self.tickers[0]]["date"], "%Y-%m-%d %H:%M:%S")
         prices = {ticker: [d[ticker]["close"] for d in ohlcv if ticker in d] for ticker in self.tickers}
 
         if len(prices) < self.min_days:
             log("Insufficient data for basic analysis")
             return TargetAllocation({ticker: 0 for ticker in self.tickers})
+        
+        current_date = datetime.strptime(ohlcv[-1][self.tickers[0]]["date"], "%Y-%m-%d %H:%M:%S")
 
         # Use last allocation if available and not rebalancing
         if self.last_allocation and not self.is_quarter_end(current_date):
