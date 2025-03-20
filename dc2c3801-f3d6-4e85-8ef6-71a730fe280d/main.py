@@ -32,9 +32,7 @@ class TradingStrategy(Strategy):
 
     def run(self, data):
         ohlcv = data["ohlcv"]
-        if len(ohlcv) < self.min_days:
-            log("Insufficient data for basic analysis")
-            return TargetAllocation({ticker: 0 for ticker in self.tickers})
+        
 
         # Parse current date from latest OHLCV entry
         current_date = datetime.strptime(ohlcv[-1][self.tickers[0]]["date"], "%Y-%m-%d %H:%M:%S")
