@@ -1,13 +1,15 @@
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.logging import log
 from surmount.technical_indicators import STDEV
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class TradingStrategy(Strategy):
     def __init__(self):
         self.tickers = ["MSFT", "ARM", "NVDA", "AMD"]
         self.data_list = []
-        self.min_days = 21  # Minimum days for basic operation (e.g., monthly stop-loss)
+        self.min_days = 21  # Minimum days for basic operation
+        self.last_allocation = None  # Store previous allocation
+        self.last_rebalance_date = None  # Track last rebalance
 
     @property
     def assets(self):
@@ -21,30 +23,42 @@ class TradingStrategy(Strategy):
     def data(self):
         return self.data_list
 
+    def is_quarter_end(self, date):
+        """Check if the date is the last trading day of a quarter."""
+        next_day = date + timedelta(days=1)
+        current_quarter = (date.month - 1) // 3 + 1
+        next_quarter = (next_day.month - 1) // 3 + 1
+        return current_quarter != next_quarter  # True if crossing quarter boundary
+
     def run(self, data):
         ohlcv = data["ohlcv"]
         if len(ohlcv) < self.min_days:
             log("Insufficient data for basic analysis")
             return TargetAllocation({ticker: 0 for ticker in self.tickers})
 
-        # Extract closing prices
+        # Parse current date from latest OHLCV entry
+        current_date = datetime.strptime(ohlcv[-1][self.tickers[0]]["date"], "%Y-%m-%d %H:%M:%S")
         prices = {ticker: [d[ticker]["close"] for d in ohlcv if ticker in d] for ticker in self.tickers}
 
-        # Default to equal weights if less than 63 days
+        # Use last allocation if available and not rebalancing
+        if self.last_allocation and not self.is_quarter_end(current_date):
+            log("Not quarter-end, using previous allocation")
+            return TargetAllocation(self.last_allocation)
+
+        # Default to equal weights if insufficient data for full analysis
         allocation_dict = {ticker: 0.25 for ticker in self.tickers}
         if len(ohlcv) < 63:
             log("Less than 63 days, using equal weights")
+            self.last_allocation = allocation_dict
+            self.last_rebalance_date = current_date
             return TargetAllocation(allocation_dict)
 
-        # Check if today is a quarter-end day (approximated as last trading day of Mar, Jun, Sep, Dec)
-        latest_date = datetime.strptime(ohlcv[-1][self.tickers[0]]["date"], "%Y-%m-%d %H:%M:%S")
-        is_quarter_end = latest_date.month in [3, 6, 9, 12] and latest_date.day >= 25
+        # Quarterly rebalancing logic (only on quarter-end)
+        if not self.is_quarter_end(current_date):
+            log("Not quarter-end, skipping rebalance")
+            return TargetAllocation(self.last_allocation or allocation_dict)
 
-        if not is_quarter_end:
-            log("Not a quarter-end day, maintaining prior allocation")
-            return TargetAllocation(allocation_dict)  # Hold position until quarter-end
-
-        # Quarterly rebalancing logic
+        log("Quarter-end rebalancing triggered")
         quarterly_returns = {ticker: (prices[ticker][-1] / prices[ticker][-63]) - 1 
                             if len(prices[ticker]) >= 63 else 0 for ticker in self.tickers}
 
@@ -85,9 +99,12 @@ class TradingStrategy(Strategy):
             log("MSFT volatility spiked 50% above average, rebalancing")
             allocation_dict = {t: 0.25 for t in self.tickers}
 
-        # Ensure total allocation sums to 1
+        # Normalize allocation to sum to 1
         total = sum(allocation_dict.values())
         if total > 0:
             allocation_dict = {t: w / total for t, w in allocation_dict.items()}
 
+        # Store allocation and rebalance date
+        self.last_allocation = allocation_dict
+        self.last_rebalance_date = current_date
         return TargetAllocation(allocation_dict)
