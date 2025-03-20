@@ -36,7 +36,7 @@ class TradingStrategy(Strategy):
         # Parse current date from latest OHLCV entry
         prices = {ticker: [d[ticker]["close"] for d in ohlcv if ticker in d] for ticker in self.tickers}
 
-        if len(prices) < self.min_days:
+        if len(prices[0]) < self.min_days:
             log("Insufficient data for basic analysis")
             return TargetAllocation({ticker: 0 for ticker in self.tickers})
         
