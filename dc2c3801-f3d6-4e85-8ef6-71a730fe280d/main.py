@@ -7,7 +7,7 @@ class TradingStrategy(Strategy):
     def __init__(self):
         self.tickers = ["MSFT", "ARM", "NVDA", "AMD"]
         self.data_list = []
-        self.min_days = 1  # Minimum days for basic operation
+        self.min_days = 1
         self.last_allocation = None  # Store previous allocation
         self.last_rebalance_date = None  # Track last rebalance
 
@@ -32,7 +32,7 @@ class TradingStrategy(Strategy):
 
     def run(self, data):
         ohlcv = data["ohlcv"]
-        if len(ohlcv) < self.min_days:
+        if len(ohlcv[self.tickers[0]]["close"]) < self.min_days:
             log("Insufficient data for basic analysis")
             return TargetAllocation({ticker: 0 for ticker in self.tickers})
 
