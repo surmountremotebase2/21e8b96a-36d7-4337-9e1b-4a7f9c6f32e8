@@ -5,8 +5,8 @@ import pandas as pd
 
 class TradingStrategy(Strategy):
     def __init__(self):
-        # Define the assets: Microsoft, ARM, NVIDIA, and ORIC Pharmaceuticals
-        self.tickers = ["MSFT", "ARM", "NVDA", "ORCI"]
+        # Updated assets: MSFT, ARM, NVDA, and AMD (replacing ORCI)
+        self.tickers = ["MSFT", "ARM", "NVDA", "AMD"]
         self.data_list = []
 
     @property
@@ -15,7 +15,7 @@ class TradingStrategy(Strategy):
 
     @property
     def interval(self):
-        # Use daily data for volatility calculations; quarterly rebalancing checked via date
+        # Daily data for volatility calculations; quarterly rebalancing via date
         return "1day"
 
     @property
@@ -58,17 +58,17 @@ class TradingStrategy(Strategy):
                 allocation_dict = {t: 0.25 for t in self.tickers}  # Equal-weight reset
                 break
 
-        # Stop-Loss Rule: ORCI drops >15% in a month (approx 21 trading days)
-        if len(prices["ORCI"]) >= 21:
-            monthly_return = (prices["ORCI"][-1] / prices["ORCI"][-21]) - 1
+        # Stop-Loss Rule: AMD drops >15% in a month (approx 21 trading days)
+        if len(prices["AMD"]) >= 21:
+            monthly_return = (prices["AMD"][-1] / prices["AMD"][-21]) - 1
             if monthly_return <= -0.15:
-                log("ORCI dropped >15% in a month, reducing exposure by half")
-                allocation_dict["ORCI"] *= 0.5
+                log("AMD dropped >15% in a month, reducing exposure by half")
+                allocation_dict["AMD"] *= 0.5
                 # Redistribute remaining weight proportionally
-                remaining = sum(allocation_dict[t] for t in self.tickers if t != "ORCI")
+                remaining = sum(allocation_dict[t] for t in self.tickers if t != "AMD")
                 for t in self.tickers:
-                    if t != "ORCI":
-                        allocation_dict[t] = allocation_dict[t] / remaining * (1 - allocation_dict["ORCI"])
+                    if t != "AMD":
+                        allocation_dict[t] = allocation_dict[t] / remaining * (1 - allocation_dict["AMD"])
 
         # Volatility Spike Rule: MSFT volatility 50% above historical average
         msft_vol = volatilities["MSFT"]
