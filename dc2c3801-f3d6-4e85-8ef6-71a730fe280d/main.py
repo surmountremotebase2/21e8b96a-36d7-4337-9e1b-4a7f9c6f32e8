@@ -33,7 +33,7 @@ class TradingStrategy(Strategy):
     def run(self, data):
         ohlcv = data["ohlcv"]
         
-        closes = [entry[ticker]["close"] for entry in ohlcv]
+        closes = [entry['MSFT']["close"] for entry in ohlcv]
         if len(closes) < 200:
             return TargetAllocation({ticker: 0 for ticker in self.tickers})
 
