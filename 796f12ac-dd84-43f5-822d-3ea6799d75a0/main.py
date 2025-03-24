@@ -43,18 +43,21 @@ class TradingStrategy(Strategy):
                 past_price = ohlcv[-60][ticker]['close']
                 if current_price >= 1.5 * past_price:
                     #log(f"Profit-taking: Trimming {ticker}")
-                    weight *= 0.5
+                    #weight *= 0.5
+                    weight = 0.1
 
             # Stop-loss rule
             if current_price <= 0.8 * max_price[ticker]:
                 #log(f"Stop-loss: Trimming {ticker}")
-                weight *= 0.5
+                weight = 0.1
 
             allocation[ticker] = weight
             total_weight += weight
 
         # Normalize allocations to sum <= 1
         if total_weight > 1:
-            allocation = {k: v / total_weight for k, v in allocation.items()}
+            excess = (1 - total_weight) / len(self.tickers
+            #allocation = {k: v / total_weight for k, v in allocation.items()}
+            allocation = {k: v - excess for k, v in allocation.items()}
 
         return TargetAllocation(allocation)
