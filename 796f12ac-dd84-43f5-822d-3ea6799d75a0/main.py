@@ -56,7 +56,7 @@ class TradingStrategy(Strategy):
 
         # Normalize allocations to sum <= 1
         if total_weight > 1:
-            excess = (1 - total_weight) / len(self.tickers)
+            excess = (total_weight - 1) / len(self.tickers)
             #allocation = {k: v / total_weight for k, v in allocation.items()}
             allocation = {k: v - excess for k, v in allocation.items()}
 
