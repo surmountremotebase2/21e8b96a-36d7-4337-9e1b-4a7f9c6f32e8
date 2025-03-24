@@ -34,9 +34,9 @@ class TradingStrategy(Strategy):
             
             # Determine overweight or underweight based on SMA
             if current_price > sma_50[-1] and current_price > sma_200[-1]:
-                weight = 0.25  # Overweight allocation
+                weight = 0.3  # Overweight allocation
             else:
-                weight = 0.05  # Underweight allocation
+                weight = 0.1  # Underweight allocation
 
             # Profit-taking rule
             if len(ohlcv) >= 60:  # Ensure 3 months of data
@@ -49,7 +49,7 @@ class TradingStrategy(Strategy):
             # Stop-loss rule
             if current_price <= 0.8 * max_price[ticker]:
                 #log(f"Stop-loss: Trimming {ticker}")
-                weight = 0.1
+                weight = 0.05
 
             allocation[ticker] = weight
             total_weight += weight
