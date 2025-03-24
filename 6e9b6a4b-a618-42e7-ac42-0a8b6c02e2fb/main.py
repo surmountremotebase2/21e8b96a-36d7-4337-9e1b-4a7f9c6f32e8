@@ -7,8 +7,8 @@ import numpy as np
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define the assets to trade
-        #self.tickers = ["NVDA", "MSFT", "GOOGL", "SNOW", "PLTR", "ASML", "TSLA"]
-        self.tickers = ["NVDA", "PLTR", "INTC", "TSLA", "AAPL", "AMD", "AMZN", "MSFT", "GOOGL", "TSM", ]
+        self.tickers = ["NVDA", "MSFT", "GOOGL", "SNOW", "PLTR", "ASML", "TSLA"]
+        #self.tickers = ["NVDA", "PLTR", "INTC", "TSLA", "AAPL", "AMD", "AMZN", "MSFT", "GOOGL", "TSM"]
         self.data_list = []  # No additional data sources needed for this strategy
 
     @property
