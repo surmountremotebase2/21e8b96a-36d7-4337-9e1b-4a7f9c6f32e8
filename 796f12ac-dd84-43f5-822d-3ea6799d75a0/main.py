@@ -36,7 +36,7 @@ class TradingStrategy(Strategy):
             if current_price > sma_50[-1] and current_price > sma_200[-1]:
                 weight = 0.25  # Overweight allocation
             else:
-                weight = 0.1  # Underweight allocation
+                weight = 0.05  # Underweight allocation
 
             # Profit-taking rule
             if len(ohlcv) >= 60:  # Ensure 3 months of data
