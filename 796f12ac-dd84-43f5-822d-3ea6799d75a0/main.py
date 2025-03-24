@@ -41,7 +41,7 @@ class TradingStrategy(Strategy):
             # Profit-taking rule
             if len(ohlcv) >= 60:  # Ensure 3 months of data
                 past_price = ohlcv[-60][ticker]['close']
-                if ticker in ["TSM", "MELI"] and current_price >= 1.5 * past_price:
+                if current_price >= 1.5 * past_price:
                     #log(f"Profit-taking: Trimming {ticker}")
                     weight *= 0.5
 
