@@ -36,6 +36,9 @@ class TradingStrategy(Strategy):
         ohlcv = data["ohlcv"]
         inflation_data = data.get("5year_forward_inflation_expected_rate")
 
+        if len(ohlcv) < 100:
+            return TargetAllocation(allocations)
+
         # Rebalance based on 5-Year Forward Inflation Expected Rate
         if inflation_data and inflation_data[-1]["value"] > 5.0:
             allocations["GLD"] += 0.10  # Increase gold allocation
