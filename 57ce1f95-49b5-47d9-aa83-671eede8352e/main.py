@@ -45,7 +45,7 @@ class TradingStrategy(Strategy):
             return TargetAllocation(allocations)
 
         #current_cpi = inflation_data[-1]["value"]
-        log(f"{cpi}")
+        #log(f"{cpi}")
 
         # Rebalance based on 5-Year Forward Inflation Expected Rate
         if inflation_data and inflation_data[-1]["value"] > 5.0:
@@ -58,7 +58,7 @@ class TradingStrategy(Strategy):
         if gld_prices[0] and gld_prices[-1] and ((gld_prices[-1] - gld_prices[0]) / gld_prices[0]) > 0.15:
             allocations["GLD"] -= 0.10  # Reduce allocation to GLD
             log("GLD up more than 15% this quarter, reducing allocation")
-            log(f"{cpi}")
+            log(f"{inflation_data}")
 
         # Stop-Loss Rule: If oil stocks drop >10% in a month, trim allocation
         for ticker in ["XOM", "COP"]:
