@@ -35,12 +35,13 @@ class TradingStrategy(Strategy):
         allocations = {ticker: 1 / len(self.assets) for ticker in self.assets}  # Default equal allocation
         ohlcv = data["ohlcv"]
         inflation_data = data.get("5year_forward_inflation_expected_rate")
+        cpi = data
 
         if len(ohlcv) < 100:
             return TargetAllocation(allocations)
 
-        current_cpi = inflation_data[-1]["value"]
-        log(f"{inflation_data}")
+        #current_cpi = inflation_data[-1]["value"]
+        log(f"{cpi}")
 
         # Rebalance based on 5-Year Forward Inflation Expected Rate
         if inflation_data and inflation_data[-1]["value"] > 5.0:
