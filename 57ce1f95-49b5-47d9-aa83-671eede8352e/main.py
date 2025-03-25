@@ -36,6 +36,7 @@ class TradingStrategy(Strategy):
         ohlcv = data["ohlcv"]
         cpi_data = data.get("HousingCPI")
 
+        current_cpi = cpi_data[-1]["value"]
         # Rebalance based on CPI Inflation Data
         if cpi_data and cpi_data[-1]["value"] > 5.0:
             allocations["GLD"] += 0.10  # Increase gold allocation
@@ -47,6 +48,7 @@ class TradingStrategy(Strategy):
         if gld_prices[0] and gld_prices[-1] and ((gld_prices[-1] - gld_prices[0]) / gld_prices[0]) > 0.15:
             allocations["GLD"] -= 0.10  # Reduce allocation to GLD
             log("GLD up more than 15% this quarter, reducing allocation")
+            log(f"CPI - {current_cpi}")
 
         # Stop-Loss Rule: If oil stocks drop >10% in a month, trim allocation
         for ticker in ["XOM", "COP"]:
@@ -54,6 +56,7 @@ class TradingStrategy(Strategy):
             if stock_prices[0] and stock_prices[-1] and ((stock_prices[-1] - stock_prices[0]) / stock_prices[0]) < -0.10:
                 allocations[ticker] -= 0.05  # Reduce exposure to oil stocks
                 log(f"{ticker} dropped more than 10% this month, trimming allocation")
+                log(f"CPI - {current_cpi}")
 
         # Normalize allocations to ensure they sum to 1
         total_allocation = sum(allocations.values())
