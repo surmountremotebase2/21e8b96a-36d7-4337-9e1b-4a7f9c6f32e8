@@ -10,7 +10,7 @@ class TradingStrategy(Strategy):
     gold price movements, and oil stock performance.
     """
     def __init__(self):
-        self.tickers = ["SPY", "QQQ", "AAPL", "GOOGL"]
+        self.tickers = ["GLD", "BAM", "PLD", "XOM", "COP", "ET"]
         self.data_list = [FiveYearForwardInflationExpectedRate()]
 
 
