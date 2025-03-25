@@ -39,7 +39,7 @@ class TradingStrategy(Strategy):
         allocations = {ticker: 1 / len(self.assets) for ticker in self.assets}  # Default equal allocation
         ohlcv = data["ohlcv"]
         inflation_data = data.get('5year_forward_inflation_expected_rate')
-        cpi = self.data_list[0][('5year_forward_inflation_expected_rate')]
+        cpi = self.data_list.iloc[0][('5year_forward_inflation_expected_rate')]
 
         if len(ohlcv) < 100:
             return TargetAllocation(allocations)
