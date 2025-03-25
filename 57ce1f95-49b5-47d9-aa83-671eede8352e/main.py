@@ -9,10 +9,14 @@ class TradingStrategy(Strategy):
     The strategy dynamically allocates to GLD, BAM, PLD, XOM, COP, and ET based on inflation data,
     gold price movements, and oil stock performance.
     """
+    def __init__(self):
+        self.tickers = ["SPY", "QQQ", "AAPL", "GOOGL"]
+        self.data_list = [FiveYearForwardInflationExpectedRate()]
+
 
     @property
     def assets(self):
-        return ["GLD", "BAM", "PLD", "XOM", "COP", "ET"]
+        return self.tickers
 
     @property
     def interval(self):
@@ -20,7 +24,7 @@ class TradingStrategy(Strategy):
 
     @property
     def data(self):
-        return [FiveYearForwardInflationExpectedRate()]
+        return self.data_list
 
     def run(self, data):
         """
