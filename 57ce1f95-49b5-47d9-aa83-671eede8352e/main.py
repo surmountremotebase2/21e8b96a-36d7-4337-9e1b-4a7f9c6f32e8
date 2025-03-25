@@ -40,7 +40,8 @@ class TradingStrategy(Strategy):
             return TargetAllocation(allocations)
 
         current_cpi = inflation_data[-1]["value"]
-        log(f"{current_cpi})
+        log(f"{current_cpi}")
+
         # Rebalance based on 5-Year Forward Inflation Expected Rate
         if inflation_data and inflation_data[-1]["value"] > 5.0:
             allocations["GLD"] += 0.10  # Increase gold allocation
