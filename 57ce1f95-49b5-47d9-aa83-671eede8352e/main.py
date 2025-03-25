@@ -39,7 +39,7 @@ class TradingStrategy(Strategy):
         if len(ohlcv) < 50:
             return TargetAllocation(allocations)
 
-        log(cpi_data[-1])
+        log(f"{cpi_data}")
         # Rebalance based on CPI Inflation Data
         if cpi_data[-1]["value"] > 5.0:
             allocations["GLD"] += 0.10  # Increase gold allocation
