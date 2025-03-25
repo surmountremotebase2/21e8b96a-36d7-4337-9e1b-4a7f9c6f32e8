@@ -37,7 +37,7 @@ class TradingStrategy(Strategy):
         cpi_data = data.get("HousingCPI")
 
         if len(ohlcv) < 50:
-            return TargetAllocation(normalized_allocations)
+            return TargetAllocation(allocations)
 
         current_cpi = cpi_data[-1]["value"]
         # Rebalance based on CPI Inflation Data
