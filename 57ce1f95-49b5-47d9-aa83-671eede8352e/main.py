@@ -1,6 +1,6 @@
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.technical_indicators import SMA
-from surmount.data import HousingCPI
+from surmount.data import FiveYearForwardInflationExpectedRate
 from surmount.logging import log
 
 class TradingStrategy(Strategy):
@@ -20,38 +20,33 @@ class TradingStrategy(Strategy):
 
     @property
     def data(self):
-        return [HousingCPI()]
+        return [FiveYearForwardInflationExpectedRate()]
 
     def run(self, data):
         """
         Executes the trading strategy logic.
         
         Args:
-            data (dict): Contains OHLCV price data and CPI inflation data.
+            data (dict): Contains OHLCV price data and 5-year forward inflation data.
         
         Returns:
             TargetAllocation: The target allocations for each asset.
         """
         allocations = {ticker: 1 / len(self.assets) for ticker in self.assets}  # Default equal allocation
         ohlcv = data["ohlcv"]
-        cpi_data = data.get("HousingCPI")
+        inflation_data = data.get("5year_forward_inflation_expected_rate")
 
-        if len(ohlcv) < 50:
-            return TargetAllocation(allocations)
-
-        log(f"{cpi_data}")
-        # Rebalance based on CPI Inflation Data
-        '''if cpi_data[-1]["value"] > 5.0:
+        # Rebalance based on 5-Year Forward Inflation Expected Rate
+        if inflation_data and inflation_data[-1]["value"] > 5.0:
             allocations["GLD"] += 0.10  # Increase gold allocation
             allocations["XOM"] += 0.10  # Increase oil allocation
-            log("High inflation detected (CPI > 5%), increasing allocation to GLD and XOM") '''
+            log("High inflation expectations detected (5-year forward > 5%), increasing allocation to GLD and XOM")
 
         # Profit-Taking Rule: If GLD rises >15% in a quarter, rebalance
         gld_prices = [ohlcv[i]["GLD"]["close"] for i in range(-63, 0)]  # Approx. 63 trading days in a quarter
         if gld_prices[0] and gld_prices[-1] and ((gld_prices[-1] - gld_prices[0]) / gld_prices[0]) > 0.15:
             allocations["GLD"] -= 0.10  # Reduce allocation to GLD
             log("GLD up more than 15% this quarter, reducing allocation")
-            log(f"CPI - {current_cpi}")
 
         # Stop-Loss Rule: If oil stocks drop >10% in a month, trim allocation
         for ticker in ["XOM", "COP"]:
@@ -59,7 +54,6 @@ class TradingStrategy(Strategy):
             if stock_prices[0] and stock_prices[-1] and ((stock_prices[-1] - stock_prices[0]) / stock_prices[0]) < -0.10:
                 allocations[ticker] -= 0.05  # Reduce exposure to oil stocks
                 log(f"{ticker} dropped more than 10% this month, trimming allocation")
-                log(f"CPI - {current_cpi}")
 
         # Normalize allocations to ensure they sum to 1
         total_allocation = sum(allocations.values())
