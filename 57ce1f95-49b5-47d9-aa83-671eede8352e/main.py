@@ -1,13 +1,12 @@
 from surmount.base_class import Strategy, TargetAllocation
-from surmount.technical_indicators import RSI, SMA, ATR
-from surmount.logging import log
+from surmount.technical_indicators import SMA, ATR
 from surmount.data import CPI
+from surmount.logging import log
 
 class TradingStrategy(Strategy):
     """
-    A volatility-based & mean reversion trading strategy for Real Assets & Commodities.
-    The strategy dynamically adjusts allocations based on inflation, price movements,
-    and risk management rules.
+    A strategy for real assets and commodities based on volatility and mean reversion.
+    Adjusts allocation based on CPI data, price movements, and technical indicators.
     """
     
     @property
@@ -23,40 +22,36 @@ class TradingStrategy(Strategy):
         return [CPI()]
     
     def run(self, data):
-        """
-        Executes the trading strategy based on CPI, price trends, and risk management rules.
-        """
-        allocations = {asset: 1 / len(self.assets) for asset in self.assets}  # Equal weight initially
-        ohlcv_data = data["ohlcv"]
-        cpi_data = data.get("cpi", [])
+        allocations = {ticker: 1 / len(self.assets) for ticker in self.assets}  # Equal weight initially
+        ohlcv = data["ohlcv"]
+        cpi_data = data.get("cpi")
         
-        # Adjust for inflation (CPI)
         if cpi_data and cpi_data[-1]["value"] > 5:
-            allocations["GLD"] += 0.05  # Hedge with gold
+            allocations["GLD"] += 0.05  # Increase gold exposure
             allocations["XOM"] += 0.05  # Increase oil exposure
-            log("CPI > 5%, increasing exposure to GLD and XOM")
+            log("High inflation detected, increasing GLD and XOM allocations.")
         
         for ticker in self.assets:
-            if ticker not in ohlcv_data[-1]:
-                continue  # Skip if no recent data available
+            close_prices = [day["close"] for day in ohlcv if ticker in day]
+            if len(close_prices) < 2:
+                continue  # Skip if not enough data
             
-            close_prices = [day[ticker]["close"] for day in ohlcv_data]
-            latest_price = close_prices[-1]
+            recent_return = (close_prices[-1] - close_prices[-2]) / close_prices[-2]  # Daily return
+            atr_value = ATR(ticker, ohlcv, length=14)[-1]
+            sma_value = SMA(ticker, ohlcv, length=20)[-1]
             
-            # Profit-Taking Rule: If GLD rises >15% in a quarter, rebalance
-            if ticker == "GLD" and (latest_price / close_prices[-63] - 1) > 0.15:
-                allocations["GLD"] -= 0.05  # Trim profits
-                log("GLD rose >15% in a quarter, reducing allocation")
+            if ticker == "GLD" and recent_return > 0.15:
+                allocations["GLD"] -= 0.05  # Reduce exposure after strong rally
+                log("GLD profit-taking triggered.")
             
-            # Stop-Loss Rule: If oil stocks drop >10% in a month, trim allocation
-            if ticker in ["XOM", "COP", "ET"] and (latest_price / close_prices[-21] - 1) < -0.10:
-                allocations[ticker] -= 0.05  # Reduce exposure
-                log(f"{ticker} dropped >10% in a month, trimming allocation")
+            if ticker in ["XOM", "COP"] and recent_return < -0.10:
+                allocations[ticker] -= 0.05  # Reduce oil exposure on significant drop
+                log(f"Stop-loss triggered for {ticker}.")
+            
+            if sma_value and close_prices[-1] < sma_value:
+                allocations[ticker] += 0.02  # Mean reversion: Buy undervalued assets
+                log(f"{ticker} below SMA, increasing allocation.")
         
-        # Normalize allocations to sum to 1
-        total_allocation = sum(allocations.values())
-        normalized_allocations = {
-            asset: alloc / total_allocation for asset, alloc in allocations.items()
-        }
-        
+        total_alloc = sum(allocations.values())
+        normalized_allocations = {k: v / total_alloc for k, v in allocations.items()}
         return TargetAllocation(normalized_allocations)
