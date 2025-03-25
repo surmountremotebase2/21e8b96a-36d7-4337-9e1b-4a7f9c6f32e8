@@ -1,57 +1,62 @@
 from surmount.base_class import Strategy, TargetAllocation
-from surmount.technical_indicators import SMA, ATR
-from surmount.data import CPI
+from surmount.technical_indicators import SMA
+from surmount.data import HousingCPI
 from surmount.logging import log
 
 class TradingStrategy(Strategy):
     """
-    A strategy for real assets and commodities based on volatility and mean reversion.
-    Adjusts allocation based on CPI data, price movements, and technical indicators.
+    A volatility-based and mean reversion strategy focused on real assets and commodities.
+    The strategy dynamically allocates to GLD, BAM, PLD, XOM, COP, and ET based on inflation data,
+    gold price movements, and oil stock performance.
     """
-    
+
     @property
     def assets(self):
         return ["GLD", "BAM", "PLD", "XOM", "COP", "ET"]
-    
+
     @property
     def interval(self):
         return "1day"
-    
+
     @property
     def data(self):
-        return [CPI()]
-    
+        return [HousingCPI()]
+
     def run(self, data):
-        allocations = {ticker: 1 / len(self.assets) for ticker in self.assets}  # Equal weight initially
+        """
+        Executes the trading strategy logic.
+        
+        Args:
+            data (dict): Contains OHLCV price data and CPI inflation data.
+        
+        Returns:
+            TargetAllocation: The target allocations for each asset.
+        """
+        allocations = {ticker: 1 / len(self.assets) for ticker in self.assets}  # Default equal allocation
         ohlcv = data["ohlcv"]
-        cpi_data = data.get("cpi")
-        
-        if cpi_data and cpi_data[-1]["value"] > 5:
-            allocations["GLD"] += 0.05  # Increase gold exposure
-            allocations["XOM"] += 0.05  # Increase oil exposure
-            log("High inflation detected, increasing GLD and XOM allocations.")
-        
-        for ticker in self.assets:
-            close_prices = [day["close"] for day in ohlcv if ticker in day]
-            if len(close_prices) < 2:
-                continue  # Skip if not enough data
-            
-            recent_return = (close_prices[-1] - close_prices[-2]) / close_prices[-2]  # Daily return
-            atr_value = ATR(ticker, ohlcv, length=14)[-1]
-            sma_value = SMA(ticker, ohlcv, length=20)[-1]
-            
-            if ticker == "GLD" and recent_return > 0.15:
-                allocations["GLD"] -= 0.05  # Reduce exposure after strong rally
-                log("GLD profit-taking triggered.")
-            
-            if ticker in ["XOM", "COP"] and recent_return < -0.10:
-                allocations[ticker] -= 0.05  # Reduce oil exposure on significant drop
-                log(f"Stop-loss triggered for {ticker}.")
-            
-            if sma_value and close_prices[-1] < sma_value:
-                allocations[ticker] += 0.02  # Mean reversion: Buy undervalued assets
-                log(f"{ticker} below SMA, increasing allocation.")
-        
-        total_alloc = sum(allocations.values())
-        normalized_allocations = {k: v / total_alloc for k, v in allocations.items()}
+        cpi_data = data.get("HousingCPI")
+
+        # Rebalance based on CPI Inflation Data
+        if cpi_data and cpi_data[-1]["value"] > 5.0:
+            allocations["GLD"] += 0.10  # Increase gold allocation
+            allocations["XOM"] += 0.10  # Increase oil allocation
+            log("High inflation detected (CPI > 5%), increasing allocation to GLD and XOM")
+
+        # Profit-Taking Rule: If GLD rises >15% in a quarter, rebalance
+        gld_prices = [ohlcv[i]["GLD"]["close"] for i in range(-63, 0)]  # Approx. 63 trading days in a quarter
+        if gld_prices[0] and gld_prices[-1] and ((gld_prices[-1] - gld_prices[0]) / gld_prices[0]) > 0.15:
+            allocations["GLD"] -= 0.10  # Reduce allocation to GLD
+            log("GLD up more than 15% this quarter, reducing allocation")
+
+        # Stop-Loss Rule: If oil stocks drop >10% in a month, trim allocation
+        for ticker in ["XOM", "COP"]:
+            stock_prices = [ohlcv[i][ticker]["close"] for i in range(-21, 0)]  # Approx. 21 trading days in a month
+            if stock_prices[0] and stock_prices[-1] and ((stock_prices[-1] - stock_prices[0]) / stock_prices[0]) < -0.10:
+                allocations[ticker] -= 0.05  # Reduce exposure to oil stocks
+                log(f"{ticker} dropped more than 10% this month, trimming allocation")
+
+        # Normalize allocations to ensure they sum to 1
+        total_allocation = sum(allocations.values())
+        normalized_allocations = {asset: alloc / total_allocation for asset, alloc in allocations.items()}
+
         return TargetAllocation(normalized_allocations)
