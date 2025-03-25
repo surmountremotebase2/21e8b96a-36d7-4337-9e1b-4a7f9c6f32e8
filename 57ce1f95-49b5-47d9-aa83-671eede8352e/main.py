@@ -38,7 +38,7 @@ class TradingStrategy(Strategy):
 
         current_cpi = cpi_data[-1]["value"]
         # Rebalance based on CPI Inflation Data
-        if cpi_data and cpi_data[-1]["value"] > 5.0:
+        if cpi_data[-1]["value"] > 5.0:
             allocations["GLD"] += 0.10  # Increase gold allocation
             allocations["XOM"] += 0.10  # Increase oil allocation
             log("High inflation detected (CPI > 5%), increasing allocation to GLD and XOM")
