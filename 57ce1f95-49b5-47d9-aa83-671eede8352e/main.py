@@ -38,8 +38,8 @@ class TradingStrategy(Strategy):
         """
         allocations = {ticker: 1 / len(self.assets) for ticker in self.assets}  # Default equal allocation
         ohlcv = data["ohlcv"]
-        inflation_data = data.get('5year_forward_inflation_expected_rate')
-        cpi = self.data_list.iloc[0][('5year_forward_inflation_expected_rate')]
+        inflation_data = data[("5year_forward_inflation_expected_rate",)]
+
 
         if len(ohlcv) < 100:
             return TargetAllocation(allocations)
@@ -58,7 +58,7 @@ class TradingStrategy(Strategy):
         if gld_prices[0] and gld_prices[-1] and ((gld_prices[-1] - gld_prices[0]) / gld_prices[0]) > 0.15:
             allocations["GLD"] -= 0.10  # Reduce allocation to GLD
             log("GLD up more than 15% this quarter, reducing allocation")
-            log(f"{cpi}")
+            log(f"{inflation_data}")
 
         # Stop-Loss Rule: If oil stocks drop >10% in a month, trim allocation
         for ticker in ["XOM", "COP"]:
