@@ -41,7 +41,7 @@ class TradingStrategy(Strategy):
         inflation_data = data[("5year_forward_inflation_expected_rate",)]
 
 
-        if len(ohlcv) < 100:
+        if len(ohlcv) < 1:
             return TargetAllocation(allocations)
 
         current_cpi = inflation_data[-1]["value"]
