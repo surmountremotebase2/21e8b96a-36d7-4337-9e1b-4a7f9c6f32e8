@@ -1,6 +1,6 @@
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.technical_indicators import SMA
-from surmount.data import FiveYearForwardInflationExpectedRate
+from surmount.data import FiveYearBreakevenInflationRate
 from surmount.logging import log
 
 class TradingStrategy(Strategy):
