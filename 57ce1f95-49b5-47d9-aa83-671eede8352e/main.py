@@ -11,7 +11,7 @@ class TradingStrategy(Strategy):
     """
     def __init__(self):
         self.tickers = ["GLD", "BAM", "PLD", "XOM", "COP", "ET"]
-        self.data_list = [FiveYearForwardInflationExpectedRate()]
+        self.data_list = [FiveYearBreakevenInflationRate()]
 
 
     @property
@@ -31,14 +31,14 @@ class TradingStrategy(Strategy):
         Executes the trading strategy logic.
         
         Args:
-            data (dict): Contains OHLCV price data and 5-year forward inflation data.
+            data (dict): Contains OHLCV price data and 5-year breakeven inflation data.
         
         Returns:
             TargetAllocation: The target allocations for each asset.
         """
         allocations = {ticker: 1 / len(self.assets) for ticker in self.assets}  # Default equal allocation
         ohlcv = data["ohlcv"]
-        inflation_data = data[("5year_forward_inflation_expected_rate",)]
+        inflation_data = data[("5year_breakeven_inflation_rate",)]
 
 
         if len(ohlcv) < 1:
@@ -48,7 +48,7 @@ class TradingStrategy(Strategy):
         #log(f"{cpi}")
 
         # Rebalance based on 5-Year Forward Inflation Expected Rate
-        if inflation_data and current_cpi > 2.3:
+        if inflation_data and current_cpi > 2.1:
             allocations["GLD"] += 0.10  # Increase gold allocation
             allocations["XOM"] += 0.10  # Increase oil allocation
             log("High inflation expectations detected (5-year forward > 5%), increasing allocation to GLD and XOM")
