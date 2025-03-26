@@ -48,10 +48,11 @@ class TradingStrategy(Strategy):
         #log(f"{cpi}")
 
         # Rebalance based on 5-Year Forward Inflation Expected Rate
-        if inflation_data and inflation_data[-1]["value"] > 5.0:
+        if inflation_data and inflation_data[-1]["value"] > 2.5:
             allocations["GLD"] += 0.10  # Increase gold allocation
             allocations["XOM"] += 0.10  # Increase oil allocation
             log("High inflation expectations detected (5-year forward > 5%), increasing allocation to GLD and XOM")
+            log(f"CURRENT CPI :  {current_cpi}")
 
         # Profit-Taking Rule: If GLD rises >15% in a quarter, rebalance
         gld_prices = [ohlcv[i]["GLD"]["close"] for i in range(-63, 0)]  # Approx. 63 trading days in a quarter
