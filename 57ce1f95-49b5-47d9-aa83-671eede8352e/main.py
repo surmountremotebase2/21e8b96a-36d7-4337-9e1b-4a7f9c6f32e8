@@ -48,7 +48,7 @@ class TradingStrategy(Strategy):
         #log(f"{cpi}")
 
         # Rebalance based on 5-Year Forward Inflation Expected Rate
-        if inflation_data and inflation_data[-1]["value"] > 2.5:
+        if inflation_data and current_cpi > 2.3:
             allocations["GLD"] += 0.10  # Increase gold allocation
             allocations["XOM"] += 0.10  # Increase oil allocation
             log("High inflation expectations detected (5-year forward > 5%), increasing allocation to GLD and XOM")
