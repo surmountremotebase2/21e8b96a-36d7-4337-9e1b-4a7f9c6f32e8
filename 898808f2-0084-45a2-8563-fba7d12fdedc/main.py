@@ -7,7 +7,7 @@ class TradingStrategy(Strategy):
         self.tickers = ["COIN", "NVDA", "MSTR", "AMD", "BITO", "BIL"]
         self.btc_ticker = "BTC-USD"
         self.data_list = []
-        self.weights = {"COIN": 0.1, "MSTR": 0.1, "NVDA": 0.1, "AMD": 0.1, "BITO": 0.1, "BIL": 0.0}
+        self.weights = {"COIN": 0.1, "MSTR": 0.1, "NVDA": 0.1, "AMD": 0.1, "BITO": 0.1}
 
     @property
     def interval(self):
