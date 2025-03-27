@@ -66,7 +66,7 @@ class TradingStrategy(Strategy):
             
             if monthly_return > 0.50:
                 #log(f"Profit-taking triggered for {ticker}, reducing exposure")
-                self.weights[ticker] = 0.10
+                self.weights[ticker] -= 0.10
         
         total_weight = sum(self.weights.values())
         if total_weight > 0:
