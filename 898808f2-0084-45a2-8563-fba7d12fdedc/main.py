@@ -4,7 +4,7 @@ from surmount.logging import log
 
 class TradingStrategy(Strategy):
     def __init__(self):
-        self.tickers = ["COIN", "NVDA", "MSTR", "AMD", "BITO", "BIL"]
+        self.tickers = ["COIN", "NVDA", "MSTR", "AMD", "BITO"]
         self.btc_ticker = "BTC-USD"
         self.data_list = []
         self.weights = {"COIN": 0.1, "MSTR": 0.1, "NVDA": 0.1, "AMD": 0.1, "BITO": 0.1}
@@ -38,7 +38,7 @@ class TradingStrategy(Strategy):
         
         
         
-        if is_btc_bull:
+        if is_btc_bull:  #set filter by stock 200ma
             self.weights["COIN"] = 0.2
             self.weights["MSTR"] = 0.2
             self.weights["BITO"] = 0.2
