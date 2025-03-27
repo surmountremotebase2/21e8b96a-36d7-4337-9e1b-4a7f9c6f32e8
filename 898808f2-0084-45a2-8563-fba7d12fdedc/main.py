@@ -50,7 +50,7 @@ class TradingStrategy(Strategy):
             self.weights["BITO"] = 0.0
             self.weights["MSTR"] = 0.0
             self.weights["NVDA"] = 0.1
-            #self.weights["AMD"] = 0.0
+            self.weights["AMD"] = 0.1
             #self.weights["GLD"] = 1.0
         
         for ticker in self.tickers:
