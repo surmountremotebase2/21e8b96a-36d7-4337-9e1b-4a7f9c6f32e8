@@ -44,7 +44,7 @@ class TradingStrategy(Strategy):
             self.weights["BITO"] = 0.2
         elif is_btc_bear:
             self.weights["COIN"] = 0.0
-            self.weights["BITO"] = 0.1
+            self.weights["BITO"] = 0.0
             self.weights["MSTR"] = 0.0
         
         for ticker in self.tickers:
