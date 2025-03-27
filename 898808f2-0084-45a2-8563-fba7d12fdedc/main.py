@@ -4,10 +4,10 @@ from surmount.logging import log
 
 class TradingStrategy(Strategy):
     def __init__(self):
-        self.tickers = ["COIN", "SQ", "NVDA", "MSTR", "AMD"]
+        self.tickers = ["COIN", "SQ", "NVDA", "MSTR", "AMD", "BITO"]
         self.btc_ticker = "BTC-USD"
         self.data_list = []
-        self.weights = {"COIN": 0.2, "MSTR": 0.2, "SQ": 0.2, "NVDA": 0.2, "AMD": 0.2}
+        self.weights = {"COIN": 0.1, "MSTR": 0.1, "SQ": 0.1, "NVDA": 0.1, "AMD": 0.1, "BITO": 0.1}
 
     @property
     def interval(self):
@@ -39,8 +39,9 @@ class TradingStrategy(Strategy):
         
         
         if is_btc_bull:
-            self.weights["COIN"] += 0.15
-            self.weights["MSTR"] += 0.15
+            self.weights["COIN"] += 0.1
+            self.weights["MSTR"] += 0.2
+            self.weights["BITO"] += 0.2
         elif is_btc_bear:
             self.weights["COIN"] -= 0.10
         
