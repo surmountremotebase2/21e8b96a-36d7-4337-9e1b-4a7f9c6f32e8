@@ -42,6 +42,7 @@ class TradingStrategy(Strategy):
             self.weights["COIN"] = 0.2
             self.weights["MSTR"] = 0.2
             self.weights["BITO"] = 0.2
+            self.weights["NVDA"] = 0.2
         elif is_btc_bear:
             self.weights["COIN"] = 0.0
             self.weights["BITO"] = 0.0
