@@ -4,10 +4,10 @@ from surmount.logging import log
 
 class TradingStrategy(Strategy):
     def __init__(self):
-        self.tickers = ["COIN", "NVDA", "MSTR", "AMD", "BITO", "GLD"]
+        self.tickers = ["COIN", "NVDA", "MSTR", "AMD", "BITO"]
         self.btc_ticker = "BTC-USD"
         self.data_list = []
-        self.weights = {"COIN": 0.1, "MSTR": 0.1, "NVDA": 0.1, "AMD": 0.1, "BITO": 0.1, "GLD": 0.0}
+        self.weights = {"COIN": 0.1, "MSTR": 0.1, "NVDA": 0.1, "AMD": 0.1, "BITO": 0.1}
 
     @property
     def interval(self):
