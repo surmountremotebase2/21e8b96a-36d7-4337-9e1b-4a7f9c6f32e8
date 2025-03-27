@@ -40,8 +40,8 @@ class TradingStrategy(Strategy):
         
         if is_btc_bull:
             self.weights["COIN"] += 0.1
-            self.weights["MSTR"] += 0.2
-            self.weights["BITO"] += 0.2
+            self.weights["MSTR"] += 0.1
+            self.weights["BITO"] += 0.1
         elif is_btc_bear:
             self.weights["COIN"] -= 0.10
         
