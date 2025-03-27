@@ -54,7 +54,7 @@ class TradingStrategy(Strategy):
             monthly_return = (ticker_prices[-1] / ticker_prices[-21]) - 1 if len(ticker_prices) > 21 else 0
             
             #if drawdown > 0.25:
-            if drawdown > 0.10:
+            if drawdown > 0.05:
                 #log(f"Stop-loss triggered for {ticker}, reducing exposure")
                 self.weights[ticker] = 0.0
             
