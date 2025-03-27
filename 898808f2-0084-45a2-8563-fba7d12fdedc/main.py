@@ -4,10 +4,10 @@ from surmount.logging import log
 
 class TradingStrategy(Strategy):
     def __init__(self):
-        self.tickers = ["COIN", "NVDA", "MSTR", "AMD", "BITO"]
+        self.tickers = ["COIN", "NVDA", "MSTR", "AMD", "BITO", "BIL"]
         self.btc_ticker = "BTC-USD"
         self.data_list = []
-        self.weights = {"COIN": 0.1, "MSTR": 0.1, "NVDA": 0.1, "AMD": 0.1, "BITO": 0.1}
+        self.weights = {"COIN": 0.1, "MSTR": 0.1, "NVDA": 0.1, "AMD": 0.1, "BITO": 0.1, "BIL": 0.0}
 
     @property
     def interval(self):
@@ -44,14 +44,14 @@ class TradingStrategy(Strategy):
             self.weights["BITO"] = 0.2
             self.weights["NVDA"] = 0.2
             #self.weights["AMD"] = 0.2
-            #self.weights["GLD"] = 0.0
+            self.weights["BIL"] = 0.0
         elif is_btc_bear:
             self.weights["COIN"] = 0.0
             self.weights["BITO"] = 0.0
             self.weights["MSTR"] = 0.0
-            self.weights["NVDA"] = 0.1
-            self.weights["BITO"] = 0.1
-            #self.weights["GLD"] = 1.0
+            self.weights["NVDA"] = 0.2
+            #self.weights["BITO"] = 0.1
+            self.weights["BIL"] = 0.1
         
         for ticker in self.tickers:
             ticker_prices = [entry[ticker]["close"] for entry in ohlcv]
