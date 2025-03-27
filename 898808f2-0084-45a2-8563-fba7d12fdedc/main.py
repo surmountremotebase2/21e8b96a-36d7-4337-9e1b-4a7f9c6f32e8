@@ -45,7 +45,7 @@ class TradingStrategy(Strategy):
         elif is_btc_bear:
             self.weights["COIN"] -= 0.10
         
-        for ticker in ["COIN", "MSTR"]:
+        for ticker in self.tickers:
             ticker_prices = [entry[ticker]["close"] for entry in ohlcv]
             peak_price = max(ticker_prices)
             drawdown = (peak_price - ticker_prices[-1]) / peak_price
