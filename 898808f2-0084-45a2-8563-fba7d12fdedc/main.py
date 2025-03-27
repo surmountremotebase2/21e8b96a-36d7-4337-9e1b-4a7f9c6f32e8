@@ -43,14 +43,14 @@ class TradingStrategy(Strategy):
             self.weights["MSTR"] = 0.2
             self.weights["BITO"] = 0.2
             self.weights["NVDA"] = 0.2
-            self.weights["AMD"] = 0.2
+            #self.weights["AMD"] = 0.2
             #self.weights["GLD"] = 0.0
         elif is_btc_bear:
             self.weights["COIN"] = 0.0
             self.weights["BITO"] = 0.0
             self.weights["MSTR"] = 0.0
-            self.weights["NVDA"] = 0.0
-            self.weights["AMD"] = 0.0
+            self.weights["NVDA"] = 0.1
+            #self.weights["AMD"] = 0.0
             #self.weights["GLD"] = 1.0
         
         for ticker in self.tickers:
