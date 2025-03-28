@@ -65,7 +65,7 @@ class TradingStrategy(Strategy):
                 self.weights[ticker] = 0.0
                 log(f"Drawdown {self.weights[ticker]}")
             
-            if monthly_return > 0.50 and self.weights[ticker] > 0:
+            if monthly_return > 0.50 and self.weights[ticker] > 0.05:
                 #log(f"Profit-taking triggered for {ticker}, reducing exposure")
                 self.weights[ticker] -= 0.05
                 log(f"Trimming {self.weights[ticker]}")
