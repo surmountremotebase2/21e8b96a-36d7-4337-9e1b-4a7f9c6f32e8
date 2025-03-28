@@ -30,8 +30,8 @@ class TradingStrategy(Strategy):
             return TargetAllocation(allocation)
         
         btc_prices = [entry[self.btc_ticker]["close"] for entry in ohlcv]
-        btc_50_ma = VWAP(self.btc_ticker, ohlcv, 50)[-1]
-        btc_200_ma = VWAP(self.btc_ticker, ohlcv, 200)[-1]
+        btc_50_ma = VWAP(self.btc_ticker, ohlcv, 60)[-1]
+        btc_200_ma = VWAP(self.btc_ticker, ohlcv, 180)[-1]
         
         is_btc_bull = btc_prices[-1] > btc_200_ma
         is_btc_bear = btc_prices[-1] < btc_50_ma
