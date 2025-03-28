@@ -63,12 +63,12 @@ class TradingStrategy(Strategy):
             if drawdown > 0.05 and self.weights[ticker] > 0:
                 #log(f"Stop-loss triggered for {ticker}, reducing exposure")
                 self.weights[ticker] = 0.0
-                log(f"Drawdown {self.weights[ticker]}")
+                #log(f"Drawdown {self.weights[ticker]}")
             
             if monthly_return > 0.50 and self.weights[ticker] > 0.05:
                 #log(f"Profit-taking triggered for {ticker}, reducing exposure")
                 self.weights[ticker] -= 0.05
-                log(f"Trimming {self.weights[ticker]}")
+                #log(f"Trimming {self.weights[ticker]}")
         
         total_weight = sum(self.weights.values())
         if total_weight > 0:
