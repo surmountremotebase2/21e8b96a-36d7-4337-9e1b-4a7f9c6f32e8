@@ -1,5 +1,5 @@
 from surmount.base_class import Strategy, TargetAllocation
-from surmount.technical_indicators import RSI, SMA, STDEV
+from surmount.technical_indicators import RSI, SMA, STDEV, VWAP
 from surmount.logging import log
 import pandas as pd
 import numpy as np
@@ -59,8 +59,8 @@ class TradingStrategy(Strategy):
             # Apply stop-loss rule
             peak_price = max(closes[-63:])  # Last 3 months peak
             drop_from_peak = (peak_price - closes[-1]) / peak_price
-            sma_50 = SMA(ticker, ohlcv, 50)[-1] if SMA(ticker, ohlcv, 50) else closes[-1]
-            sma_200 = SMA(ticker, ohlcv, 200)[-1] if SMA(ticker, ohlcv, 200) else closes[-1]
+            sma_50 = VWAP(ticker, ohlcv, 50)[-1] if VWAP(ticker, ohlcv, 50) else closes[-1]
+            sma_200 = VWAP(ticker, ohlcv, 200)[-1] if VWAP(ticker, ohlcv, 200) else closes[-1]
             if drop_from_peak > 0.12 or sma_50 < sma_200:
                 #log(f"Stop-loss triggered for {ticker}: Drop={drop_from_peak:.2%}, SMA50={sma_50:.2f}, SMA200={sma_200:.2f}")
                 momentum_scores[ticker] = 0  # Temporarily remove stock
