@@ -37,8 +37,8 @@ class TradingStrategy(Strategy):
         # Calculate momentum score and volatility for each asset
         for ticker in self.tickers:
             closes = [entry[ticker]["close"] for entry in ohlcv]
-            if len(closes) < 10:
-                momentum_scores[ticker] = 0
+            if len(closes) < 1:
+                momentum_scores[ticker] = 1
                 volatilities[ticker] = 1
                 continue
 
