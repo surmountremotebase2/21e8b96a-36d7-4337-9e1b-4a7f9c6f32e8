@@ -52,16 +52,16 @@ class TradingStrategy(Strategy):
             # Apply profit-taking rule
             one_month_return = (closes[-1] / closes[-21] - 1) if len(closes) >= 21 else 0  # Approx 1 month
             rsi = RSI(ticker, ohlcv, 14)[-1] if RSI(ticker, ohlcv, 14) else 50
-            if one_month_return > 0.3 or rsi > 80:
+            if one_month_return > 0.30 or rsi > 80:
                 #log(f"Profit-taking triggered for {ticker}: Return={one_month_return:.2%}, RSI={rsi:.2f}")
                 momentum_scores[ticker] *= 0.85  # Reduce exposure by 15% (trim position)
 
             # Apply stop-loss rule
             peak_price = max(closes[-63:])  # Last 3 months peak
             drop_from_peak = (peak_price - closes[-1]) / peak_price
-            sma_50 = VWAP(ticker, ohlcv, 50)[-1] if VWAP(ticker, ohlcv, 50) else closes[-1]
+            sma_50 = VWAP(ticker, ohlcv, 10)[-1] if VWAP(ticker, ohlcv, 10) else closes[-1]
             sma_200 = VWAP(ticker, ohlcv, 200)[-1] if VWAP(ticker, ohlcv, 200) else closes[-1]
-            if drop_from_peak > 0.12 or sma_50 < sma_200:
+            if drop_from_peak > 0.05 or sma_50 < sma_200:
                 #log(f"Stop-loss triggered for {ticker}: Drop={drop_from_peak:.2%}, SMA50={sma_50:.2f}, SMA200={sma_200:.2f}")
                 momentum_scores[ticker] = 0  # Temporarily remove stock
 
