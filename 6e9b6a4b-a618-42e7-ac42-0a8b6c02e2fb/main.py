@@ -26,7 +26,7 @@ class TradingStrategy(Strategy):
     def run(self, data):
         # Access OHLCV data
         ohlcv = data["ohlcv"]
-        if len(ohlcv) < 5:  # Ensure sufficient data for 200-day MA
+        if len(ohlcv) < 1:  # Ensure sufficient data for 200-day MA
             #log("Insufficient data for strategy execution")
             return TargetAllocation({ticker: 0 for ticker in self.tickers})
 
@@ -37,10 +37,10 @@ class TradingStrategy(Strategy):
         # Calculate momentum score and volatility for each asset
         for ticker in self.tickers:
             closes = [entry[ticker]["close"] for entry in ohlcv]
-            '''if len(closes) < 1:
+            if len(closes) < 127:
                 momentum_scores[ticker] = 1
                 volatilities[ticker] = 1
-                continue'''
+                continue
 
             # Momentum Score: (3-month + 6-month return) / volatility
             three_month_return = (closes[-1] / closes[-63] - 1) if len(closes) >= 63 else 0  # Approx 3 months
@@ -68,7 +68,7 @@ class TradingStrategy(Strategy):
         # Adjust exposure based on momentum score
         for ticker in self.tickers:
             ms = momentum_scores[ticker]
-            if ms < 0:
+            if ms <= 0:
                 momentum_scores[ticker] *= 0.5  # Reduce exposure by 50% if negative momentum
 
         # Risk-based weighting: Wi = 1 / volatility
