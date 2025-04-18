@@ -45,7 +45,7 @@ class TradingStrategy(Strategy):
             # Momentum Score: (3-month + 6-month return) / volatility
             three_month_return = (closes[-1] / closes[-63] - 1) if len(closes) >= 63 else 0  # Approx 3 months
             six_month_return = (closes[-1] / closes[-126] - 1) if len(closes) >= 126 else 0  # Approx 6 months
-            volatility = STDEV(ticker, ohlcv, 20)[-1] / closes[-1] if STDEV(ticker, ohlcv, 20) else 1  # 20-day std dev
+            volatility = STDEV(ticker, ohlcv, 20)[-1] / closes[-1]
             momentum_scores[ticker] = (three_month_return + six_month_return) / max(volatility, 0.01)  # Avoid division by zero
             volatilities[ticker] = volatility
 
