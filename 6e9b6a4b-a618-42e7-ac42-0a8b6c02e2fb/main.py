@@ -90,7 +90,7 @@ class TradingStrategy(Strategy):
             for ticker in self.tickers:
                 allocation_dict[ticker] /= total_allocation
                 allocation_dict[ticker] = min(max(allocation_dict[ticker], 0), 1)  # Ensure bounds
-                log(f"{ticker}: Momentum Score={momentum_scores[ticker]:.2f}, Volatility={volatilities[ticker]:.2f}, Weight={allocation_dict[ticker]:.2%}")
+                #log(f"{ticker}: Momentum Score={momentum_scores[ticker]:.2f}, Volatility={volatilities[ticker]:.2f}, Weight={allocation_dict[ticker]:.2%}")
         else:
             allocation_dict = {ticker: 0 for ticker in self.tickers}
 
