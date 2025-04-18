@@ -7,7 +7,6 @@ import numpy as np
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define the assets to trade
-        #self.tickers = ["NVDA", "MSFT", "GOOGL", "SNOW", "PLTR", "ASML", "TSLA"]
         self.tickers = ["NVDA", "PLTR", "INTC", "TSLA", "AAPL", "AMD", "AMZN", "MSFT", "GOOGL", "TSM"]
         self.data_list = []  # No additional data sources needed for this strategy
 
@@ -27,7 +26,6 @@ class TradingStrategy(Strategy):
         # Access OHLCV data
         ohlcv = data["ohlcv"]
         if len(ohlcv) < 1:  # Ensure sufficient data for 200-day MA
-            #log("Insufficient data for strategy execution")
             return TargetAllocation({ticker: 0 for ticker in self.tickers})
 
         allocation_dict = {}
@@ -45,7 +43,7 @@ class TradingStrategy(Strategy):
             # Momentum Score: (3-month + 6-month return) / volatility
             three_month_return = (closes[-1] / closes[-63] - 1) if len(closes) >= 63 else 0  # Approx 3 months
             six_month_return = (closes[-1] / closes[-126] - 1) if len(closes) >= 126 else 0  # Approx 6 months
-            #volatility = STDEV(ticker, ohlcv, 20)[-1] / closes[-1] if STDEV(ticker, ohlcv, 20) else 1
+
             # Calculate realized volatility
             log_returns = np.diff(np.log(closes[-20:]))  # Log returns over the last 20 days
             volatility = np.std(log_returns) * np.sqrt(252)  # Annualized volatility
@@ -57,7 +55,6 @@ class TradingStrategy(Strategy):
             one_month_return = (closes[-1] / closes[-21] - 1) if len(closes) >= 21 else 0  # Approx 1 month
             rsi = RSI(ticker, ohlcv, 14)[-1] if RSI(ticker, ohlcv, 14) else 50
             if one_month_return > 0.30 or rsi > 80:
-                #log(f"Profit-taking triggered for {ticker}: Return={one_month_return:.2%}, RSI={rsi:.2f}")
                 momentum_scores[ticker] *= 0.85  # Reduce exposure by 15% (trim position)
 
             # Apply stop-loss rule
@@ -66,7 +63,6 @@ class TradingStrategy(Strategy):
             sma_50 = VWAP(ticker, ohlcv, 10)[-1] if VWAP(ticker, ohlcv, 10) else closes[-1]
             sma_200 = VWAP(ticker, ohlcv, 200)[-1] if VWAP(ticker, ohlcv, 200) else closes[-1]
             if drop_from_peak > 0.05 or sma_50 < sma_200:
-                #log(f"Stop-loss triggered for {ticker}: Drop={drop_from_peak:.2%}, SMA50={sma_50:.2f}, SMA200={sma_200:.2f}")
                 momentum_scores[ticker] = 0  # Temporarily remove stock
 
         # Adjust exposure based on momentum score
@@ -78,7 +74,6 @@ class TradingStrategy(Strategy):
         # Risk-based weighting: Wi = 1 / volatility
         total_inverse_vol = sum(1 / max(volatilities[ticker], 0.01) for ticker in self.tickers if momentum_scores[ticker] > 0)
         if total_inverse_vol == 0:
-            #log("No valid allocations; all momentum scores are zero or negative")
             return TargetAllocation({ticker: 0 for ticker in self.tickers})
 
         # Calculate initial weights based on momentum and volatility
@@ -98,5 +93,8 @@ class TradingStrategy(Strategy):
                 log(f"{ticker}: Momentum Score={momentum_scores[ticker]:.2f}, Volatility={volatilities[ticker]:.2f}, Weight={allocation_dict[ticker]:.2%}")
         else:
             allocation_dict = {ticker: 0 for ticker in self.tickers}
+
+        # Ensure all values in allocation_dict are floats
+        allocation_dict = {ticker: float(allocation) for ticker, allocation in allocation_dict.items()}
 
         return TargetAllocation(allocation_dict)
