@@ -26,7 +26,7 @@ class TradingStrategy(Strategy):
         # Access OHLCV data
         ohlcv = data["ohlcv"]
         if len(ohlcv) < 1:  # Ensure sufficient data for 200-day MA
-            return TargetAllocation({ticker: 0 for ticker in self.tickers})
+            return TargetAllocation({ticker: .1 for ticker in self.tickers})
 
         allocation_dict = {}
         momentum_scores = {}
@@ -74,7 +74,7 @@ class TradingStrategy(Strategy):
         # Risk-based weighting: Wi = 1 / volatility
         total_inverse_vol = sum(1 / max(volatilities[ticker], 0.01) for ticker in self.tickers if momentum_scores[ticker] > 0)
         if total_inverse_vol == 0:
-            return TargetAllocation({ticker: .1 for ticker in self.tickers})
+            return TargetAllocation({ticker: 0 for ticker in self.tickers})
 
         # Calculate initial weights based on momentum and volatility
         for ticker in self.tickers:
