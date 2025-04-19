@@ -26,7 +26,7 @@ class TradingStrategy(Strategy):
         # Access OHLCV data
         ohlcv = data["ohlcv"]
         if len(ohlcv) < 1:  # Ensure sufficient data for 200-day MA
-            return TargetAllocation({ticker: .1 for ticker in self.tickers})
+            return TargetAllocation({ticker: 0.1 for ticker in self.tickers})
 
         allocation_dict = {}
         momentum_scores = {}
