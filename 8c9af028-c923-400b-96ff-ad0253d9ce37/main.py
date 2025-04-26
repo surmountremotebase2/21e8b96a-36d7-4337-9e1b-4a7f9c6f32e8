@@ -60,8 +60,8 @@ class TradingStrategy(Strategy):
         spy_data['returns'] = 100 * spy_data.close.pct_change().dropna()
         spy_data['log_returns'] = np.log(spy_data.close / spy_data.close.shift(1))
         spy_data = spy_data.fillna(0)
-        INTERVAL_WINDOW = 120
-        n_future = 21
+        INTERVAL_WINDOW = 60
+        n_future = 20
 
         if len(spy_data) > n_future:
             spy_data['vol_current'] = spy_data.log_returns.rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
