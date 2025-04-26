@@ -12,6 +12,12 @@ class TradingStrategy(Strategy):
         self.bench = ["SPY"]
         self.equal_weighting = False
         self.count = 0
+        self.trading_assets = self.tickers + ["BIL"]  # Include BIL as a risk-free asset
+        self.mkrt = "SPY"
+        self.MinMonths = 6
+        self.MaxMonths = 12
+        self.WARMUP = 252  # 1 year warmup period
+        self.ON = "QQQ"  # Assuming QQQ is the asset to invest in when the signal is positive
 
     @property
     def interval(self):
@@ -19,16 +25,7 @@ class TradingStrategy(Strategy):
 
     @property
     def assets(self):
-        return self.tickers + self.bench
-
-    def realized_volatility_daily(self, series_log_return):
-        """
-        Get the daily realized volatility which is calculated as the square root
-        of sum of squares of log returns within a specific window interval
-        """
-        n = len(series_log_return)
-        vola = np.sqrt(np.sum(series_log_return**2) / (n - 1))
-        return vola
+        return self.tickers + self.bench + ["BIL"]
 
     def run(self, data):
         if len(data['ohlcv']) < 2:
@@ -53,39 +50,43 @@ class TradingStrategy(Strategy):
                 allocation_dict = {self.tickers[i]: self.weights[i] for i in range(len(self.tickers))}
             return TargetAllocation(allocation_dict)
 
-        # Volatility switch logic
-        spy_data = [entry['SPY']['close'] for entry in data['ohlcv'] if 'SPY' in entry]
-        spy_dates = [entry['SPY']['date'] for entry in data['ohlcv'] if 'SPY' in entry]
-        spy_data = pd.DataFrame(spy_data, columns=['close'])
-        spy_data['returns'] = 100 * spy_data.close.pct_change().dropna()
-        spy_data['log_returns'] = np.log(spy_data.close / spy_data.close.shift(1))
-        spy_data = spy_data.fillna(0)
-        INTERVAL_WINDOW = 60
-        n_future = 20
+        # Convert data to DataFrame
+        ohlcv_data = pd.DataFrame(data['ohlcv'])
+        ohlcv_data = ohlcv_data.set_index('date')
 
-        if len(spy_data) > n_future:
-            spy_data['vol_current'] = spy_data.log_returns.rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
-            spy_data['vol_current'] = spy_data['vol_current'].bfill()
-            spy_data['vol_future'] = spy_data.log_returns.shift(n_future).fillna(0).rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
-            spy_data['vol_future'] = spy_data['vol_future'].bfill()
+        # Extract SPY close data
+        spy_close = ohlcv_data["SPY"]["close"]
 
-            volaT = np.percentile(spy_data['vol_current'], 40)  # Increased threshold
-            volaH = np.percentile(spy_data['vol_current'], 90)  # Increased threshold
+        # Define moving average periods (6 to 12 months, assuming 21 trading days per month)
+        ma_periods = [i * 21 for i in range(self.MinMonths, self.MaxMonths)]  # 126, 147, 168, ..., 252 days
 
-            allocation_dict = {self.tickers[i]: self.weights[i] for i in range(len(self.tickers))}
+        # Initialize signals DataFrame to store buy/sell signals for each MA period
+        signals = pd.DataFrame(index=spy_close.index, columns=[f"ma_{ma}" for ma in ma_periods], dtype=float)
 
-            if (spy_data['vol_current'].iloc[-1] > spy_data['vol_future'].iloc[-1] and spy_data['vol_current'].iloc[-1] > volaT):
-                if spy_data['vol_current'].iloc[-1] > volaH:
-                    self.count = 10  # Reduced count to revert to risk-on more quickly
-                else:
-                    self.count = 5   # Reduced count to revert to risk-on more quickly
-                return TargetAllocation({ticker: 0 for ticker in self.tickers})
-            elif self.count < 1:
-                allocation_dict = {self.tickers[i]: self.weights[i] for i in range(len(self.tickers))}
-                return TargetAllocation(allocation_dict)
+        # Compute moving averages and signals for each period
+        for ma in ma_periods:
+            # SPY moving average
+            spy_ma = spy_close.rolling(window=ma).mean().fillna(0)
+
+            # Signal: 1 if SPY is above its moving average, 0 otherwise
+            signal = (spy_close > spy_ma).astype(int)
+
+            signals[f"ma_{ma}"] = signal
+
+        # Start after warmup period
+        if len(spy_close) > self.WARMUP:
+            current_signals = signals.iloc[-1]
+
+            # Compute the average signal across all strategies (equally weighted)
+            average_signal = current_signals.mean()
+
+            # Allocate based on the average signal
+            if average_signal > 0.5:
+                allocation_dict = {k: 1 if k == self.ON else 0 for k in self.trading_assets}
             else:
-                self.count -= 1  # Decrement count to eventually revert to risk-on
-                return TargetAllocation({ticker: 0 for ticker in self.tickers})
+                allocation_dict = {k: 1 if k == "BIL" else 0 for k in self.trading_assets}
+
+            return TargetAllocation(allocation_dict)
         else:
             return TargetAllocation({ticker: 0 for ticker in self.tickers})
 
