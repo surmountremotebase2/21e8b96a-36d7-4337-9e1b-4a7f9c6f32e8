@@ -80,9 +80,9 @@ class TradingStrategy(Strategy):
 
             # Allocate based on the average signal
             if average_signal > 0.5:
-                allocation_dict = {k: self.weights[i] if k == self.tickers[i] else 0 for i in range(len(self.tickers))}
+                allocation_dict = {ticker: weight for ticker, weight in zip(self.tickers, self.weights)}
             else:
-                allocation_dict = {k: 1 if k == "BIL" else 0 for k in self.trading_assets}
+                allocation_dict = {"BIL": 1}
 
             return TargetAllocation(allocation_dict)
         else:
