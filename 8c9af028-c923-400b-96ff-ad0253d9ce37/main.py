@@ -54,8 +54,8 @@ class TradingStrategy(Strategy):
             return TargetAllocation(allocation_dict)
 
         # Volatility switch logic
-        spy_data = [entry[self.bench]['close'] for entry in data['ohlcv'] if self.bench in entry]
-        spy_dates = [entry[self.bench]['date'] for entry in data['ohlcv'] if self.bench in entry]
+        spy_data = [entry['SPY']['close'] for entry in data['ohlcv'] if 'SPY' in entry]
+        spy_dates = [entry['SPY']['date'] for entry in data['ohlcv'] if 'SPY' in entry]
         spy_data = pd.DataFrame(spy_data, columns=['close'])
         spy_data['returns'] = 100 * spy_data.close.pct_change().dropna()
         spy_data['log_returns'] = np.log(spy_data.close / spy_data.close.shift(1))
