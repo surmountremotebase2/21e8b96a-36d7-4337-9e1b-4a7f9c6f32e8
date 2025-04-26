@@ -14,9 +14,9 @@ class TradingStrategy(Strategy):
         self.count = 0
         self.trading_assets = self.tickers + ["BIL"]  # Include BIL as a risk-free asset
         self.mkrt = "SPY"
-        self.MinMonths = 6
-        self.MaxMonths = 12
-        self.WARMUP = 252  # 1 year warmup period
+        self.MinMonths = 3
+        self.MaxMonths = 9
+        self.WARMUP = 126  # 6 months warmup period
         self.ON = "QQQ"  # Assuming QQQ is the asset to invest in when the signal is positive
 
     @property
@@ -55,8 +55,8 @@ class TradingStrategy(Strategy):
         spy_dates = [entry['SPY']['date'] for entry in data['ohlcv'] if 'SPY' in entry]
         spy_close = pd.DataFrame(spy_data, index=spy_dates, columns=['close'])
 
-        # Define moving average periods (6 to 12 months, assuming 21 trading days per month)
-        ma_periods = [i * 21 for i in range(self.MinMonths, self.MaxMonths)]  # 126, 147, 168, ..., 252 days
+        # Define moving average periods (3 to 9 months, assuming 21 trading days per month)
+        ma_periods = [i * 21 for i in range(self.MinMonths, self.MaxMonths)]  # 63, 84, 105, ..., 189 days
 
         # Initialize signals DataFrame to store buy/sell signals for each MA period
         signals = pd.DataFrame(index=spy_close.index, columns=[f"ma_{ma}" for ma in ma_periods], dtype=float)
@@ -80,7 +80,7 @@ class TradingStrategy(Strategy):
 
             # Allocate based on the average signal
             if average_signal > 0.5:
-                allocation_dict = {k: 1 if k == self.ON else 0 for k in self.trading_assets}
+                allocation_dict = {k: self.weights[i] if k == self.tickers[i] else 0 for i in range(len(self.tickers))}
             else:
                 allocation_dict = {k: 1 if k == "BIL" else 0 for k in self.trading_assets}
 
