@@ -70,7 +70,7 @@ class TradingStrategy(Strategy):
             spy_data['vol_future'] = spy_data['vol_future'].bfill()
 
             volaT = np.percentile(spy_data['vol_current'], 40)  # Increased threshold
-            volaH = np.percentile(spy_data['vol_current'], 80)  # Increased threshold
+            volaH = np.percentile(spy_data['vol_current'], 90)  # Increased threshold
 
             allocation_dict = {self.tickers[i]: self.weights[i] for i in range(len(self.tickers))}
 
