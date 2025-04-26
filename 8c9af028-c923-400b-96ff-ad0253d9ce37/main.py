@@ -79,7 +79,7 @@ class TradingStrategy(Strategy):
             average_signal = current_signals.mean()
 
             # Allocate based on the average signal
-            if average_signal > 0.5:
+            if average_signal > 0.55:
                 allocation_dict = {ticker: weight for ticker, weight in zip(self.tickers, self.weights)}
             else:
                 allocation_dict = {"BIL": 1}
