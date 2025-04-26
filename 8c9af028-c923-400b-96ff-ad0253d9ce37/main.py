@@ -1,5 +1,6 @@
 from surmount.base_class import Strategy, TargetAllocation, backtest
 from surmount.logging import log
+from surmount.technical_indicators import EMA
 from datetime import datetime
 import pandas as pd
 import numpy as np
@@ -16,8 +17,7 @@ class TradingStrategy(Strategy):
         self.mkrt = "SPY"
         self.MinMonths = 3
         self.MaxMonths = 9
-        self.WARMUP = 126  # 6 months warmup period
-        self.ON = "QQQ"  # Assuming QQQ is the asset to invest in when the signal is positive
+        self.WARMUP = 189  # 9 months warmup period (189 days)
 
     @property
     def interval(self):
@@ -56,18 +56,18 @@ class TradingStrategy(Strategy):
         spy_close = pd.DataFrame(spy_data, index=spy_dates, columns=['close'])
 
         # Define moving average periods (3 to 9 months, assuming 21 trading days per month)
-        ma_periods = [i * 21 for i in range(self.MinMonths, self.MaxMonths)]  # 63, 84, 105, ..., 189 days
+        ma_periods = [i * 21 for i in range(self.MinMonths, self.MaxMonths + 1)]  # 63, 84, 105, ..., 189 days
 
         # Initialize signals DataFrame to store buy/sell signals for each MA period
         signals = pd.DataFrame(index=spy_close.index, columns=[f"ma_{ma}" for ma in ma_periods], dtype=float)
 
-        # Compute moving averages and signals for each period
+        # Compute EMAs and signals for each period
         for ma in ma_periods:
-            # SPY moving average
-            spy_ma = spy_close['close'].rolling(window=ma).mean().fillna(0)
+            # SPY EMA
+            spy_ema = EMA("SPY", data["ohlcv"], ma)
 
-            # Signal: 1 if SPY is above its moving average, 0 otherwise
-            signal = (spy_close['close'] > spy_ma).astype(int)
+            # Signal: 1 if SPY is above its EMA, 0 otherwise
+            signal = (spy_close['close'] > spy_ema).astype(int)
 
             signals[f"ma_{ma}"] = signal
 
