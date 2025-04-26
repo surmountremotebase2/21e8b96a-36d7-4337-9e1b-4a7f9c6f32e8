@@ -9,9 +9,9 @@ class TradingStrategy(Strategy):
     def __init__(self):
         self.tickers = ["NVDA", "GOOGL", "MSFT", "AMZN", "TSLA", "IBM", "INTC", "BIDU", "AMD", "CRM", "NOW", "TWLO", "PATH", "CGNX", "MU", "ASML", "DOCU", "CRWD", "OKTA", "PLTR", "ZS", "FSLY", "SNOW", "DDOG", "SNPS", "CDNS", "ANSS", "ADSK", "NTNX", "APPN", "ANET", "TDC", "PEGA", "VRNS", "AI", "ESTC", "TENB"]
         self.weights = [0.06, 0.06, 0.06, 0.06, 0.06, 0.04, 0.04, 0.04, 0.04, 0.03, 0.03, 0.02, 0.02, 0.02, 0.04, 0.02, 0.03, 0.02, 0.01, 0.01, 0.02, 0.02, 0.03, 0.01, 0.01, 0.01, 0.01, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.06]
+        self.bench = ["SPY"]
         self.equal_weighting = False
         self.count = 0
-        self.bench = ["SPY"]
 
     @property
     def interval(self):
@@ -69,21 +69,22 @@ class TradingStrategy(Strategy):
             spy_data['vol_future'] = spy_data.log_returns.shift(n_future).fillna(0).rolling(window=INTERVAL_WINDOW).apply(self.realized_volatility_daily)
             spy_data['vol_future'] = spy_data['vol_future'].bfill()
 
-            volaT = np.percentile(spy_data['vol_current'], 50)
-            volaH = np.percentile(spy_data['vol_current'], 80)
+            volaT = np.percentile(spy_data['vol_current'], 60)  # Increased threshold
+            volaH = np.percentile(spy_data['vol_current'], 90)  # Increased threshold
 
             allocation_dict = {self.tickers[i]: self.weights[i] for i in range(len(self.tickers))}
 
             if (spy_data['vol_current'].iloc[-1] > spy_data['vol_future'].iloc[-1] and spy_data['vol_current'].iloc[-1] > volaT):
                 if spy_data['vol_current'].iloc[-1] > volaH:
-                    self.count = 20
+                    self.count = 10  # Reduced count to revert to risk-on more quickly
                 else:
-                    self.count = 15
+                    self.count = 5   # Reduced count to revert to risk-on more quickly
                 return TargetAllocation({ticker: 0 for ticker in self.tickers})
             elif self.count < 1:
                 allocation_dict = {self.tickers[i]: self.weights[i] for i in range(len(self.tickers))}
                 return TargetAllocation(allocation_dict)
             else:
+                self.count -= 1  # Decrement count to eventually revert to risk-on
                 return TargetAllocation({ticker: 0 for ticker in self.tickers})
         else:
             return TargetAllocation({ticker: 0 for ticker in self.tickers})
