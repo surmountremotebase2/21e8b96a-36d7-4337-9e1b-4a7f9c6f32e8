@@ -50,12 +50,10 @@ class TradingStrategy(Strategy):
                 allocation_dict = {self.tickers[i]: self.weights[i] for i in range(len(self.tickers))}
             return TargetAllocation(allocation_dict)
 
-        # Convert data to DataFrame
-        ohlcv_data = pd.DataFrame(data['ohlcv'])
-        ohlcv_data = ohlcv_data.set_index('date')
-
         # Extract SPY close data
-        spy_close = ohlcv_data["SPY"]["close"]
+        spy_data = [entry['SPY']['close'] for entry in data['ohlcv'] if 'SPY' in entry]
+        spy_dates = [entry['SPY']['date'] for entry in data['ohlcv'] if 'SPY' in entry]
+        spy_close = pd.DataFrame(spy_data, index=spy_dates, columns=['close'])
 
         # Define moving average periods (6 to 12 months, assuming 21 trading days per month)
         ma_periods = [i * 21 for i in range(self.MinMonths, self.MaxMonths)]  # 126, 147, 168, ..., 252 days
@@ -66,10 +64,10 @@ class TradingStrategy(Strategy):
         # Compute moving averages and signals for each period
         for ma in ma_periods:
             # SPY moving average
-            spy_ma = spy_close.rolling(window=ma).mean().fillna(0)
+            spy_ma = spy_close['close'].rolling(window=ma).mean().fillna(0)
 
             # Signal: 1 if SPY is above its moving average, 0 otherwise
-            signal = (spy_close > spy_ma).astype(int)
+            signal = (spy_close['close'] > spy_ma).astype(int)
 
             signals[f"ma_{ma}"] = signal
 
