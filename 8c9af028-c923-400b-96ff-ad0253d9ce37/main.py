@@ -1,6 +1,6 @@
 from surmount.base_class import Strategy, TargetAllocation, backtest
 from surmount.logging import log
-from surmount.technical_indicators import EMA
+from surmount.technical_indicators import SMA
 from datetime import datetime
 import pandas as pd
 import numpy as np
@@ -64,7 +64,7 @@ class TradingStrategy(Strategy):
         # Compute EMAs and signals for each period
         for ma in ma_periods:
             # SPY EMA
-            spy_ema = EMA("SPY", data["ohlcv"], ma)
+            spy_ema = SMA("SPY", data["ohlcv"], ma)
 
             # Signal: 1 if SPY is above its EMA, 0 otherwise
             signal = (spy_close['close'] > spy_ema).astype(int)
