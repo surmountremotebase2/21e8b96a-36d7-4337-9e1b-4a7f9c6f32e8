@@ -35,7 +35,7 @@ class TradingStrategy(Strategy):
         
         closes = [entry['MSFT']["close"] for entry in ohlcv]
         if len(closes) < 200:
-            return TargetAllocation({ticker: 0 for ticker in self.tickers})
+            return TargetAllocation({ticker: 0.25 for ticker in self.tickers})
 
         current_date = datetime.strptime(ohlcv[-1][self.tickers[0]]["date"], "%Y-%m-%d %H:%M:%S")
         # Parse current date from latest OHLCV entry
