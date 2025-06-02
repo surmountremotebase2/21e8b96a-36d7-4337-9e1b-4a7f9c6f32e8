@@ -68,8 +68,8 @@ class TradingStrategy(Strategy):
         # Normalize weights to sum <= 1
         total_weight = sum(weights.values())
         if total_weight > 0:
-            allocations = {ticker: weights[ticker] / total_weight for ticker in self.tickers}
+            allocations = {ticker: weights[ticker] / total_weight for ticker in self.tradtick}
         else:
-            allocations = {ticker: 1.0 / len(self.tickers) for ticker in self.tickers}
+            allocations = {ticker: 1.0 / len(self.tradtick) for ticker in self.tradtick}
 
         return TargetAllocation(allocations)
