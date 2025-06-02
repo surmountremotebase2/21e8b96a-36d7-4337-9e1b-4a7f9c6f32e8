@@ -84,6 +84,8 @@ class TradingStrategy(Strategy):
         tsla_rsi = RSI("TSLA", ohlcv, 14)
         if tsla_rsi and tsla_rsi[-1] > 85:
             allocation["TSLA"] = 0  # Take profit
+        elif tsla_rsi and tsla_rsi[-1] < 40:
+            allocation["TSLA"] = 1  # Buy
 
         # Normalize to [0,1]
         total = sum(weights.values())
