@@ -26,10 +26,10 @@ class TradingStrategy(Strategy):
         index = [x["URA"]["close"] for x in ohlcv if "URA" in x]
 
         # Edge case: Not enough data
-        if len(index.values()) < 1:
+        '''if len(index) < 1:
             log("Insufficient data. Using equal weights.")
             equal_weight = 1.0 / len(self.tickers)
-            return TargetAllocation({ticker: equal_weight for ticker in self.tickers})
+            return TargetAllocation({ticker: equal_weight for ticker in self.tickers})'''
 
         # Compute 1-month and 3-month performance for all stocks
         for ticker in self.tickers:
