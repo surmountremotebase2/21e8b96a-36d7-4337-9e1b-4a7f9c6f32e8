@@ -6,6 +6,7 @@ from surmount.logging import log
 class TradingStrategy(Strategy):
     def __init__(self):
         self.tickers = ["SMR", "BWXT", "LEU", "CEG", "VST", "OKLO", "CCJ", "URA"]
+        self.tradtick = ["SMR", "BWXT", "LEU", "CEG", "VST", "OKLO", "CCJ"]
 
     @property
     def interval(self):
@@ -32,7 +33,7 @@ class TradingStrategy(Strategy):
             return TargetAllocation({ticker: equal_weight for ticker in self.tickers})'''
 
         # Compute 1-month and 3-month performance for all stocks
-        for ticker in self.tickers:
+        for ticker in self.tradtick:
             prices = [x[ticker]["close"] for x in ohlcv if ticker in x]
 
             if len(prices) < 1:
