@@ -23,7 +23,7 @@ class TradingStrategy(Strategy):
     def run(self, data):
         ohlcv = data["ohlcv"]
         allocations = {}
-        weights = {ticker: 1 for ticker in self.tickers}
+        weights = {ticker: 1 for ticker in self.tradtick}
         index = [x["URA"]["close"] for x in ohlcv if "URA" in x]
 
         # Edge case: Not enough data
