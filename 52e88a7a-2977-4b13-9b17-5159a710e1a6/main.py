@@ -25,7 +25,7 @@ class TradingStrategy(Strategy):
         weights = {ticker: 1 for ticker in self.tickers}
 
         # Edge case: Not enough data
-        if len(ohlcv) < 60:
+        if len(ohlcv['CCJ']["close"]) < 60:
             log("Insufficient data. Using equal weights.")
             equal_weight = 1.0 / len(self.tickers)
             return TargetAllocation({ticker: equal_weight for ticker in self.tickers})
