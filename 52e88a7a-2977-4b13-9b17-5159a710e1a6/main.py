@@ -5,7 +5,7 @@ from surmount.logging import log
 
 class TradingStrategy(Strategy):
     def __init__(self):
-        self.tickers = ["SMR", "BWXT", "LEU", "CEG", "VST", "OKLO", "CCJ"]
+        self.tickers = ["SMR", "BWXT", "LEU", "CEG", "VST", "OKLO", "CCJ", "URA"]
 
     @property
     def interval(self):
@@ -23,10 +23,10 @@ class TradingStrategy(Strategy):
         ohlcv = data["ohlcv"]
         allocations = {}
         weights = {ticker: 1 for ticker in self.tickers}
-        index = [x["CCJ"]["close"] for x in ohlcv if "CCJ" in x]
+        index = [x["URA"]["close"] for x in ohlcv if "URA" in x]
 
         # Edge case: Not enough data
-        if len(index) < 5:
+        if len(index) < 1:
             log("Insufficient data. Using equal weights.")
             equal_weight = 1.0 / len(self.tickers)
             return TargetAllocation({ticker: equal_weight for ticker in self.tickers})
