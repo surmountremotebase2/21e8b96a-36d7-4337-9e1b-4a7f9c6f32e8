@@ -34,8 +34,7 @@ class TradingStrategy(Strategy):
         # Compute 1-month and 3-month performance for all stocks
         for ticker in self.tickers:
             prices = [x[ticker]["close"] for x in ohlcv if ticker in x]
-            if len(prices) < 1:
-                continue
+
 
             current = prices[-1]
             month_ago = prices[-21]
