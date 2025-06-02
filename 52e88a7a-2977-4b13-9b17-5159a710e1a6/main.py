@@ -25,6 +25,10 @@ class TradingStrategy(Strategy):
         allocations = {}
         weights = {ticker: 1 for ticker in self.tradtick}
         index = [x["URA"]["close"] for x in ohlcv if "URA" in x]
+        if len(index) > 1:
+            incurrent = index[-1]
+            inmonth_ago = index[-21]
+            inmonth_return = (incurrent - inmonth_ago) / inmonth_ago
 
         # Edge case: Not enough data
         '''if len(index) < 1:
@@ -53,7 +57,7 @@ class TradingStrategy(Strategy):
             drawdown = (current - peak) / peak
 
             # Adaptive overweighting based on CCJ price
-            if ticker == "CCJ" and month_return > 0.10:
+            if ticker == "CCJ" and inmonth_return > 0.10:
                 weights["CCJ"] += 2
                 weights["LEU"] += 1
 
