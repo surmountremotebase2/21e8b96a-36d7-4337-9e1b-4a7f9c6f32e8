@@ -38,10 +38,7 @@ class TradingStrategy(Strategy):
             else:
                 below_200dma[ticker] = False
 
-        # RSI-based sell signal for TSLA
-        tsla_rsi = RSI("TSLA", ohlcv, 14)
-        if tsla_rsi and tsla_rsi[-1] > 85:
-            allocation["TSLA"] = 0  # Take profit
+        
 
         # Get P/B ratios
         for d in self.data_list:
@@ -82,6 +79,11 @@ class TradingStrategy(Strategy):
                     weights[ticker] = base_weight * 1.25
                 else:
                     weights[ticker] = base_weight
+
+        # RSI-based sell signal for TSLA
+        tsla_rsi = RSI("TSLA", ohlcv, 14)
+        if tsla_rsi and tsla_rsi[-1] > 85:
+            allocation["TSLA"] = 0  # Take profit
 
         # Normalize to [0,1]
         total = sum(weights.values())
