@@ -27,7 +27,7 @@ class TradingStrategy(Strategy):
 
     def run(self, data):
         # Check if there is enough data (252 trading days ~ 1 year)
-        if len(data["ohlcv"]) < 252:
+        if len(data["ohlcv"]) < 1:
             return TargetAllocation({ticker: 0 for ticker in self.tickers})
 
         # Dictionaries to store momentum and value scores
