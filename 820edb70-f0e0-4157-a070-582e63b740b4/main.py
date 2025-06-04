@@ -10,7 +10,7 @@ class TradingStrategy(Strategy):
         self.safe_asset = "GLD"
         self.target_vol = 0.15  # 15% annualized volatility
         self.lookback_vol = 20
-        self.sma_period = 50
+        self.sma_period = 200
         self.rsi_period = 14
 
     @property
