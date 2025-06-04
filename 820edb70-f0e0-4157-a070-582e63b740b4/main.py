@@ -8,7 +8,7 @@ class TradingStrategy(Strategy):
         # Define a fixed basket of 10 high market cap stocks from NASDAQ/NYSE plus GLD
         self.tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NVDA', 'JPM', 'JNJ', 'V', 'GLD', 'SPY']
         # Specify data sources: SPY for volatility, PE and PEG for valuation
-        self.data_list = [[PE(i) for i in self.tickers] + [PEG(i) for i in self.tickers]]
+        #self.data_list = [[PE(i) for i in self.tickers] + [PEG(i) for i in self.tickers]]
 
     @property
     def assets(self):
@@ -23,7 +23,7 @@ class TradingStrategy(Strategy):
     @property
     def data(self):
         # Return the list of additional data sources
-        return self.data_list
+        #return self.data_list
 
     def run(self, data):
         # Check if there is enough data (252 trading days ~ 1 year)
