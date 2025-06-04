@@ -8,8 +8,8 @@ class TradingStrategy(Strategy):
         self.tickers = ["XLK", "XLV", "XLF", "XLI", "XLY", 
                         "XLP", "XLE", "XLU", "XLB", "XLRE"]
         self.safe_asset = "GLD"
-        self.target_vol = 0.15  # 15% annualized vol
-        self.lookback_vol = 20  # 20-day realized vol
+        self.target_vol = 0.15  # 15% annualized volatility
+        self.lookback_vol = 20
         self.sma_period = 50
         self.rsi_period = 14
 
@@ -26,13 +26,12 @@ class TradingStrategy(Strategy):
         return []
 
     def annualized_volatility(self, prices):
-        """Estimate annualized volatility using 20-day rolling std of log returns."""
         if len(prices) < self.lookback_vol + 1:
             return None
         returns = np.diff(np.log(prices[-self.lookback_vol-1:]))
-        if np.any(np.isnan(returns)):
+        if not np.all(np.isfinite(returns)):
             return None
-        return np.std(returns) * np.sqrt(252)
+        return float(np.std(returns) * np.sqrt(252))
 
     def run(self, data):
         price_data = data["ohlcv"]
@@ -52,23 +51,24 @@ class TradingStrategy(Strategy):
                 if sma is None or rsi is None or len(sma) < 1 or len(rsi) < 1:
                     continue
 
-                # Entry condition: above trend and not overbought
                 if latest_close > sma[-1] and rsi[-1] < 70:
                     vol = self.annualized_volatility(prices)
-                    if vol is not None and vol > 0:
-                        # Volatility targeting weight
-                        vol_weights[ticker] = self.target_vol / vol
+                    if vol and vol > 0:
+                        weight = self.target_vol / vol
+                        if np.isfinite(weight):
+                            vol_weights[ticker] = float(weight)
 
             except Exception as e:
                 log(f"Error processing {ticker}: {e}")
 
         if not vol_weights:
-            # No qualifying sectors — move fully to GLD
             return TargetAllocation({self.safe_asset: 1.0})
 
-        # Normalize total to max 1.0
         total = sum(vol_weights.values())
+        if total <= 0 or not np.isfinite(total):
+            return TargetAllocation({self.safe_asset: 1.0})
+
         for ticker, weight in vol_weights.items():
-            allocations[ticker] = weight / total
+            allocations[ticker] = float(weight / total)
 
         return TargetAllocation(allocations)
