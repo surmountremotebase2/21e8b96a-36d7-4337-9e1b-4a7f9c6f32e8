@@ -6,7 +6,7 @@ import pandas as pd
 class TradingStrategy(Strategy):
     def __init__(self):
         # Define a fixed basket of 10 high market cap stocks from NASDAQ/NYSE plus GLD
-        self.tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NVDA', 'JPM', 'JNJ', 'V', 'GLD']
+        self.tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NVDA', 'JPM', 'JNJ', 'V', 'GLD', 'SPY']
         # Specify data sources: SPY for volatility, PE and PEG for valuation
         self.data_list = [Asset("SPY")] + [PE(i) for i in self.tickers] + [PEG(i) for i in self.tickers]
 
@@ -35,7 +35,7 @@ class TradingStrategy(Strategy):
         value_score = {}
 
         # Calculate momentum (12-month return) and value score (-PEG) for stocks (excluding GLD)
-        stock_tickers = [t for t in self.tickers if t != 'GLD']
+        stock_tickers = [t for t in self.tickers if (t != 'GLD' and t != 'SPY')]
         for ticker in stock_tickers:
             close_prices = [d[ticker]["close"] for d in data["ohlcv"]]
             # Momentum: 12-month return
