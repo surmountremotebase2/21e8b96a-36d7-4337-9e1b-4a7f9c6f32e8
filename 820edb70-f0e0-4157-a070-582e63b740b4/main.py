@@ -1,18 +1,17 @@
 from surmount.base_class import Strategy, TargetAllocation
-from surmount.data import PE, PEG
+from surmount.data import PE, PEG, Asset
 from surmount.technical_indicators import STDEV
-import pandas as pd
 
 class TradingStrategy(Strategy):
     def __init__(self):
-        # Define a fixed basket of 10 high market cap stocks from NASDAQ/NYSE plus GLD
+        # Define a fixed basket of 10 high market cap stocks from NASDAQ/NYSE, plus GLD and SPY
         self.tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA', 'NVDA', 'JPM', 'JNJ', 'V', 'GLD', 'SPY']
         # Specify data sources: SPY for volatility, PE and PEG for valuation
-        #self.data_list = [[PE(i) for i in self.tickers] + [PEG(i) for i in self.tickers]]
+        self.data_list = [Asset("SPY")] + [PE(i) for i in self.tickers] + [PEG(i) for i in self.tickers]
 
     @property
     def assets(self):
-        # Return the list of tickers including GLD
+        # Return the list of tickers including GLD and SPY
         return self.tickers
 
     @property
@@ -23,30 +22,34 @@ class TradingStrategy(Strategy):
     @property
     def data(self):
         # Return the list of additional data sources
-        #return self.data_list
+        return self.data_list
 
     def run(self, data):
         # Check if there is enough data (252 trading days ~ 1 year)
-        if len(data["ohlcv"]) < 1:
+        if len(data["ohlcv"]) < 252:
             return TargetAllocation({ticker: 0 for ticker in self.tickers})
 
         # Dictionaries to store momentum and value scores
         momentum = {}
         value_score = {}
 
-        # Calculate momentum (12-month return) and value score (-PEG) for stocks (excluding GLD)
-        stock_tickers = [t for t in self.tickers if (t != 'GLD' and t != 'SPY')]
+        # Calculate momentum (12-month return) and value score (-PEG) for stocks (excluding GLD and SPY)
+        stock_tickers = [t for t in self.tickers if t not in ['GLD', 'SPY']]
         for ticker in stock_tickers:
             close_prices = [d[ticker]["close"] for d in data["ohlcv"]]
             # Momentum: 12-month return
             return_12m = (close_prices[-1] / close_prices[-252]) - 1
             momentum[ticker] = return_12m
-            # Value: Negative PEG (lower PEG is better)
-            try:
-                peg = data[("peg", ticker)][-1]["value"]
-                value_score[ticker] = -peg if peg > 0 else -1000  # Penalize non-positive PEG
-            except (KeyError, IndexError):
-                value_score[ticker] = -1000  # Handle missing PEG data
+
+        # Access PE and PEG data using the provided structure
+        for i in self.data_list:
+            if tuple(i)[0] == "peg" and tuple(i)[1] in stock_tickers:
+                ticker = tuple(i)[1]
+                if data[tuple(i)] and len(data[tuple(i)]) > 0:
+                    peg = data[tuple(i)][-1]["value"]
+                    value_score[ticker] = -peg if peg > 0 else -1000  # Penalize non-positive PEG
+                else:
+                    value_score[ticker] = -1000  # Handle missing PEG data
 
         # Standardize scores
         momentum_values = list(momentum.values())
@@ -97,6 +100,7 @@ class TradingStrategy(Strategy):
         # Final allocation: Scale stock allocations and assign remainder to GLD or cash
         allocation_dict = {ticker: stock_allocation[ticker] * scaling for ticker in stock_tickers}
         allocation_dict['GLD'] = gld_allocation
+        allocation_dict['SPY'] = 0.0  # SPY is used for volatility, not allocation
 
         # Ensure sum of allocations is between 0 and 1
         total_allocation = sum(allocation_dict.values())
