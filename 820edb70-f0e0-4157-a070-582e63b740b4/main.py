@@ -7,7 +7,7 @@ import numpy as np
 class TradingStrategy(Strategy):
     def __init__(self):
         self.assets_list = [
-            "SPY", "QQQ", "XLK", "XLP", "XLE", "XLF", "XLV", "XLU", "GLD", "UUP", "SPY", "BIL"
+            "QQQ", "XLK", "XLP", "XLE", "XLF", "XLV", "XLU", "GLD", "UUP", "SPY", "BIL"
         ]
         self.current_allocation = {asset: 0 for asset in self.assets_list}
         self.data_list = []
