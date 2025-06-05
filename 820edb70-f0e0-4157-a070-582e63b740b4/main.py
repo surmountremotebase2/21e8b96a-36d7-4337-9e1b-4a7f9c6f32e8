@@ -87,7 +87,8 @@ class TradingStrategy(Strategy):
                 allocation = {s: 1 / len(sector_returns) for s in sector_returns}
         else:
             # Bearish market: Allocate to safe assets (GLD and UUP)
-            allocation = {"GLD": 0.5, "UUP": 0.5}
+            allocation = {asset: 0 for asset in self.assets_list}
+            allocation = {"GLD": 0.5, "BIL": 0.5}
 
         # Update current allocation
         self.current_allocation = {asset: 0 for asset in self.assets_list}
