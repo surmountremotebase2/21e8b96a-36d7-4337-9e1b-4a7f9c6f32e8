@@ -1,7 +1,7 @@
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.technical_indicators import SMA, RSI
 from surmount.logging import log
-from date import date, datetime
+from datetime import datetime
 import numpy as np
 
 class TradingStrategy(Strategy):
