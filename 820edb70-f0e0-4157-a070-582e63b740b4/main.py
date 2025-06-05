@@ -29,7 +29,7 @@ class TradingStrategy(Strategy):
         ohlcv = data["ohlcv"]
         
         # Increment counter
-        self.count = (self.count + 1) % 1
+        self.count = (self.count + 1) % 10
         
         # Check if there is enough historical data (at least ~1 year)
         if len(ohlcv) < 1:
