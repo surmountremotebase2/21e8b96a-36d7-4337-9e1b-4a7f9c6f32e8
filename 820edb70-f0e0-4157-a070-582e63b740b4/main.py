@@ -11,6 +11,7 @@ class TradingStrategy(Strategy):
         ]
         self.current_allocation = {asset: 0 for asset in self.assets_list}
         self.data_list = []
+        self.count = 0  # Initialize counter for 5-day rebalancing
 
     @property
     def assets(self):
@@ -27,19 +28,20 @@ class TradingStrategy(Strategy):
     def run(self, data):
         ohlcv = data["ohlcv"]
         
+        # Increment counter
+        self.count = (self.count + 1) % 5
+        
         # Check if there is enough historical data (at least ~1 year)
-        if len(ohlcv) < 1:
+        if len(ohlcv) < 260:
             return TargetAllocation(self.current_allocation)
 
-        # Parse today's date
-        today_str = ohlcv[-1]["date"]
-        today = datetime.strptime(today_str, "%Y-%m-%d")
-
-        # Only rebalance on Wednesdays
-        if today.weekday() != 2:
+        # Only rebalance every 5th day
+        if self.count != 0:
             return TargetAllocation(self.current_allocation)
 
         # Calculate past date (52 weeks ago)
+        today_str = ohlcv[-1]["date"]
+        today = datetime.strptime(today_str, "%Y-%m-%d")
         past_date = today - timedelta(days=364)
 
         # Find the index of the most recent trading day on or before past_date
