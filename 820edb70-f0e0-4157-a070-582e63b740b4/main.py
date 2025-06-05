@@ -5,70 +5,91 @@ import numpy as np
 
 class TradingStrategy(Strategy):
     def __init__(self):
-        self.tickers = ["XLK", "XLV", "XLF", "XLI", "XLY", 
-                        "XLP", "XLE", "XLU", "XLB", "XLRE"]
-        self.safe_asset = "GLD"
-        self.target_vol = 0.15  # 15% annualized volatility
-        self.lookback_vol = 20
-        self.sma_period = 200
-        self.rsi_period = 14
+        self.assets_list = [
+            "XLK", "XLY", "XLP", "XLE", "XLF", "XLV", "XLI", "XLB", "XLU", "XLC", "XLRE", 
+            "GLD", "UUP", "SPY", "BIL"
+        ]
+        self.current_allocation = {asset: 0 for asset in self.assets_list}
+        self.data_list = []
+
+    @property
+    def assets(self):
+        return self.assets_list
 
     @property
     def interval(self):
         return "1day"
 
     @property
-    def assets(self):
-        return self.tickers + [self.safe_asset]
-
-    @property
     def data(self):
-        return []
-
-    def annualized_volatility(self, prices):
-        if len(prices) < self.lookback_vol + 1:
-            return None
-        returns = np.diff(np.log(prices[-self.lookback_vol-1:]))
-        if not np.all(np.isfinite(returns)):
-            return None
-        return float(np.std(returns) * np.sqrt(252))
+        return self.data_list
 
     def run(self, data):
-        price_data = data["ohlcv"]
-        allocations = {}
-        vol_weights = {}
+        ohlcv = data["ohlcv"]
+        
+        # Check if there is enough historical data (at least ~1 year)
+        if len(ohlcv) < 260:
+            return TargetAllocation(self.current_allocation)
 
-        for ticker in self.tickers:
-            try:
-                if len(price_data) < self.sma_period + self.lookback_vol + 1:
-                    continue
+        # Parse today's date
+        today_str = ohlcv[-1]["date"]
+        today = datetime.strptime(today_str, "%Y-%m-%d")
 
-                prices = [bar[ticker]["close"] for bar in price_data]
-                sma = SMA(ticker, price_data, self.sma_period)
-                rsi = RSI(ticker, price_data, self.rsi_period)
-                latest_close = prices[-1]
+        # Only rebalance on Wednesdays
+        if today.weekday() != 2:
+            return TargetAllocation(self.current_allocation)
 
-                if sma is None or rsi is None or len(sma) < 1 or len(rsi) < 1:
-                    continue
+        # Calculate past date (52 weeks ago)
+        past_date = today - timedelta(days=364)
 
-                if latest_close > sma[-1] and rsi[-1] < 70:
-                    vol = self.annualized_volatility(prices)
-                    if vol and vol > 0:
-                        weight = self.target_vol / vol
-                        if np.isfinite(weight):
-                            vol_weights[ticker] = float(weight)
+        # Find the index of the most recent trading day on or before past_date
+        for i in range(len(ohlcv)-1, -1, -1):
+            date_str = ohlcv[i]["date"]
+            date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+            if date_obj <= past_date:
+                past_index = i
+                break
+        else:
+            past_index = 0  # Use the earliest available data if no match
 
-            except Exception as e:
-                log(f"Error processing {ticker}: {e}")
+        # Calculate SPY and BIL returns
+        try:
+            spy_close_today = ohlcv[-1]["SPY"]["close"]
+            spy_close_past = ohlcv[past_index]["SPY"]["close"]
+            spy_ret = (spy_close_today / spy_close_past) - 1
 
-        if not vol_weights:
-            return TargetAllocation({self.safe_asset: 1.0})
+            bil_close_today = ohlcv[-1]["BIL"]["close"]
+            bil_close_past = ohlcv[past_index]["BIL"]["close"]
+            bil_ret = (bil_close_today / bil_close_past) - 1
+        except KeyError:
+            return TargetAllocation(self.current_allocation)  # Handle missing data
 
-        total = sum(vol_weights.values())
-        if total <= 0 or not np.isfinite(total):
-            return TargetAllocation({self.safe_asset: 1.0})
+        if spy_ret > bil_ret:
+            # Bullish market: Allocate to top-performing sector ETFs
+            sector_returns = {}
+            sectors = ["XLK", "XLY", "XLP", "XLE", "XLF", "XLV", "XLI", "XLB", "XLU", "XLC", "XLRE"]
+            for sector in sectors:
+                try:
+                    close_today = ohlcv[-1][sector]["close"]
+                    close_past = ohlcv[past_index][sector]["close"]
+                    ret = (close_today / close_past) - 1
+                    sector_returns[sector] = ret
+                except KeyError:
+                    continue  # Skip if data is missing for a sector
 
-        for ticker, weight in vol_weights.items():
-            allocations[ticker] = float(weight / total)
+            # Select top 4 sectors (or all if fewer than 4 are available)
+            if len(sector_returns) >= 4:
+                top_sectors = sorted(sector_returns, key=sector_returns.get, reverse=True)[:4]
+                allocation = {s: 0.25 for s in top_sectors}
+            else:
+                allocation = {s: 1 / len(sector_returns) for s in sector_returns}
+        else:
+            # Bearish market: Allocate to safe assets (GLD and UUP)
+            allocation = {"GLD": 0.5, "UUP": 0.5}
 
-        return TargetAllocation(allocations)
+        # Update current allocation
+        self.current_allocation = {asset: 0 for asset in self.assets_list}
+        for asset, weight in allocation.items():
+            self.current_allocation[asset] = weight
+
+        return TargetAllocation(self.current_allocation)
