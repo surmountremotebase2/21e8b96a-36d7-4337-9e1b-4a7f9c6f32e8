@@ -1,7 +1,7 @@
 from surmount.base_class import Strategy, TargetAllocation
 from surmount.technical_indicators import SMA, RSI
 from surmount.logging import log
-from datetime import datetime
+from datetime import datetime, timedelta
 import numpy as np
 
 class TradingStrategy(Strategy):
@@ -33,7 +33,7 @@ class TradingStrategy(Strategy):
         self.count = (self.count + 1) % 5
         
         # Check if there is enough historical data (at least ~1 year)
-        if len(ohlcv) < 1:
+        if len(ohlcv) < 260:
             return TargetAllocation(self.current_allocation)
 
         # Only rebalance every 5th day
@@ -41,14 +41,14 @@ class TradingStrategy(Strategy):
             return TargetAllocation(self.current_allocation)
 
         # Calculate past date (52 weeks ago)
-        today_str = ohlcv[-1]["SPY"]["date"]
-        today = datetime.strptime(today_str, "%Y-%m-%d")
+        today_str = ohlcv[-1]["date"]
+        today = datetime.strptime(today_str, "%Y-%m-%d %H:%M:%S")  # Updated format to handle timestamp
         past_date = today - timedelta(days=364)
 
         # Find the index of the most recent trading day on or before past_date
         for i in range(len(ohlcv)-1, -1, -1):
-            date_str = ohlcv[i]["SPY"]["date"]
-            date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+            date_str = ohlcv[i]["date"]
+            date_obj = datetime.strptime(date_str, "%Y-%m-%d %H:%M:%S")  # Updated format
             if date_obj <= past_date:
                 past_index = i
                 break
