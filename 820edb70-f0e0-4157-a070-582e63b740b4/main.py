@@ -29,7 +29,7 @@ class TradingStrategy(Strategy):
         ohlcv = data["ohlcv"]
         
         # Increment counter
-        self.count = (self.count + 1) % 5
+        self.count = (self.count + 1) % 1
         
         # Check if there is enough historical data (at least ~1 year)
         if len(ohlcv) < 1:
@@ -95,3 +95,4 @@ class TradingStrategy(Strategy):
             self.current_allocation[asset] = weight
 
         return TargetAllocation(self.current_allocation)
+
