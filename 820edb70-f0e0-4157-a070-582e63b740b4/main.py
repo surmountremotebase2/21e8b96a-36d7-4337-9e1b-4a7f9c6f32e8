@@ -80,9 +80,9 @@ class TradingStrategy(Strategy):
                     continue  # Skip if data is missing for a sector
 
             # Select top 4 sectors (or all if fewer than 4 are available)
-            if len(sector_returns) >= 4:
-                top_sectors = sorted(sector_returns, key=sector_returns.get, reverse=True)[:4]
-                allocation = {s: 0.25 for s in top_sectors}
+            if len(sector_returns) >= 2:
+                top_sectors = sorted(sector_returns, key=sector_returns.get, reverse=True)[:2]
+                allocation = {s: 0.5 for s in top_sectors}
             else:
                 allocation = {s: 1 / len(sector_returns) for s in sector_returns}
         else:
