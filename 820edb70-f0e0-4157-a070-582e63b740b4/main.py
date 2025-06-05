@@ -7,7 +7,7 @@ import numpy as np
 class TradingStrategy(Strategy):
     def __init__(self):
         self.assets_list = [
-            "XLK", "XLP", "XLE", "XLF", "XLV", "XLU", "GLD", "UUP", "SPY", "BIL"
+            "SPY", "QQQ", "XLK", "XLP", "XLE", "XLF", "XLV", "XLU", "GLD", "UUP", "SPY", "BIL"
         ]
         self.current_allocation = {asset: 0 for asset in self.assets_list}
         self.data_list = []
@@ -69,7 +69,7 @@ class TradingStrategy(Strategy):
         if spy_ret > bil_ret:
             # Bullish market: Allocate to top-performing sector ETFs
             sector_returns = {}
-            sectors = ["XLK", "XLP", "XLE", "XLF", "XLV", "XLU"]
+            sectors = ["SPY", "QQQ", "XLK", "XLP", "XLE", "XLF", "XLV", "XLU"]
             for sector in sectors:
                 try:
                     close_today = ohlcv[-1][sector]["close"]
@@ -95,3 +95,4 @@ class TradingStrategy(Strategy):
             self.current_allocation[asset] = weight
 
         return TargetAllocation(self.current_allocation)
+
