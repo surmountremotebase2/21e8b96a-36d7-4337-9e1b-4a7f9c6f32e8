@@ -69,7 +69,7 @@ class TradingStrategy(Strategy):
         if spy_ret > bil_ret:
             # Bullish market: Allocate to top-performing sector ETFs
             sector_returns = {}
-            sectors = ["SPY", "QQQ", "XLK", "XLP", "XLF", "XLV", "XLU"]
+            sectors = ["SPY", "QQQ", "XLK", "XLP", "XLE", "XLF", "XLV", "XLU"]
             for sector in sectors:
                 try:
                     close_today = ohlcv[-1][sector]["close"]
