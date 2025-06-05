@@ -28,7 +28,7 @@ class TradingStrategy(Strategy):
         ohlcv = data["ohlcv"]
         
         # Check if there is enough historical data (at least ~1 year)
-        if len(ohlcv) < 260:
+        if len(ohlcv) < 1:
             return TargetAllocation(self.current_allocation)
 
         # Parse today's date
