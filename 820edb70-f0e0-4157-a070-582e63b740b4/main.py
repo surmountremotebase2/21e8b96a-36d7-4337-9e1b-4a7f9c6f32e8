@@ -42,7 +42,8 @@ class TradingStrategy(Strategy):
         # Calculate past date (52 weeks ago)
         today_str = ohlcv[-1]["SPY"]["date"]
         today = datetime.strptime(today_str, "%Y-%m-%d %H:%M:%S")  # Updated format to handle timestamp
-        past_date = today - timedelta(days=45)
+        past_date = today - timedelta(days=15)
+        lpast_date = today - timedelta(days=82)
 
         # Find the index of the most recent trading day on or before past_date
         for i in range(len(ohlcv)-1, -1, -1):
@@ -53,16 +54,25 @@ class TradingStrategy(Strategy):
                 break
         else:
             past_index = 0  # Use the earliest available data if no match
+        
 
         # Calculate SPY and BIL returns
         try:
             spy_close_today = ohlcv[-1]["SPY"]["close"]
             spy_close_past = ohlcv[past_index]["SPY"]["close"]
+            spy_close_lpast = ohlcv[-82]["SPY"]["close"]
             spy_ret = (spy_close_today / spy_close_past) - 1
+            spy_lret = (spy_close_today / spy_close_lpast) - 1
+            spy_ret = spy_lret - spy_ret
+
 
             bil_close_today = ohlcv[-1]["BIL"]["close"]
             bil_close_past = ohlcv[past_index]["BIL"]["close"]
+            bil_close_lpast = ohlcv[-82]["BIL"]["close"]
             bil_ret = (bil_close_today / bil_close_past) - 1
+            bil_lret = (bil_close_today / bil_close_lpast) - 1
+            bil_ret = bil_lret - bil_ret
+
         except KeyError:
             return TargetAllocation(self.current_allocation)  # Handle missing data
 
@@ -74,7 +84,10 @@ class TradingStrategy(Strategy):
                 try:
                     close_today = ohlcv[-1][sector]["close"]
                     close_past = ohlcv[past_index][sector]["close"]
+                    close_lpast = ohlcv[-82][sector]["close"]
                     ret = (close_today / close_past) - 1
+                    lret = (close_today / close_lpast) - 1
+                    ret = lret - ret
                     sector_returns[sector] = ret
                 except KeyError:
                     continue  # Skip if data is missing for a sector
