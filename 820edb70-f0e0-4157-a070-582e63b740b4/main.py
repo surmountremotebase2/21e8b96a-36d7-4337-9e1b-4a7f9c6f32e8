@@ -42,7 +42,7 @@ class TradingStrategy(Strategy):
         # Calculate past date (52 weeks ago)
         today_str = ohlcv[-1]["SPY"]["date"]
         today = datetime.strptime(today_str, "%Y-%m-%d %H:%M:%S")  # Updated format to handle timestamp
-        past_date = today - timedelta(days=21)
+        past_date = today - timedelta(days=15)
         lpast_date = today - timedelta(days=82)
 
         # Find the index of the most recent trading day on or before past_date
@@ -84,7 +84,7 @@ class TradingStrategy(Strategy):
                 try:
                     close_today = ohlcv[-1][sector]["close"]
                     close_past = ohlcv[past_index][sector]["close"]
-                    close_lpast = ohlcv[-82][sector]["close"]
+                    close_lpast = ohlcv[-126][sector]["close"]
                     ret = (close_today / close_past) - 1
                     lret = (close_today / close_lpast) - 1
                     ret = lret - ret
