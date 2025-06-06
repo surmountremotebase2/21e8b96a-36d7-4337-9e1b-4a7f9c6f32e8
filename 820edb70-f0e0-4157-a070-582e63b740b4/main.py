@@ -63,7 +63,7 @@ class TradingStrategy(Strategy):
             spy_close_lpast = ohlcv[-82]["SPY"]["close"]
             spy_ret = (spy_close_today / spy_close_past) - 1
             spy_lret = (spy_close_today / spy_close_lpast) - 1
-            spy_ret = spy_lret - spy_ret
+            spy_ret = spy_lret + spy_ret
 
 
             bil_close_today = ohlcv[-1]["BIL"]["close"]
@@ -71,7 +71,7 @@ class TradingStrategy(Strategy):
             bil_close_lpast = ohlcv[-82]["BIL"]["close"]
             bil_ret = (bil_close_today / bil_close_past) - 1
             bil_lret = (bil_close_today / bil_close_lpast) - 1
-            bil_ret = bil_lret - bil_ret
+            bil_ret = bil_lret + bil_ret
 
         except KeyError:
             return TargetAllocation(self.current_allocation)  # Handle missing data
@@ -87,7 +87,7 @@ class TradingStrategy(Strategy):
                     close_lpast = ohlcv[-82][sector]["close"]
                     ret = (close_today / close_past) - 1
                     lret = (close_today / close_lpast) - 1
-                    ret = lret + ret
+                    ret = lret - ret
                     sector_returns[sector] = ret
                 except KeyError:
                     continue  # Skip if data is missing for a sector
