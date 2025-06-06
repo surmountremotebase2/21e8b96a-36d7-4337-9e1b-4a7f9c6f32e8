@@ -79,12 +79,12 @@ class TradingStrategy(Strategy):
         if spy_ret > bil_ret:
             # Bullish market: Allocate to top-performing sector ETFs
             sector_returns = {}
-            sectors = ["SPY", "QQQ", "XLK", "FEZ", "XLE", "XLV", "IJT", "GLD"]
+            sectors = ["QQQ", "XLK", "FEZ", "XLE", "XLV", "IJT"]
             for sector in sectors:
                 try:
                     close_today = ohlcv[-1][sector]["close"]
                     close_past = ohlcv[past_index][sector]["close"]
-                    close_lpast = ohlcv[-126][sector]["close"]
+                    close_lpast = ohlcv[-64][sector]["close"]
                     ret = (close_today / close_past) - 1
                     lret = (close_today / close_lpast) - 1
                     ret = lret + ret
