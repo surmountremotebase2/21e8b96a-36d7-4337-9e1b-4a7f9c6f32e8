@@ -79,7 +79,7 @@ class TradingStrategy(Strategy):
         if spy_ret > bil_ret:
             # Bullish market: Allocate to top-performing sector ETFs
             sector_returns = {}
-            sectors = ["SPY", "QQQ", "XLK", "FEZ", "XLE", "EWJ", "XLV", "IJT", "GLD"]
+            sectors = ["SPY", "QQQ", "XLK", "FEZ", "XLE", "EWJ", "XLV", "IJT"]
             for sector in sectors:
                 try:
                     close_today = ohlcv[-1][sector]["close"]
@@ -101,7 +101,7 @@ class TradingStrategy(Strategy):
         else:
             # Bearish market: Allocate to safe assets (GLD and UUP)
             allocation = {asset: 0 for asset in self.assets_list}
-            allocation = {"UUP": 0.3, "BIL": 0.7}
+            allocation = {"GLD": 0.3, "BIL": 0.7}
 
         # Update current allocation
         self.current_allocation = {asset: 0 for asset in self.assets_list}
