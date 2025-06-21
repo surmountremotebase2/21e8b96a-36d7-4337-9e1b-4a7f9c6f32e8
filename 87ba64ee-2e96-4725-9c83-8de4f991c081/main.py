@@ -90,7 +90,7 @@ class TradingStrategy(Strategy):
 
     def run(self, data):
         # Ensure there's enough historical data to run the strategy.
-        if len(data["ohlcv"]) < self.warmup:
+        if len(data["ohlcv"]['close'][self.market_benchmark]) < self.warmup:
             return TargetAllocation({})
 
         # --- Risk-Off VWAP Signal ---
