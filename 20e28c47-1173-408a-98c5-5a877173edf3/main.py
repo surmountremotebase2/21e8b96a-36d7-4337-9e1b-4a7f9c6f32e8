@@ -231,6 +231,7 @@ class TradingStrategy(Strategy):
         spy_weight = np.clip(final_roar_score / 100.0, 0.0, 1.0)
         bil_weight = 1.0 - spy_weight
         
-        self.last_alloc = {"SPY": spy_weight, "BIL": bil_weight}
+        # Convert numpy floats to native Python floats to satisfy the assertion
+        self.last_alloc = {"SPY": float(spy_weight), "BIL": float(bil_weight)}
         
         return TargetAllocation(self.last_alloc)
